@@ -24,7 +24,9 @@ public class Hw1_part1 {
 				average += numbers[i]; // The loop sums up the contents of the array for the average.
 		}
 		average /= numbers.length; // After the for loop, the program divides the sum by the length of the array for the average.
+		System.out.println();
 		System.out.printf("average = %.2f, min = %d, max = %d\n", average, min, max);
+		System.out.println();
 	}
 
 	/**
@@ -35,7 +37,7 @@ public class Hw1_part1 {
 	 */
 	public static void subarray(int[] a, int from, int to) {
 		// error check w/o using Java's exception handling
-		if (from < 0 || to >= a.length) {
+		if (from < 0 || to >= a.length || to < from) {
 			System.out.println("Index out of bound");
 			return;
 		}
@@ -46,13 +48,14 @@ public class Hw1_part1 {
 
 		for(int i = from + 1; i <= to; i += 1) {
 			sub[i - from] = a[i];
-			System.out.print(", " + a[i]);
+			System.out.print(", " + a[i]); // Printing a comma then the number, which is why we needed to print the initial value earlier.
 		}
+		System.out.println();
 	}
 	
 	public static void main(String[] args) {
 		
-		// test 
+		// provided test
 		int[] a = {15, 25, 10, 65, 30, 55, 65};
 
 		System.out.println("\nGiven array is: " + Arrays.toString(a));
@@ -64,7 +67,9 @@ public class Hw1_part1 {
 		System.out.println("\nGiven array is: " + Arrays.toString(b));
 		stats(b);
 		subarray(b, 5, 10); // Return OOB
+		System.out.println();
 		subarray(b, -1, 4); // Return OOB
+		System.out.println();
 		subarray(b, 2, 6);
 
 		int[] c = {100, 97, 83, 71, 43};
@@ -75,6 +80,9 @@ public class Hw1_part1 {
 		int[] d = {2,2,2};
 		System.out.println("\nGiven array is: " + Arrays.toString(d));
 		stats(d); //Testing when all three are the same
+		subarray(d, 1,1); // Testing when from == to
+		System.out.println();
+		subarray(d, 2, 1); // Testing when to < from
 	}
 
 }
