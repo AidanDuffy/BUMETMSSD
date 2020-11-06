@@ -16,7 +16,8 @@ public class SalariedEmployee extends Employee {
     }
 
     public void employeeInfo() {
-        System.out.printf("Employee Information: Name: %s, ID: %d, Annual Salary: %d, and Monthly Salary: %d", this.getName(), this.getEmpId(), this.salary, this.monthlyPayment());
+        System.out.printf("Employee Information: Name: %s, ID: %d, Annual Salary: %d, and Monthly Salary: %d",
+                this.getName(), this.getEmpId(), this.salary, this.monthlyPayment());
     }
 
     // get methods

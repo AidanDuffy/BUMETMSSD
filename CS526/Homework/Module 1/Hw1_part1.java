@@ -3,7 +3,8 @@ import java.util.Arrays;
 
 public class Hw1_part1 {
 	/**
-	 * This method calculates the following information about a given array of integers: the average, minimum, and maximum.
+	 * This method calculates the following information about a given array of integers: the average, minimum,
+	 * and maximum.
 	 * It then prints out that information.
 	 * @param numbers is the full array of integers.
 	 */
@@ -13,17 +14,19 @@ public class Hw1_part1 {
 		int min = initial;
 		int max = initial;
 
-		// Within this for loop, if a number is larger than the current maximum or smaller than the minimum, those values
-		// are replaced.
+		// Within this for loop, if a number is larger than the current maximum or smaller than the minimum, those
+		// value are replaced.
 		for (int i = 1; i < numbers.length; i += 1) {
 			if (numbers[i] > max) {
 				max = numbers[i];
 			} else if (numbers[i] < min) {
 				min = numbers[i];
 			}
-				average += numbers[i]; // The loop sums up the contents of the array for the average.
+			// The loop sums up the contents of the array for the average.
+				average += numbers[i];
 		}
-		average /= numbers.length; // After the for loop, the program divides the sum by the length of the array for the average.
+		// After the for loop, the program divides the sum by the length of the array for the average.
+		average /= numbers.length;
 		System.out.println();
 		System.out.printf("average = %.2f, min = %d, max = %d\n", average, min, max);
 		System.out.println();
@@ -42,13 +45,17 @@ public class Hw1_part1 {
 			return;
 		}
 
-		int[] sub = new int[to - from + 1]; // Adding the one ensures that the array includes a[to].
-		sub[0] = a[from]; // The method initializes this first value to allow for the for loop to both create and print the contents of the subarray.
+		// Adding the one ensures that the array includes a[to].
+		int[] sub = new int[to - from + 1];
+		// The method initializes this first value to allow for the for loop to both create and print the contents of
+		// the subarray.
+		sub[0] = a[from];
 		System.out.print("The subarray, from index " + from + " to index " + to + ", is: " + sub[0]);
 
 		for(int i = from + 1; i <= to; i += 1) {
 			sub[i - from] = a[i];
-			System.out.print(", " + a[i]); // Printing a comma then the number, which is why we needed to print the initial value earlier.
+			// Printing a comma then the number, which is why we needed to print the initial value earlier.
+			System.out.print(", " + a[i]);
 		}
 		System.out.println();
 	}
