@@ -21,4 +21,12 @@ Module 1:
 				-int, String, boolean, float, etc
 				-list, dict, set, etc
 	Lecture 2:
-		
+		-Python Storage
+			- x = 5, y = 5.0, x==y is True because the values are equal but x is y is False because they do not point to the same object
+			-object = data + methods that operate on this data
+		-Structure
+			-English has sentences, building blocks of nouns and verbs, with grammar rules
+			-Python has statements, building blocks of data types, and syntax rules
+		Data Types
+			-integers, floats, boolean, char, complex numbers are the primitives
+			-lists [], tuples (), set {x,y}, string, dict {a:b} are the collections
