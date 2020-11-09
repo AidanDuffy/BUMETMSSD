@@ -30,3 +30,8 @@ Module 1:
 		Data Types
 			-integers, floats, boolean, char, complex numbers are the primitives
 			-lists [], tuples (), set {x,y}, string, dict {a:b} are the collections
+		Modules
+			-large programs can be split into modules with variables na d functions
+				-modules are stored as files
+			-a Py script can import individual programs or all programs within a module import math vs from math import p
+i
