@@ -1,0 +1,11 @@
+Aidan Duffy
+Boston University
+METCS 521
+
+Module 1:
+	Lecture 1:
+		-6 week of instruction, 1 week for final exam and project
+		-basic Python overview
+		-this will be made up of simple (non-trivial) examples, like lego blocks
+		-everything will be visualized, use pythontutor.com
+		-
