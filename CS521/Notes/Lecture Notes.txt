@@ -4,8 +4,21 @@ METCS 521
 
 Module 1:
 	Lecture 1:
-		-6 week of instruction, 1 week for final exam and project
-		-basic Python overview
-		-this will be made up of simple (non-trivial) examples, like lego blocks
-		-everything will be visualized, use pythontutor.com
-		-
+		-Course Overview
+			-6 week of instruction, 1 week for final exam and project
+			-basic Python overview
+			-this will be made up of simple (non-trivial) examples, like lego blocks
+			-everything will be visualized, use pythontutor.com
+			-de-emphasized quizzes so you can use it as an indicator of what you need to learn
+				-quizzes will ask what is a block of code doing, M.C. about outcomes, and T/F
+			-project must be individual, shows you mastered basic python structures ie people have done sports rankings, hangman games, etc.
+				-think about project that would help advance my career
+		-Python Basics
+			-no declaration of storage (no need to set a variable as an integer or even declare it as such) like in Java or C
+			-its an interpretive language (runs code line by line) not a compiled lang like Java
+			-import libraries, not include, but it is similar
+			-5 data types and 5 collections:
+				-int, String, boolean, float, etc
+				-list, dict, set, etc
+	Lecture 2:
+		
