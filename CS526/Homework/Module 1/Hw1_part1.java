@@ -68,7 +68,7 @@ public class Hw1_part1 {
 		System.out.println("\nGiven array is: " + Arrays.toString(a));
 		stats(a);
 		subarray(a, 1, 4);
-
+		System.out.println("\n================================================================");
 		// Testing with other arrays
 		int[] b = {0,1,2,3,4,5,6,7,8,9};
 		System.out.println("\nGiven array is: " + Arrays.toString(b));
@@ -78,12 +78,12 @@ public class Hw1_part1 {
 		subarray(b, -1, 4); // Return OOB
 		System.out.println();
 		subarray(b, 2, 6);
-
+		System.out.println("\n================================================================");
 		int[] c = {100, 97, 83, 71, 43};
 		System.out.println("\nGiven array is: " + Arrays.toString(c));
 		stats(c);
 		subarray(c, 0, 2);
-
+		System.out.println("\n================================================================");
 		int[] d = {2,2,2};
 		System.out.println("\nGiven array is: " + Arrays.toString(d));
 		stats(d); //Testing when all three are the same
