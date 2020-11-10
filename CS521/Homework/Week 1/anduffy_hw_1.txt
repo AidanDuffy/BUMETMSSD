@@ -1,3 +1,28 @@
 Aidan Duffy
 Boston University
 METCS 521
+Homework 1
+
+1. A program is a set of instructions that are executed sequentially, which can all be saved in a module, which can then be imported into the interpreter. The interpreter then runs programs by executing the instructions contained in the module.
+
+2. Interpreted means that there is a program within Python called the interpreter that takes each line of Python code -- one at a time -- and executes that code. This is unlike a compiled language that compiles code into a separate executable file.
+
+3. A comment is a part of the Python code that is meant only for humans and is ignored by the interpreter. It is meant to increase the readability of the code and explain at a higher level what the code is trying to do. Comments are indicated with a #.
+
+4. Namespaces are special structures that keep a list of names and their associated values, which can be variables or functions.
+
+5. a) Whitespace is what separates words that we type as well as indentations before a line of code begins. The types of characters that are considered whitespace are: tab, space, return, linefeed, formfeed, and vertical tab.
+5. b) Whitespace is especially important for indentation. In the case of if, else statements, for instance, only the code indented past the if statments will be executed if that condition is met; if an expression or statement has the same indentation as the if statement, it will be executed regardless.
+5. c) Whitespace is ignored in both expressions and statements.
+
+6. An expression creates a return value, whereas a statement does not. For instance "x + 5" is an expression, returning whatever the value of x is plus five. "x = 5" is a statement, as it has no return value. It does, however, have a "side effect" because the value of x has now either been created or changed, even though no value has been returned.
+
+7. a) Both of these create float types.
+7. b) In Python, division always yields a float, even if it is two integers being divided. The operator needs to be prepared if the division does not naturally result in a whole number, so it always returns a float.
+
+8. This is not the same as brackets would create a list (the list would length c with each element being a+b, ex: if a+b=2 and c = 3, the list would be [2,2,2]) and curly braces would create a set but then throw an error since all the values would be identical.
+
+11. a) This would print 8 because my_int is first assigned the value 5, then it is assigned the value of my_int + 3. my_int is 5, so that statement is actually my_int = 5 + 3, which equals 8. The right hand side of the statement in Python is always executed first here.
+11. b) my_int += 3
+
+12. This would print 2.0 because the remainder of dividing 7 by 5 is 2 and seven is a floating point number, not an integer.
