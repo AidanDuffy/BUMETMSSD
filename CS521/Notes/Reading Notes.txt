@@ -4,6 +4,92 @@ METCS 521
 
 Module 1:
 	Chapter 1:
-	Chapter 9:
-	Appendix A:
-		
+		-Exercises: whats a program, whats interpreted mean, whata a comment, namespace, white space, statement vs expression, difference between (),{}, and [], how assignment works
+		-Bold/Headers: 
+			-comments help readability, not read by the interpreter
+			-modules, statements, variables, programs, etc.
+			-naming recommendations
+			-variable assignment
+		-to calculate a circles area and circumference we need a few things:
+			-prompt the user for the radius
+			-apply the formulas for the two things
+			-print out the results
+			-we also need to import math for math.pi
+		-anything following # is only for human readers, it is a comment that the interpreter ignores, it is for readability and so the reader knows what some code is doing
+		-modules get imported at the beginning, python has many modules to simplify tasks, like math
+		- assignment has the variable name on the left of the = and the value it is being assigned on the right
+			-sometimes the right side can have a funciton, like input which prompts the user for an input
+		-Strings can use '' or ""
+		-* is for multiplication ** is for exponents
+		-print, well prints
+			- strings can be added together but for different data types, use commas in print
+				-ie: print(str1 + str2) vs print(str1, int1)
+		-Python is interpreted, that means that there is a program within Python called the interpreter that takes each line of Python code -- one at a time -- and executes that code
+			-this allows users to try out lines of code in the Python shell for experimentation
+		-PARTS OF A PROGRAM
+			-a program contains a set of instructions that executed sequentially, which are all saved in a module, which can then be imported into the interpreter
+			-Expression vs Statement:
+				-expression: a combination of values and operations that creates a new value called a return value (x+5 is an expression)
+				-statement: returns no value but does perform a task, a statement could have a side effect (assignments are statements, like x = 5)
+			-Whitespace:
+				-what separates words when we type -- Python counts the following as whitespace:
+					-tab, space, return, linefeed, formfeed, and vertical tab
+				-it is ignored in both expressions and statements
+				-leading whitespace defines indentation and is very important for the interpreter!
+					-indentation helps readability but also determines how code is executed (need to indent under loops and if statements for instance)
+			-Comments:
+				-should clarify intent of code, not repeat/explain it. Explain at a higher level of abstraction than the code, what you're trying to do.
+				-if codew containts a novel solution, add comments explaining the methodology
+			-Tokens:
+				-they are special keywords, symbols, and characters
+					-Keyword examples: and, as, if, global, class, print, import, etc.
+					-operators: +, +=, <<, |, ^, %
+					-punctuators and delimiters: (), [], #. "", =, @
+					-literals is notation for representing a fixed value, cannot be changed
+			-Naming Objects (Tips/Procedure):
+				-every name must begin with a letter or underscore(cant be a numeral)
+					-link multiple words with _
+				-after the first letter, name can contain any combo of letters, numbers, and underscores
+				-a name can be any length
+				-UPPERCASE is different form lowercase
+					-all are distinct: my_name, my_Name, My_Name, and My_name
+				-Check out Google Style Guide for Python for naming tips(generally do lowercase_with_underscores)
+		-VARIABLES:
+			-variables are names you create in a program to represent something like a value, another program, a set of data, or a file
+			-interpreter keeps a special structure called namespace to keep this list of names and their associated values
+			-Variable Creation & Assignment:
+				-assignment is a way to create a name such as a variable like my_int = 5
+					-if you have my_int = my_int + 2 now, you evaluate as follows:
+						-evaluate the expression on the RHS (right hand side), then
+						-take the resulting value from the RHS expression and associate it with the LHS variable, create one if it does not exist
+				-LHS is always just the variable so 7 = my_int is illegal as is my_int + 7 = my_int
+	Chapter 9.6:
+		-Headers/Bolds:
+			-Namespaces and Scope
+			-Search Rule for Scope
+			-LEGB rule or Local, Enclosing, Global, and Built-in (this is the search rule)-
+			-then one header for each part of LEGB
+			-local assignment rule
+			-the global statement
+		-NAMESPACES AND SCOPE:
+			-namespace is a relation b/w names and objects
+				-used to determine what object is assocaited with a variable, like a dictionary
+		-SEARCH RULE FOR SCOPE:
+			-the sequence of namespaces examined when looking for a name(variable, function, or otherwise) is:
+				-Local
+				-Enclosing
+				-Global
+				-Built-in
+		-LOCAL:
+			-local namespace is the one within a function that comes into being when the function is invoked and then inactive when the invocation ends
+			-only variables declared within the function are here, the global ones are not included
+		-GLOBAL:
+			-includes functions, packages, global variables, imported modules, etc.
+			-Local Assignment Rule:
+				-if anywhere in a function an assignment is made, then that assignment is assumed to create a name only in the presently active namespace
+				-ie if you declare x = 5, then run x through a function and it changes, after the function ends, x is still 5, using the global statement within the function gets around that
+		-BUILT-INS:
+			-two namespaces are created when python starts: __main__ and __builtins__
+			-BI is a link to all the regular Python programs and data types that are provided without modules
+		-ENCLOSING:
+			-this rule applies when a function defines a function
