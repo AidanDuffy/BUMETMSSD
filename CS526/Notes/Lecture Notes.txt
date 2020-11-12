@@ -3,3 +3,37 @@ Boston University
 METCS 521
 
 Module 1:
+	-Skipped through most of the first presentation, mostly things I remember
+	-interface: 
+		-methods not implemented, theres no data, can't be instantiated, can be used for multiple inheritance, a class implemeneting an interface must implement all methods
+		-a class can implement multiple interfaces
+		-Use Case:
+			-expect unrelated classes would implement it
+			-want to specify behavior of a particular data type, but not concerned about who implements its behavior
+			-want to take advantage of multiple inheritance of type
+	-Abstract Class:
+		-abstract method is one w/o implementation
+		-concrete is one w/ implementation
+		-Class:
+			-declared with abstract keywrord
+			-may or may not have abstract method
+			-a class w/ an abstract method must be an abstract class
+			-Used when subclasses share many common variables and methods
+			-cannot be instantiated
+		-Use case:
+			-want to share code among several closely related classes
+			-expect that classes that extend your a.c. have many common methods or fields
+	-Exception:
+		-occurs when exceptio is thrown, the runtime system finds an exception handler, the code in the handler is executed
+		-handler will go through the entire method tree from most recent to main to find something to handle the error, otherwise the program crashes
+			-use try-catch
+		-JVM can also throw errors that we can't prepare for with try-catch
+	-Generic:
+		-ex: we have queues that store ints, strings, and char, what if i want a method that could affect all of these?
+		-Write a generic queue! use "E" as the data type for generic
+	-Nested Class
+		-class within a class
+		-NC is only used for the outer class
+		-can be used if we want to declare members of the outer class as private but also want a smaller class to be able to access members of it
+		-or we want to implement a data structure which has a nother smaller data strucutre as its member
+		-it is more readable code and is easy to maintain, and can help reduce name conflict!
