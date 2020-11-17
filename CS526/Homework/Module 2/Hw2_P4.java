@@ -2,15 +2,23 @@
 import java.util.Arrays;
 
 public class Hw2_P4 {
-
+	/**
+	 * This is a recursive method which reverses the contents of an int array up to a given index.
+	 * @param a is an integer array which will have its contents reversed.
+	 * @param n is the last index involved in the reversals
+	 */
 	public static void reverseFirstN(int[] a, int n) {
-		// complete this method
-		// write a separate method with additional parameters, if needed
+		
+		return;
 	}
-	
+
+	/**
+	 * This is a recursive method which rearranges the order of ints stored in a given int array so
+	 * that all the even ints come before all of the odd integers.
+	 * @param a is the array whose contents are being rearranged.
+	 */
 	public static void evenBeforeOdd(int[] a) {
-		// complete this method
-		// write a separate method with additional parameters, if needed
+		return;
 	}
 	
 	public static void main(String[] args) {
