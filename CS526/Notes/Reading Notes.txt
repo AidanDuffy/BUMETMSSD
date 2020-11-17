@@ -2,6 +2,64 @@ Aidan Duffy
 Boston University
 METCS 526
 
+Module 3:
+	-CHAPTER 7 (Lists):
+		-The List ADT:
+		-Array Lists:
+		-Positional Lists:
+		-Iterators:
+		-Java Collections Framework:
+		-Sorting Positional Lists:
+		-Case Study: Maintaining Access Frequencies:
+	-CHAPTER 8 (Trees):
+		-General Trees:
+		-Binary Trees:
+		-Implementing Trees:
+		-Tree Traversal Algos:
+
+
+Module 2:
+	-CHAPTER 4 (Algo Analysis):
+		-Experimental Studies in Algo Analysis:
+		-The Seven Functions Used in this Book:
+		-Asymptotic Analysis:
+		-Simple Justification Techniques:
+	-CHAPTER 5 (Recursion):
+		-Illustrative Recursion Examples:
+		-Analyzing Recursive Algorithms
+		-Further Examples
+		-Designing Recursive Algos:
+		-Recursion Run Amok:
+		-Eliminating Tail Recursion:
+	-CHAPTER 6(Stacks,Queues, and Deques):
+		-Stacks:
+		-Queues:
+		-Double Ended Queues/Deques:
+
 Module 1:
-	-CHAPTER 1:
+	-CHAPTER 1 (Java Primer):
+		-Getting Started:
+		-Classes and Objects:
+		-Strings, Wrappers, Arrays, and Enum Types
+		-Expressions:
+		-Control Flow:
+		-Simple I/O:
+		-An Example Program:
+		-Packages and Imports:
+		-Software Development
+	-CHAPTER 2 (Object Oriented Design):
+		-Goals, Principles, and Patterns of OOD:
+		-Inheritance
+		-Interfaces and Abstract Classes:
+		-Exceptions:
+		-Casting and Generics:
+		-Nested Classes:
+	-CHAPTER 3 (Fundamental Data Structures):
+		-Using Arrays:
+		-Singly Linked Lists:
+		-Circularly Linked Lists:
+		-Doubly Linked Lists:
+		-Equivalnce Testing:
+		-Cloning Data Structures:
+
 	

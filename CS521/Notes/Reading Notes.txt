@@ -2,13 +2,68 @@ Aidan Duffy
 Boston University
 METCS 521
 
-Module 2:
+Module 3:
+	Chapter 2:
+		-In-Depth Control:
+			-Selection Statement for Decisions and More on Python Decision Statements:
+			-Repetition, the while statement:
+			-Sentinel Loop:
+			-Summary of Repetition:
+			-More on the for statement:
+			-Nesting:
+			-Hailstone Sequence Example:
 	Chapter 4:
-		-
-	Chapter 5:
-		-
+		-The String type:
+		-String Operations:
+		-Preview of Functions and Methods:
+		-Formatted Output for Strings:
+		-Control and Strings:
+		-Working with Strings:
+		-More String Formatting:
+		-Unicode:
+		-A GUI to Check a Palindrome:
+		-What's Wrong with My Code?:
+		-Summary:
 	Chapter 6:
-		-
+		-What is a File?:
+		-Accessing Files:
+			-Reading Text Files:
+			-Writing Text Files:
+		-Reading and Writing Text Files in a Program:
+		-File Creation and Overwriting (only the first part):
+	Chapter 14:
+		-More Details on Files:
+		-CSV Files:
+		-Module, os:
+
+Module 2:
+	Chapter 1:
+		-Variables:
+		-Objects and Types:
+		-Operators:
+		-Your First Module, Math:
+		-Developing an Algorithm:
+	Chapter 2:
+		-In-Depth Control:
+			-Booleans:
+			-Relational and Boolean Operators:
+			-Precedence:
+			-Boolean Operators Example & Another Word on Assignments:
+	Chapter 9:
+		-Scope: The Full Story:
+			-Namespaces and Scope:
+			-Search Rule for Scope:
+			-Local:
+			-Global:
+			-Built-ins:
+			-Enclosed:
+	Chapter 16:
+		-Numbers:
+			-Fractions:
+			-Decimal:
+			-Complex Numbers:
+			-Statistics Module:
+			-Random Numbers:
 
 Module 1:
 	Chapter 1:
