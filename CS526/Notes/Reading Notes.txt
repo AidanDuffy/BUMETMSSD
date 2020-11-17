@@ -39,19 +39,142 @@ Module 2:
 Module 1:
 	-CHAPTER 1 (Java Primer):
 		-Getting Started:
+			-executable statements are placed in functions called methods that belong to some class definition
+			-any set of statements b/w {} define a program "block"
+			-name of a class,method, or variable in Java is called an identifier
+				-must start with a letter and consists of lettes, numbers, and underscores
+			-// or /*\n*\n*/ for inline or block comments.
+			-Primitives:
+				-boolean
+				-char
+				-byte (8-bit signed int)
+				-short (16-bit signed int)
+				-int
+				-long (64-bit int)
+				-float (32b)
+				-double (64b)
 		-Classes and Objects:
-		-Strings, Wrappers, Arrays, and Enum Types
+			-primary actors are objects, and each is an instance of a class, which serves as a type of the object and as a blueprint
+			-critical members of a Java class:
+				-instance variables or fields, represent data associated with an object of a class, must have a type
+				-methods, blocks of code that can be called to perform actions, two types are accessor methods or update methods (doesn't and does change the instance variables, get vs set)
+			-classes are known as reference types and a var of that type isa reference variable
+				-ref var is capable of storing the location/mem address of an object from the declared class as well as null which is the lack of an object
+			-a new object is created by using the new operator followed by a call to a constructor
+				-new returns a reference to the newly created instance
+			-creation of a new instance of class causes three events:
+				-a new object is dynamically allocated in memory and all instance vars are initialized to default or given values (default is null for reference vars and 0 for base types)
+				-constructor for the new object is called with the parameters specified, and the constructor may assign actual vaues to the instance vars
+				-after the constructor returns, the new operator returns a reference to the newly created objet
+			-use the dot . to access methods and instance variables associated with an object
+			-method signature is the name and the number and types of its parameters
+			-Modifiers:
+				-access control modifiers control level of access/visibility
+					-public designates that ALL classes may access the defined aspect
+					-protected designates taht access to the defined aspect is only granted to the following:
+						-classes that are subclasses or those that belong to the same package
+					-private designates access only granted to code within the same class
+				-static modifier:
+					-variables: for global vars, its value is associated with the whole class
+					-methods: it is associated with the class but not a particular instance of the class
+				-abstract modifier:
+					-its signature is provided, not any implementation
+					-a class with one or more abstract methods must be declared abstract as it is incomplete
+						-classes with no abstract methods can be declared abstract
+				-final modifier:
+					-the variable can NEVER be assigned a new value
+			-Constructors:
+				-cant be static,abstract, or final
+				-name must be identical to the class
+				-don't specify ANY return type, including void
+				-Java usually provides a default constructor if there are no given parameters
+		-Strings, Wrappers, Arrays, and Enum Types:
+			-Strings:
+				-Strings are 0+ chars, each of which can be referenced with an index (charAt(str))
+				-can be added together in concatentation
+				-Strings are immutable
+				-StringBuilder class is mutable version of a string, has methods:
+					-setCharAt(i,str)
+					-insert(i,str_new)
+					-append(new_str)
+					-reverse()
+					-toString()
+			-Wrappers:
+				-object version of all primitives, ie int x = 5 vs Integer x = new Integer(5)
+				-int to Integer conversion iscalled boxing, unboxing is the opposite
+			-Arrays:
+				-declaring int[] x; OR int[] x = {1,2,3}; OR int[] x = new int[3]; (in this last case, all elements are set to the default)
+			-Enum Types:
+				-user defined variabl type ie:
+					-public enum Day {MON, TUE, WED, THU, FRI, SAT, SUN};
+					-Day today = Day.TUE;
 		-Expressions:
+			-Literals:
+				-any constant vlaue that can be used in an assignment:
+					-null
+					-true/false
+					-String Literal: sequence within ""
+					-Char: \n. \', \t, etc.
+			-Operators:
+				-Arithmetic: +, -, *, /, %
+				-String concat +
+				-Increment and Decrement operators: ++, --
+				-Logical: <,>,==,!=, &&, ||, etc.
+				-Bitwise: ^,&,|, >>>, <<, etc
+				-Assignment =
+				-Compound Assignment: +=, *=, etc.
+			-Type Conversions:
+				-casting (type) var
+					-int to double is widening, vice versa is narrowing
 		-Control Flow:
+			-if, else if, else
+			-switch(x) {case a: case b: default:}, need a break after each case unless you want it to continue
+			-Loops: for and while
+				-for each: for (elementType name : container)
+			-return, break, continue
 		-Simple I/O:
-		-An Example Program:
-		-Packages and Imports:
-		-Software Development
+			-print, println, objects in this just use o.toString()
+			-input: Scanner -> new Scanner(System.in)
+				-hasNext()
+				-next()
+				-hasNextType()
+				-nextType()
+				-hasNextLine()
+				-nextLine()
+				-findInLine(String s)
+		-Software Development:
+			-Three Steps:
+				-Design
+					-Define responsibilites, independence, behaviors
+					-pseudocode
+				-Coding
+					-in an integrated development environment IDE
+				-Testing and Debugging
 	-CHAPTER 2 (Object Oriented Design):
 		-Goals, Principles, and Patterns of OOD:
-		-Inheritance
+			-robustness(ready for any input), adaptability(can evolve over time), and reusability
+			-basic principles are abstraction, encapsulation, and modularity
+				-Abstraction:distill complicated system down to its most fundamental parts, using ADTs that specify what each operation does but not how
+				-Encapsulation: different components of a software system should not reveal interal details of their implementations, allows parts to change w/o affecting other parts
+				-Modularity: different components of a system are divided into separate functional units to greatly increase robustness since its easier to test this way.
+		-Inheritance:
+			-put tclasses into a hierarchy, houses are subsets of buildings but apartments are supersets of studios
+			-a parent/super/base class exists wich a sub/child class extends
+				-children can augment by adding new fields and new methods, can also override existing methods
+			-use super() to access parent methods
+			-Polymorphism
+				-refers to ability of a reference variable to take different forms, ie Animal a can be declared and initialized to new Tiger(params)
+					-a here is polymorphic
+					-Java uses dynamic dispatch to determine at runtime to call the versio of the method that is most specific to the actual type, so if Animal and Tiger share a method, Java will chose the Tiger method
 		-Interfaces and Abstract Classes:
+			-Application Programming Interface(API) = interface
+				-its a collection of method declarations with no data and no bodies, so all methods are always empty
+				-classes can extend multiple classes, but can only implement one interface
+			-abstract class is the in b/w of regular classes and interfaces
+				-concrete classes are fully implemented
+				-Java limited to single inheritance so classes can have at most one superclass, concrete or abstract
 		-Exceptions:
+			-
 		-Casting and Generics:
 		-Nested Classes:
 	-CHAPTER 3 (Fundamental Data Structures):
