@@ -1,39 +1,241 @@
 Aidan Duffy
 Boston University
-METCS 521
+METCS 526
 
+Module 2:
+	Lecture 3 (Chapter 4-5):
+		-Algorithmic Analysis
+			-how we determine the space and runtime efficiency of algorithms
+				-mostly will focus on runtime
+			-runtime is function of input size, n
+			-we use big-oh notation, ie O(n), which is worst case scenario as actual outcome can be different
+				-we don't scare about specific runtime given a specific n, focused on trends and therefore scalability
+					-ie insertion sort vs quicksort have same runtime for n = 10k, insertion sort has a runtime substantially larger for n = 100k [O(n^2) vs O(nlogn)]
+				-ie best case(big-omega or Ω()) can be 1ms, vs the average(big-theta or Θ()) is 12k ms, worst case(Big-oh or O()) is 25k ms
+			-runtime examples:
+				-f(n) = c, constant
+				-f(n) = clog(n), logn
+				-f(n) = cn, n/linear
+				-f(n) = cnlogn, nlogn
+				-f(n) = cn^2, quadratic/n^2
+				-ie we drop the unnecessary constants, break them apart
+					-O(cnlogn) = O(c) + O(nlogn) = O(nlogn)
+				-then there are higher n powers (n^3,n^4,..,n^k)
+				-then a^n, then n^n
+				-check PDF for examples of how much faster 2^n grows versus n^3
+			-Analysis Example:
+				1 public static boolean unique2(int[ ] data) {
+				2 int n = data.length;
+				3 int[ ] temp = Arrays.copyOf(data, n); // make copy of data
+				4 Arrays.sort(temp); // and sort the copy, O(n log n)
+				5 for (int j=0; j < n-1; j++) // for loop takes O(n)
+				6 if (temp[j] == temp[j+1]) // check neighboring entries
+				7 return false; // found duplicate pair
+				8 return true; // if we reach this, elements are unique
+				9 }
+				-So, it is O(n logn) + O(n) = O(n log n)
+		-Proof Techniques:
+			-Proof by Contraction:
+				-to prove P->Q, assume Q is false and find a contradiction
+				-ex: if an even integer is added to another even integer, the result is even
+					-let x and y be even integers and z is their sum
+					-lets assume z is an odd integer
+					-x and y can be written, as even numbers, as 2n and 2m and z, as an odd number, as 2k + 1
+					-so x + y = z --> 2n + 2m = 2k + 1 --> 2(n+m-k) = 1, which is always false!
+			-Mathematical Induction:
+				-consists of base case/step and inductve step
+				-to prove a predicate P(n) is true for all positive integers n
+					-Base case: Show P(1) is true
+					-Inductive Step: assume P(k) is true, then prove P(k+1) is also true (the assumption is called the inductive hypothesis)
+				-ex:prove that for any positive int n, 2^n > n
+					-Base case: n = 1
+						-LHS = 2^1 = 2, RHS = 1, so LHS > RHS, true
+					-Induction Step: (n>=1):
+						-assume true for n = k for k >=1, ie 2^k > k
+						-LHS = 2^(k+1) = 2^1 * 2^k = 2k (by inductive hypothesis) = k+k >= k + 1 = RHS, so LHS > RHS
+		-Recursion:
+			-recursive functions are defined in terms of itself
+				-ie factioral function (if n == 0, return 1; else, return n*factorial(n-1))
+				-for calls, stack allocates memory for each ARI(each call of the method), so the stack becomes f(0) over f(1) over f(2) ... over f(n), then returns starting from 0 down
+					-it adds starting at n then n-1, then ... 1, then 0
+				-runtime of this method is O(n)
+					-each execution takes O(1), and we complete them n-1 times, or O(n), so O(n) + O(1) = O(n)
+			-Binary Search:
+				-search a sequence of n elements for a target element
+				-Linear search does the following:
+					-examine each element while scanning the sequence
+					-Best case: one comparison O(1)
+					-Worse case: n comparisions O(n)
+					-Average: n/2 comparisons O(n)
+				-Binary search:
+					-if sequence is sorted, we can use binary search!
+					-O(logn) runtime
+	Lecture 4 (Chapter 5-6):
+		-Recursion (cont'd):
+			-Binary Search (cont'd):
+				-it does the following:
+						-set low, mid, and high
+						-compare target with mid:
+							-if mid is larger, low = low, high = mid-1, mid = floor((low+high)/2)
+							-if mid is smaller, low = mid+1, high = high, mid = floor((low+high)/2)
+							-if mid is target, done!
+							-if mid=low=high and target not found, it is not there!
+						-recursively searching half of the array, keeps dividing it in half
+							-before recursion, we have n elements, 1st recursive call, n/2 elements, 2nd n/4 elements,...jth call has n/2^j elements at most
+							-target not there is the worst case, find max number of recursive calls
+								-smallest int r s.t. n/2^r < 1
+								-or r is the smallest int s.t. r > logn
+								-therefore, r = floor(logn) + 1 ==> O(logn) [always ignore the floor/ceiling functions since they won't change much]
+			-ex: reverseArray(int[]data, int low, int high)
+				- if low is smaller, set temp to data[low], data[low]=data[high],data[high]=temp, then reverseArray(data, low+1, high-1)
+					-we do O(1) operations n/2 times ==> O(n)
+			-ex: binary sum(int[] data, int low, int high)
+				-if low = high, return data there, is low>high, return 0, otherwise find mid and return binarySum(data,low,mid) + binarySum(data,mid+1,high)
+					-O(1) for all operations, how many times? --> if n = 4:
+								(0,3)
+							   /	 \
+							(0,1)	(2,3)
+						   /	 \  /	 \
+					  (0,0)  (1,1) (2,2) (3,3)
+			  		-height ==> 2^h+1 - 1 = n, or 2^3 - 1 = n, or 8-1=7=n
+			  		-RT is O(n) ==> T(n) = 2*T(n/2) + O(1)
+			-ex: power(x,n) = x^n
+				-if n == 0, return 1, otherwise return x*power(x,n-1)
+				-each call is O(1), called O(n) times, so O(n) is the running time
+			-ex: efficient power(x,n):
+				-if n = 0, return 1,
+				-if n is even, return power(x,floor(n/2))^2
+				-if n is odd, return "                     "*x
+				-explanation: if k = floor(n/2), k = n/2 for even, k=(n-1)/2 for odd n
+					-even: (x^k)^2 = (x^(n/2))^2 = x^n
+				-so we still perform operations in O(1), but now we call it O(logn) times (continually dividing by 2)
+				-runtime is O(logn)
+			-Design:
+				-two components: base case & recursion
+					-base case recursive call stops when a certain condition is met
+					-recursions is when that condition is not met, the algo calls itself
+				-when using poor design, can be very inefficient
+				-adding more parameters can help ie in binarySearch, adding low and high to the method signature
+					-can add this, too, so users themselves do not need to input that info 
+					public static boolean binarySearch(int[ ] data, int target) {
+						return binarySearch(data, target, 0, data.length – 1);
+					}
+				-tail recursion is when the recursive call is the last operation
+					-can be converted to a non-recursive algo that does not need the additional memory recursion requires in exchange for readability and complexity
+		-Stacks:
+			-data structure with specific types of removals, LIFO (last in first out; most recent gets out first) or FIFO(first in first out; oldest gets out first)
+			-uses push(x) to add to the stack, pop() removes the top element and returns it
+				-also has top/peek,size, and isEmpty/empty
+			-can be implemented with an array as the underlying
+				-bottom elements is stored in index 0, top element at index t where 0 <= t < N
+				-t = -1 when stack is empty, by convention
+			-runtime of all array-based implementations is O(1)
+			-SLL as implementation:
+				-top element is the head, all operations take O(1)
+			-can use stack to reverse an arrays elements(inefficient though)
+			-can use to check for matching parentheses, push for ( and pop for )
+		-Queues:
+			-has a linear data structure like the stack
+			-uses FIFO, enqueue(x) to add, dequeue() to remove
+				-also has first, size, and isEmpty
+			-if implemented with arrays:
+				-wraps around, have a moving pointer to keep track the index of the element that will pop next, if you add three, dequeue, then add another, index 0 should be empty while index 1-3 should be occupied with that pointer storing 1
+		-Deques:
+			-can use double-ended queues, pronounced as deck
+			-allows insertion and deletion at both ends
+				-can be used as a stack or a queue
+			-mapped methods(stack/queue = deque): 
+				-push = addFirst
+				-pop = removeFirst
+				-peek = peekFirst
+				-rest are queue in Java:
+				-add/enqueue = addLast
+				-offer = offerLast
+				-remove = removeFirst
+				-poll = pollFirst
+				-element = getFirst
+				-peek (queue) = peekFirst
 Module 1:
-	-Skipped through most of the first presentation, mostly things I remember
-	-interface: 
-		-methods not implemented, theres no data, can't be instantiated, can be used for multiple inheritance, a class implemeneting an interface must implement all methods
-		-a class can implement multiple interfaces
-		-Use Case:
-			-expect unrelated classes would implement it
-			-want to specify behavior of a particular data type, but not concerned about who implements its behavior
-			-want to take advantage of multiple inheritance of type
-	-Abstract Class:
-		-abstract method is one w/o implementation
-		-concrete is one w/ implementation
-		-Class:
-			-declared with abstract keywrord
-			-may or may not have abstract method
-			-a class w/ an abstract method must be an abstract class
-			-Used when subclasses share many common variables and methods
-			-cannot be instantiated
-		-Use case:
-			-want to share code among several closely related classes
-			-expect that classes that extend your a.c. have many common methods or fields
-	-Exception:
-		-occurs when exceptio is thrown, the runtime system finds an exception handler, the code in the handler is executed
-		-handler will go through the entire method tree from most recent to main to find something to handle the error, otherwise the program crashes
-			-use try-catch
-		-JVM can also throw errors that we can't prepare for with try-catch
-	-Generic:
-		-ex: we have queues that store ints, strings, and char, what if i want a method that could affect all of these?
-		-Write a generic queue! use "E" as the data type for generic
-	-Nested Class
-		-class within a class
-		-NC is only used for the outer class
-		-can be used if we want to declare members of the outer class as private but also want a smaller class to be able to access members of it
-		-or we want to implement a data structure which has a nother smaller data strucutre as its member
-		-it is more readable code and is easy to maintain, and can help reduce name conflict!
+	Lecture 1 (Admin & Chapters 1-2):
+		-Skipped through most of the first presentation, mostly things I remember
+		-interface: 
+			-methods not implemented, theres no data, can't be instantiated, can be used for multiple inheritance, a class implemeneting an interface must implement all methods
+			-a class can implement multiple interfaces
+			-Use Case:
+				-expect unrelated classes would implement it
+				-want to specify behavior of a particular data type, but not concerned about who implements its behavior
+				-want to take advantage of multiple inheritance of type
+		-Abstract Class:
+			-abstract method is one w/o implementation
+			-concrete is one w/ implementation
+			-Class:
+				-declared with abstract keywrord
+				-may or may not have abstract method
+				-a class w/ an abstract method must be an abstract class
+				-Used when subclasses share many common variables and methods
+				-cannot be instantiated
+			-Use case:
+				-want to share code among several closely related classes
+				-expect that classes that extend your a.c. have many common methods or fields
+		-Exception:
+			-occurs when exceptio is thrown, the runtime system finds an exception handler, the code in the handler is executed
+			-handler will go through the entire method tree from most recent to main to find something to handle the error, otherwise the program crashes
+				-use try-catch
+			-JVM can also throw errors that we can't prepare for with try-catch
+		-Generic:
+			-ex: we have queues that store ints, strings, and char, what if i want a method that could affect all of these?
+			-Write a generic queue! use "E" as the data type for generic
+		-Nested Class
+			-class within a class
+			-NC is only used for the outer class
+			-can be used if we want to declare members of the outer class as private but also want a smaller class to be able to access members of it
+			-or we want to implement a data structure which has a nother smaller data strucutre as its member
+			-it is more readable code and is easy to maintain, and can help reduce name conflict!
+	Lecture 2 (Chapter 3):
+		-Linked Lists:
+			-node stores an element and link(s)
+			-nodes connected by links, which are references to a node
+			-singly linked list:
+				-nodes connected by a single link
+					-a link points to the next node
+					-a node has element and the reference/pointer to the next node
+				-ex code is in PDFs
+				-should always store head, optional to store the tail
+				-adding or removing from the head or tail can be real quick, arbitrary nodes is nontrivial and inefficient
+			-doubly linked lists:
+				-better since singly can be inefficient to insert or delete nodes at arbitrary positions
+				-DLL have two pointers, adds the previous pointer
+				-adding/deleting is simply updating the new/old next and previous pointers to the new/old node
+				-important note: in java constructor, header gets set to all null, then tail to all null but previous is header, then you add a next for the header to the tail
+			-Insertion Sort:
+				-basic structure: input is array A of n elements, output is A w/ elements rearrange in non decreasing order
+				-algo: for loop from 1 to n-1 insert A[i] at its proper location within A[0....k]
+					-everything to the left of the current index is sorted, to the right is "unexplored", and the index you need to scan leftwards (decreasing i) until the next element is less than current, that is where it gets stored.
+						-while elements are still larger than the index, replace them to the higher index (if A[3] > A[current_index], A[4]=A[3])
+				-run time is O(n^2) as it goes through much of the array each iteration of the loop
+			-Testing Equality:
+				-Two ways: whether 2 reference variables are pointing to the same object OR whether the contents of the 2 objects pointed to are the same
+					-ex: two strings that are both "data", not equal in the first interpretation, but are in the second
+					-use == for the first, .equals for the second in Java
+				-On arrays:
+					- a==b checks if a and b refer to the same array instance
+					-a.equals(b) is actually identical to a==b
+					-need to use Arrays.equals(a,b) to test if the contents of the two arrays are the same
+						-essentially runs a[i].equals(b[i]) for all the elements
+				-each type of list needs to have its own type of equality testing
+				-Linked lists:
+					-has its own .equals method, traverses the list and checks every node for equality
+			-Cloning Data Structures:
+				-shallow copy vs deep copy
+				-shallow:
+					-make a new pointer that just points to the same object
+					-ie if you change anything in the copy, the original will also change
+				-deep copy:
+					-clones the data structure, makes a new & independent object
+				-java's default object clone method creates a SHALLOW copy in certain cases
+					-if needed, define your own clone method
+					-for arrays of primitives, deep copies are created
+					-arrays with object type elements, SHALLOW copies created (ie if String array, a new array is created but the individual elements point to the same string)
+						-here is the case where you need to write your own code
+				-cloning linked lists:
+					-copy one node at a time, look to clone method in SinglyLinkedList class

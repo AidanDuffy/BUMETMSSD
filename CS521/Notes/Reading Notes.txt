@@ -2,6 +2,14 @@ Aidan Duffy
 Boston University
 METCS 521
 
+Module 2:
+	Chapter 4:
+		-
+	Chapter 5:
+		-
+	Chapter 6:
+		-
+
 Module 1:
 	Chapter 1:
 		-Exercises: whats a program, whats interpreted mean, whata a comment, namespace, white space, statement vs expression, difference between (),{}, and [], how assignment works
