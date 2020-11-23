@@ -2,9 +2,35 @@ Aidan Duffy
 Boston University
 METCS 521
 
+Module 3:
+	Lecture 5:
+		-
+	Lecture 6:
+		-
+
 Module 2:
 	Lecture 3:
-		-
+		-reminder that for the project, need to meet the minimum requirements, then can go above and beyond
+		-functions like .update which can work on both sets and dictionaries are called polymorphic as they have the same name and general idea, but the implementation is in fact different
+		-Python has 10 data types & two special types
+			-5 primitives: int, double, char, boolean, complex (2+5i, but python uses j)
+			-5 collections: list, tuple, set, string, dictionary
+			-2 specials: range (1-20, increasing every x), none
+		-other things build on all of these, ie array in numpy is an int list, but cannot contain the other data types
+		-compare x = 5 and y = 5.0, if x & y are the same value x == y, to check if they point to the same object do if x is y
+			-if x is True is preferred to if x == True
+				- same with None
+		-can cast int(), float(), and complex()
+		-0b,0o, and 0x for the various encodings
+		-operator precedence:
+			-()
+			-**
+			- -(negation)
+			-*,/,%,//
+			- +,-
+			-same is left to right, so PEMDAS more or less
+		-enhanced for loop is for x in set/list/etc:
+		-divmod() combines % and //
 	Lecture 4:
 		-
 

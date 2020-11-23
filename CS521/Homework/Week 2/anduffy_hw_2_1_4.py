@@ -5,7 +5,8 @@ def main():
     """
     number = input("Please input an integer: ")
     number = int(number)
-    print(number%2)
+    print(number % 2)
+
 
 if __name__ == "__main__":
     main()

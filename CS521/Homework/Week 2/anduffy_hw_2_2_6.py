@@ -5,7 +5,7 @@ def leap_years():
     :return:
     """
     print("For Loop: ")
-    for i in range(1900,2021):
+    for i in range(1900, 2021):
         if i % 4 == 0:
             if i % 100 == 0:
                 if i % 400 == 0:
@@ -14,7 +14,7 @@ def leap_years():
                     continue
             else:
                 print(i)
-    print("===========================") #This is just to make the result more readable
+    print("===========================")  # This is just to make the result more readable
     print("While Loop: ")
     year = 1900
     while year <= 2020:
@@ -29,8 +29,10 @@ def leap_years():
                 print(year)
         year += 1
 
+
 def main():
     leap_years()
+
 
 if __name__ == "__main__":
     main()

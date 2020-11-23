@@ -10,6 +10,7 @@ def factors(x):
             print(i)
         i += 1
 
+
 def main():
     """
     This is just a given for loop being rewritten as a while loop.
@@ -18,6 +19,7 @@ def main():
     x = input("Please input an integer: ")
     x = int(x)
     factors(x)
+
 
 if __name__ == "__main__":
     main()

@@ -13,9 +13,11 @@ def print_string_int_fp(inp):
     run into errors with the int() method.
     """
 
+
 def main():
     user_input = input("Please provide an input to be output as a string, int, and float:  ")
     print_string_int_fp(user_input)
+
 
 if __name__ == "__main__":
     main()

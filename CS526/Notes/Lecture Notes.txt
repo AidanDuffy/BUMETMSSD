@@ -2,6 +2,12 @@ Aidan Duffy
 Boston University
 METCS 526
 
+Module 3:
+	Lecture 5 (Chapter 7-8):
+		-
+	Lecture 6 (Chapter 8-9):
+		-
+
 Module 2:
 	Lecture 3 (Chapter 4-5):
 		-Algorithmic Analysis
