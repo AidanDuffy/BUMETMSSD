@@ -132,7 +132,7 @@ public abstract class AbstractTree<E> implements Tree<E> {
   /**
    * Returns the height of the subtree rooted at Node p.
    *
-   * @param p A valid Node within the tree
+   * @param n A valid Node within the tree
    * @throws IllegalArgumentException if p is not a valid Node for this tree.
    */
   public int height(Node<E> n) throws IllegalArgumentException {

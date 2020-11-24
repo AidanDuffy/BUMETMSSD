@@ -1,6 +1,7 @@
 
 // make sure all files in nodeTrees package are accessible
 // some files in nodeTrees may need files from net.datastructures
+import nodeTrees.IntBST;
 
 public class Hw3_P7 {
 
