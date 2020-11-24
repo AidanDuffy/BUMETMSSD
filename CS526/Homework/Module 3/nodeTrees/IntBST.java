@@ -2,6 +2,7 @@ package nodeTrees;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 // binary search tree storing integers
 public class IntBST extends NodeBinaryTree<Integer> {
@@ -86,8 +87,25 @@ public class IntBST extends NodeBinaryTree<Integer> {
 	// Output: an IntBST, which is a "complete" binary search tree with all integers in the array a
 	//        
 	public static IntBST makeBinaryTree(int[] a){
-		
-		// complete this method	
+		IntBST intBST = new IntBST();
+	  	if (a.length == 0) {
+			return intBST;
+		} else if (a.length == 1) {
+			intBST.addRoot(a[0]);
+			return intBST;
+		} else {
+			int length = a.length;
+			int midPoint = a.length/2;
+			int mid = a[midPoint];
+			intBST.addRoot(mid);
+			int[] left = Arrays.copyOfRange(a, 0, midPoint);
+			int[] right = Arrays.copyOfRange(a, midPoint + 1, length);
+			IntBST leftSubTree = makeBinaryTree(left);
+			IntBST rightSubTree = makeBinaryTree(right);
+			intBST.root.setRight(rightSubTree.root);
+			intBST.root.setLeft(leftSubTree.root);
+			return intBST;
+		}
 	}
 
 }
