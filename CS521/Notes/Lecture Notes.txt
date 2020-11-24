@@ -32,7 +32,18 @@ Module 2:
 		-enhanced for loop is for x in set/list/etc:
 		-divmod() combines % and //
 	Lecture 4:
-		-
+		-hash() function returns the hash value, naturally
+		-two identical values should return identical hash values
+		-two identical strings stored in separate variables also share an id() value
+		-random() returns a random number, from the random module
+		-mutability:
+			-primitives, strings, and tuples are immutable; lists, sets, and dictionaries are mutable
+			-if you have a super long string, easier to store everything in a list and change it there as opposed to changing the string
+				-changing the string would generate a new string object and redirect the pointer, inefficient for memory
+				-sorted(list) creates a new list object, list.sort() does not
+			-if a collection containts mutable elements(like a list), it is possible to write an iteration so that all elements are identical
+
+
 
 Module 1:
 	Lecture 1:
