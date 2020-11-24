@@ -7,7 +7,7 @@ Description: Reads a file of 20 words, inserts new line characters and writes a 
 """
 def restructure_file():
     try:
-        original = open("originl.txt", "r")
+        original = open("original.txt", "r")
     except:
         print("Error: The input file does not exist!")
         return
