@@ -2,6 +2,12 @@ Aidan Duffy
 Boston University
 METCS 526
 
+Module 4:
+	-CHAPTER 9 (Priority Queues):
+		-
+	-CHAPTER 10 (Maps & Hash Tables, skip 10.4):
+		-
+
 Module 3:
 	-CHAPTER 7 (Lists):
 		-The List ADT:
@@ -174,11 +180,136 @@ Module 1:
 				-concrete classes are fully implemented
 				-Java limited to single inheritance so classes can have at most one superclass, concrete or abstract
 		-Exceptions:
-			-
+			-exceptions are objects that can be "thrown" by code that encounters an unanticipated situation or by the JVM if - for ex - it runs out of memory.
+			-code can also catch exceptions and another block of code will handle the issue
+			-Java uses try-catch generally to handle exceptions
+				-catch block deals with exceptions thrown in the try block
+				-can have multiple catch blocks for different types of possible exceptions
+				-finally blocks will be executed at the end regardless what happens
+			-examples:
+				-Catch:
+					-catch (ArrayIndexOutOfBoundsException e) { handling...}
+				-Throw:
+					-throw new exceptionType(paratmeters);
+					-this would be placed in code if you anticipate error, ie a check positive method that intakes an int, checks if a number is above 0, otherwise it could throw an IllegalArgumentException that states its not positive
+			-Throwables are divided in Error and Exception
+				-Errors: thrown only (typically) by the JVM and designate the most serious situations that are typically unrecoverable
+					-ie a class file is corrupt
+				-Exceptions: designate situations in which a running program might reasonably be able to recover
+					-ie unable to open a data file
+					-Exceptions are divided into checked and unchecked
+						-Unchecked are all subtypes of runtime exceptions
+							-ex: index OOB, illegal arg, null ptr
+						-any exception type that is not part of the RuntimeException is a checked exception
+							-ex: IOException, EOFException
+							-all checked exceptions that might propogate upward from a method must be explicityl declared in its signature!
 		-Casting and Generics:
+			-Casting:
+				-Widening Conversion:
+					-occurs when a type T is converted into a wider type U
+						-T & U are class types and U is a superclass of T
+						-T & U are interface types and U is a superinterface of T
+						-T is a class that implements interface U
+						-explicit ex: CreditCard card = new PredatoryCreditCard(...)
+							-U = new T()
+				-Narrowing Conversion:
+					-vice versa of widening (T to S):
+						-T & S are class types a S is a subclass of T
+						-S is a subinterface of T
+						-S implements interface T
+						-explicit ex: PredatoryCreditCard pc = (PredatoryCreditCard) card; //From above
+				-Exceptions:
+					-if object o is type T and we cast into S, provided o is referring to is actually type S, we are good
+					-however, if o is not also of type S, then we get a ClassCastException, ex:
+						Number n;
+						Integer i;
+						n = new Integer(3);
+						i = (Integer) n; (LEGAL)
+						n = new Double(3.14);
+						i = (Integer) n; (ILLEGAL)
+					-use try catch to avoid this!
+					-use intsanceof, allows us to test whether it would work
+						-objectReference instanceof referenceType returns T/F
+						-ex:
+							-n = new Double(3.14);
+							-if (n instanceof Integer)
+								i = (Integer) n;
+							-no error will be thrown now, won't attempt third line!
+			-Generics:
+				-classes and methods that can operate on several data types are generic, they often avoid the need for explicit casts as well
+				-generic frameworks allow us to define a class in terms of a set of "formal type parameters"
+					-these can be used as the declared type for variables, params, and return vals
+				-EX: if we wish to treat a pair of related vals as a single object, so they can be returned from a method, define a new class whose instances store both values
+					-this is an OOD pattern called the "compoisiton design pattern"
+				-<>, angled brackets, enclose the sequence of formal type params
+					-when declaring a variable though, we need to specify the actual type params
+						-so could be Pair<A,B> in the original code, but declaring must be, for ex:
+							-Pair<String, Double> var;
+					-instantiate the above as follows: var = new Pair<>("STRING", 12.34);
+				-Arrays:
+					-when instantiating arrays like this, it needs to be unparameterize:
+						-Pair<String,Double> arr;
+						-ILLEGAL: arr = new Pair<String,Double>[25];
+						-LEGAL: arr = new Pair[25];
+						-Legal: arr[0] = new Pair<>("STRING", 123.4);
+				-Methods:
+					-use "T" as the generic type so:
+						-public static <T> void reverse(T[] data){ is an example signature
 		-Nested Classes:
+			-a nested class has its definition inside that of another class:
+				-ex: public class CreditCard{
+					private static class Transaction{}
+					...
+					Transaction[] history //logs all transactions for a statment
+				}
+				-CC is the outer class, trans is the nested class, the full name for it is CreditCard.Transaction
+			-nested classes have their own visibility modifiers
+				-private means only the outer class can use it
+			-static can be applied, meaning its instances have no association witha ny specific instance of the outer class
+				-in our ex, no specific transaction would be linked to on credit card
+			-a nonstatic class is called an inner class in Java
+				-can only be created within a nonstatic method of the outer class, each instance of an ionner class implicitly stores a reference to its outer instance using the syntax OuterName.this instead of just this
 	-CHAPTER 3 (Fundamental Data Structures):
 		-Using Arrays:
+			-ex from textbook is storing game scores in an array, an object with a name and an int, sorted so high score is [0]
+			-adding entries is important, by default all entries are null, process is:
+				-update number of entries (easy, done in one line of code, unless there's a cap, then need an if statement)
+				-place new entry in the appropriate location, shifting entries as needed
+					-start from the lowest score and work way up, shifting entries as you go
+			-removing you just shift all entries below to the left one, mark last entry as null
+			-Sorting:
+				-Insertion-Sort:
+					-Input array A of n elements
+					-Output array A w/ elems in nondecreasing order
+					-Algo High Level:
+						for k from 1 to n - 1
+							insert A[k] at its proper location within A[0], A[1],...,A[k]
+					-Java:
+						n = A.length;
+						for(int k = 1; k < n; k += 1) {
+							char current = data[k];
+							int j = k;
+							while (j > 0 && data[j-1] > current) {
+								data[j] = data[j-1];
+								j -= 1;
+							}
+							data[j] = current;
+						}
+						-so start with the second element, grab that element, find the correct index for it by iterating through and moving any elements greater than current to the right of it.
+			-Array methods and Random Numbers:
+				-equals(A,B) returns true iff array A and B are equal (same number of elements and every corresponding pair of elements is equal(A[0]==B[0], A[n]==B[n]))
+				-fill(A,x), stores x in every cell of A
+				-copyOf(A,n) returns array of size n s.t. the first k elements of this array are copied from A, where k is the min of n and A.length, if n is bigger then the last few elements will be null or 0
+				-copyOfRange(A,s,t) same as above but starts at A[s], ends at A[t-1]
+				-toString(A) returns the String representation of A beginning with [ and ending with ]
+				-sort(A) sorts A
+				-binarySearch(A,x), searches the sorted array A for value x, returning its index
+				-java has PRNG or pseudorandom number generators
+					-nextBoolean() returns the next PR bool
+					-nextDouble() "                  " double, between 0.0 and 1.0
+					-nextInt() "" int
+					-nextInt(n) "     " in range from 0 up to n, exclusive
+					-setSeed(s), sets seed of PRNG to the long val of s
 		-Singly Linked Lists:
 		-Circularly Linked Lists:
 		-Doubly Linked Lists:
