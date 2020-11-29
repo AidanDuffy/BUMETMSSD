@@ -42,8 +42,7 @@ Module 2:
 				-changing the string would generate a new string object and redirect the pointer, inefficient for memory
 				-sorted(list) creates a new list object, list.sort() does not
 			-if a collection containts mutable elements(like a list), it is possible to write an iteration so that all elements are identical
-
-
+				-sets cannot contain any non hashable elements
 
 Module 1:
 	Lecture 1:
