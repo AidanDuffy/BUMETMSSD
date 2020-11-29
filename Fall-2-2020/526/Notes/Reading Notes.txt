@@ -100,11 +100,52 @@ Module 2:
 						-in iteration j, we compare element val to data[j], if equal, return j; if not equal, one more element is not equal to val and we increment j, making Lj claim true until j = n or we hit
 	-CHAPTER 5 (Recursion):
 		-Illustrative Recursion Examples:
-		-Analyzing Recursive Algorithms
-		-Further Examples
+			-factorial function: if n = 1, return 1, otherwise return n*factorial(n-1)
+			-Binary Search:
+				-used to efficiently find a target value within a sorted sequence of n elements in an array
+				-if sequence is unsorted, use the standard approach where you loop and check all elements (linear or sequential search)
+				-if sorted and indexable, use a more efficient search, need size and a midpoint = floor(low+high/2)
+					-if target above mid, mid becomes the new low, find new mid and begin again
+					-if below mid, high = mid, ""
+					-if target is mid, we did it!
+					-if low > high, then unsuccessful
+			-Files:
+				-Java.io.File:
+					-new File(pathString) or new File(parentFile, childString) creates a new File instance
+					-file.length() returns the disk usage in bytes for the OS entryrepresented by the File instance
+					-file.isDirectory() returns T if the file is a directoy
+					-file.list(), returns array of strings designtating the names of all entries within a given directory
+		-Analyzing Recursive Algorithms:
+			-binary search runs in O(logn) time for a sorted array w/ n elements (continually halving number of elements)
+			-Computing Disk Space Usage:
+				-the idea we can sometimes get a tighter bound on a series of operations by considering the cumuilative effect rather than assuming each achieves a worst case is called amortization
+				-a file system is an implicit example of a tree data structure
+					-disk usage algo in the textbook is really a manifestation of a more general algo known as a tree traversal
+		-Further Examples:
+			-if a recursive call starts at most one other, linear recursion:
+				-summing all elements of an array recursively: if length is zero, return 0, else return sum(data, n-1) + data[n-1], runs in O(n)
+				-reversing elements in an array runs in O(n/2) = O(n) if you swap high and low then inc/decrement each and call the function again
+				-calculating exp. powers recursively also runs in O(n), if n == 0, return 1, else return n*power(x,n-1)
+					-other way: if n = 0, return 1, if n is odd, return x*power(x,floor(n/2))^2, if even, dont multiply that by x
+						-this is O(logn)
+						-for odd: floor(n/2) = n-1/2 and (x^k)^2 = x^(n-1), so x^n = x*(x^k)^2
+			-may call two others, binary recursion:
+				-binarySum which sums from low to mid and from mid to high, recursion depth is 1+lg(n), using O(lg(n)), with 2n-1 calls, the runtime is O(n)
+			-3+ calls, multiple recursion
 		-Designing Recursive Algos:
+			-Test for base cases (in factorial, its if n == 1, power n ==0, etc)
+			-Recur if not a base case
+			-Parameterizing:
+				-binarySearch adds low and high to the method signature instead of just the array and the target value
 		-Recursion Run Amok:
+			-need to ensure implementing recursion does not drastically increase runtime
+			-Fibonacci that returns n if n <= 1, or returns fib(n-2) + fib(n-1) is bad as it makes an exponential nuimber of calls in n!
+				-to make efficient, make sure each invocation only makes one recursive call, fib(n-1) which would return [fib(n-1), fib(n-2)] from the text implementation, runs in O(n)
+			-also need to ensure you do not create infinite recursion!
 		-Eliminating Tail Recursion:
+			-tail recursion is if any recursive call that is made from on context is the very last operation in that context
+				-always linear recursion, by necessity
+				-ex: return n*factorial(n-1) is NOT tail recursion because oan addtional multiplcation is performed after the call is completed
 	-CHAPTER 6(Stacks,Queues, and Deques):
 		-Stacks:
 		-Queues:
