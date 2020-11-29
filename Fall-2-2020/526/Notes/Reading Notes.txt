@@ -28,9 +28,76 @@ Module 2:
 	-CHAPTER 4 (Algo Analysis):
 		-The Seven Functions Used in this Book:
 			-Constant function, so it always runs in the same amount of time, regardless of input size
-			-
+			-Logarithm Function, runs in log(n) time, usually log base 2
+			-Linear function, runs in n time, ie comparing some num to each element of array sized n
+			-N-Log-N Function, runs in n*log(n) time
+			-Quadratic, runs in x^2 time, often pops up with nested loops
+				-if the first iteration of the loop uses 1 op, the second uses 2 ops, up to n operations, then that happens n times
+			-Cubic/Other polynomials runs in n^3 or n^a time, for polys, just use the biggest power for the big-Oh notation
+			-Exponential function runs in a^n time, where input size is the power
 		-Asymptotic Analysis:
+			-Big-Oh Notation:
+				-this is the worst possible runtime in asymptotic analysis, so 8n+5 is O(n) or 5n^4 + 2n^2 + 3n + 9 is O(n^4)
+			-Big-Omega is the best possible runtime, big-Theta is the average
+			-Comparatively, we check which algo is asymptotically better (O(n) is asymptotically better than O(nlogn)
+			-Note though 10^100 * n is O(n), 10nlogn is O(nlogn), the second is still preferred despite being asymptotically worse, given that the first has such a huge constant
+			-generally any algo running in O(nlogn) with reasonable coefficients is efficient, any exponential functions will almost never be considered efficient
+			-ex of constant time operations is accessing an element in array A[k] or getting an arrays length, which is stored as a variable, both in O(1)
+			-finding the max of an unsorted array is O(n) if you just go through one by one and compare (which is O(1) operation done n times)
+			-Strings:
+				-in Java, strings are immutable so adding to a string just creates a new string 
+				-if a method takes an empty string then adds a char n times, its doing: 1+2+...+n times, which is O(n^2) because each addition takes more time as you are creating all those new strings
+			-Three-Way Set Disjointness:
+				-we have three sets, A, B, and C that are unique int[]
+				-for(a: A)
+					for(b:B)
+						for(c:C)
+							if all equal:
+							O(1) operation
+					-this is O(n^3), n*n*n for each for loop
+				-instead do:
+					for(a: A)
+						for(b:B)
+							if a==b:
+								for(c:C)
+									if a==c:
+										O(1) operation
+					-this is O(n^2) becasue there are quadractically many pairs (a,b) to consider,
+					but if A and B are sets of distinct ints, there can be at most O(n) pairs with a == b, so C executs at most n times instead of n^2 times like before
+			-Element Uniqueness Problem:
+				-given an array of n elements and need to find if all elements are distinct
+					-could just iterate through nested, which is O(n^2)
+				-could sort the array first, then check for duplicates O(nlogn) + O(n) = O(nlogn), better than O(n^2)
+			-Prefix Averages:
+				-given a sequence x of n numbers, compute sequence a s.t. a.j is the average of elements x.0,...,x.j for j = 0,...,n-1
+				-O(n^2) solution is to declare a new double array and have a running array count by iterating through the first array up until j, averaging, storing in new array for all j
+				-O(n) solution is the same except use a total variable that is declared outside the for loops and just adds the newest val and averages that way
 		-Simple Justification Techniques:
+			-By example, includes counter examples
+			-Contra Attack
+				-Contrapositive is: Let a and b be integers, if ab is even, then a is even or b is even, so... If a is odd and b is odd, then ab is odd, so a = 2j+1 and b = 2k + 1, for ints j and k, then ab=4jk + 2k + 2j + 1 = 2(2jk + j + k) + 1, therefore ab is odd!
+					-If a then b, contrapositive is if not b, then not a, and P or Q == not P and not Q
+				-Contradiction: to prove P, assume P is false and show that produces a contradiction
+			-Induction & Loop Invariants:
+				-Induction:
+					-to prove a predicate P(n) is true for all positive integers n
+						-Base case: Show P(1) is true
+						-Inductive Step: assume P(k) is true, then prove P(k+1) is also true (the assumption is called the inductive hypothesis)
+					-ex:prove that for any positive int n, 2^n > n
+						-Base case: n = 1
+							-LHS = 2^1 = 2, RHS = 1, so LHS > RHS, true
+						-Induction Step: (n>=1):
+							-assume true for n = k for k >=1, ie 2^k > k
+							-LHS = 2^(k+1) = 2^1 * 2^k = 2k (by inductive hypothesis) = k+k >= k + 1 = RHS, so LHS > RHS
+				-Loop Invariants:
+					-to prove a statement L about a loop is correct, define L in terms of a series of smaller statements, L0, L1,...Lk where:
+						-L0, initial claim, is true before the loop
+						-if Lj-1 is true before iteration j, then Lj will be true after iteration j
+						-final claim Lk imples the desired statement L is true
+					-ex: loop that goes through each array element to check if it is equal to a certain value, and if so, returns that index
+						-L0: val (what we are seeing if data[j] is equal to), is not equal to any of the first j elements of data
+							-true because j = 0 at the start
+						-in iteration j, we compare element val to data[j], if equal, return j; if not equal, one more element is not equal to val and we increment j, making Lj claim true until j = n or we hit
 	-CHAPTER 5 (Recursion):
 		-Illustrative Recursion Examples:
 		-Analyzing Recursive Algorithms
