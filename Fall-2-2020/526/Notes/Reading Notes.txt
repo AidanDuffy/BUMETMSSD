@@ -26,8 +26,9 @@ Module 3:
 
 Module 2:
 	-CHAPTER 4 (Algo Analysis):
-		-Experimental Studies in Algo Analysis:
 		-The Seven Functions Used in this Book:
+			-Constant function, so it always runs in the same amount of time, regardless of input size
+			-
 		-Asymptotic Analysis:
 		-Simple Justification Techniques:
 	-CHAPTER 5 (Recursion):
@@ -311,9 +312,42 @@ Module 1:
 					-nextInt(n) "     " in range from 0 up to n, exclusive
 					-setSeed(s), sets seed of PRNG to the long val of s
 		-Singly Linked Lists:
+			-Collection where each item or "node" stores two things, its value as well as pointer to the next element
+			-the collection starts at the head, ends with the tail, which points to null next
+			-adding to the head is simple, just create  a new node, have its next point the head and the head pointer now point to that new node
+			-adding to the tail is the same
+			-removing from the head or tail is just the opposite
+			-add/remove from arbitrary points is more difficult, should just doubly linked lists for that
+				-otherwise would need to traverse through the list
+			-Implementation has the following methods:
+				-size,isEmpty,first,last,addFirst(e),addLast(e),removeFirst()
 		-Circularly Linked Lists:
+			-essentially the next ptr in the tail points to the head, need to store those vals to be able to differentiate where it starts and ends
+			-adds the rotate method which moves the first elem to the end of the list
 		-Doubly Linked Lists:
+			-this adds a second ptr that points to the previous element
+			-use sentinels or dummy nodes that store no element values for the header and trailer for safety
+				-header and trailer will now NEVER change, all insertions will be treated the same way as all nodes will be placed between two already exisiting nodes
+			-insertion is creating a node, finding where it goes, making the prev and next ptrs correct and adjust the nodes that come before/after it so their next/prev ptrs point to it
+			-deletion you just change node.prev.next to node.next and vice versa!
+			-3.4.1 has an implementation that would be good to review!!
 		-Equivalnce Testing:
+			-for nonnull x, x.equals(null) should always return false
+			-x.equals(x) should always return true
+			-x.equals(y) and y.equals(x) should return the same val
+			-if x.equals(y) and y.equals(z), then x.equals(z)
+			-use .equals for non primitives/objects
+			-Arrays:
+				-== and .equals are identical for arrays, they need to be identical arrays
+				-Arrays.equals(a,b) tests if every element is equal
+				-if the elements are arrays, use Arrays.deepEquals(a,b) to avoid == comparisons
+			-Linked Lists:
+				-traverse both lists and .equals each element
 		-Cloning Data Structures:
+			-Shallow copy means if you change the copy's fields, you change the original
+			-for arrays, use .clone() to create a separate array object that can be changed independently IF it stores primitives
+				-if it stores objects, then the pointers within the array still all point to the same objects, need to use a deep clone to clone each element of that array
+			-for linked lists:
+				-clone the head and tail, and traverse through cloning each node and setting up those pointers correctly
 
 	

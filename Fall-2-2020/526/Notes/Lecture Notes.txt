@@ -2,10 +2,15 @@ Aidan Duffy
 Boston University
 METCS 526
 
+Module 4:
+	Lecture 7 (Chapter 9):
+		-
+	Lecture 8 (Chapter 10):
+
 Module 3:
 	Lecture 5 (Chapter 7-8):
 		-
-	Lecture 6 (Chapter 8-9):
+	Lecture 6 (Chapter 7-8):
 		-
 
 Module 2:
