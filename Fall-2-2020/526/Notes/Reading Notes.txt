@@ -68,11 +68,110 @@ Module 3:
 				-asList(A) reutnrs list representation of the array A, with the same element type as the elements of A
 	-CHAPTER 8 (Trees):
 		-General Trees:
+			-important non linear data structure
+			-a tree is an abstract data type that stores elements hierarchically
+			-excluding the root, each element has a parent element or 0+ children elements
+			-we formally define a tree T as a set of nodes storing elements s.t. the ndoes have a parent-child relationship that satisifies the following properties:
+				-if T is nonempty, it has a special node called the root of T that has no parent
+				-each node v of T different from the root has unique parent node w; every node with parent w is a child w
+			-the above defintion allows for empty trees without root node r
+			-nodes w/ same parent are siblings
+			-v is an external node if it has no children, internal if it has one or more children
+				-external are aka leaves
+			-node u is an ancestor of node v if u = v or u is an ancestor of the parent of v
+			-node v is a descendant of node u if u is an ancestor of v
+			-the subtree of T rooted at node v is the tree consisting of all the descendants of v in T
+			-an edge of tree T is a pair of nodes (u,v) s.t. u is the parent of v or vice versa
+			-a path of T is a sequence of nodes s.t. any two consecutive nodes in the sequence form an edge
+			-a tree is ordered if there is a meaningful linear order among the children of each node; that is, we purposefull indetify the children of a node as being the frist, second, third, etc
+			-Tree ADT:
+				-accessor methods: root(), parent(p), children(p) returns an iterable collection of all children of node p, numChildren(p)
+				-query methods: isInternal(p), isExternal(p), isRoot(p)
+				-general: size, isEmpty, iterator, positions
+			-depth of a node is the number of ancestors of node, other than that node itself
+			-the depth of p can be recursively defined:
+				-if p is the root, then the depth of p is 0
+				-otherwise, the depth is one plus the depth of the parent of p
+			-the height of a tree is equal to the max of the depths, formally:
+				-if p is a leaf, then the height of p is 0,
+				-otherwise the height of p is one more than the maximum of the heights of p's children
+			-Propositions:
+				-height of the root of a nonempty tree T, according to the recursive dewfintion, equals the maximum depth among all leaves of tree T
+				-let T be a tree w/ n positions, and let cp denote the number of children of node p of T, then summing over the nodes of T, summation sub p of cp = n-1
+					-each node of T, w/ exception of the root, is a child of another node, and thus contributes one unit to the above sum
 		-Binary Trees:
+			-Properties:
+				-every node has AT MOST two children
+				-each child node is albeled as being either the left or right child
+				-a left child precedes a right child in the order of children of a node
+				-it is proper/full if each node has either 0 or 2 children
+			-ADT:
+				-left(p) returns node of the left child of p
+				-right(p)
+				-sibling(p)
+			-Other Properties:
+				-level 0 is root, increasing by 1, each level has at most 2^l nodes where l is the level
+				-let T be nonempty binary tree, let n, nE, nI, and h denote number of nodes, number of external nodes, internal nodes, and height:
+					-h+1 <= n <= 2^(h+1) -1
+					-1 <= nE <= 2^h
+					-h <= nI <= 2^h - 1
+					-log(n+1) - 1 <= h <= n-1
+				-if T is proper:
+					-2h+1 <= n <= 2^(h+1) - 1
+					-h+1 <= nE <= 2^h
+					-h <= nI <= 2^h - 1
+					-log(n+1) - 1 <= h <= (n-1)/2
+					-nE = nI + 1
 		-Implementing Trees:
+			-Linked Structure for Binary Trees:
+				-linked structure is a natural way of thinking about a tree, with nodes that store pointers to its children and its parent as well as its element
+				-methods:
+					-addRoot(e), addLeft(p,e), addRight(p,e), set(p,e), attach(p,T1,T2) attaches the internal structure of trees T1 and T2 as the left and right subtrees of leaf position p and resets T1 and T2 to empty trees, and remove(p)
+				-check textbook for actual implementation
+				-Runtimes:
+					-O(1) for size, isEmpty,root,parent,left,right,sibling,children,numChildren, isInternal, isExternal, isRoot, addRoot, addLeft, addRight, set, attach, remove
+					-O(dp + 1) for depth(p) where dp is depth
+					-O(n) for height
+			-Array Based Representation of a binary tree:
+				-for every node p of tree T, let f(p) be the int defined as:
+					-if p is the root of T, then f(p) = 0
+					-if p is the left child of node q, then f(p) = 2f(q) + 1
+					-if p is the right child of node q, then f(p) = 2f(q) + 2
+				-the numbering function f is known as level numbering of the nodes in a binary Tree T, for it numbers the nodes on each level of T in increasing order from left to right
+					-so the left child of the root's left child would be index 3 in the array if root is index 0
 		-Tree Traversal Algos:
-
-
+			- a traversla of a tree T is a systematic way of visiting all the nodes of T
+			-Pre- and Postorder Traversals:
+				-preorder algo:
+					-perform the visit action for node p, then for each child do preorder(child)
+					-so node, left subtree, right subtree
+				-postorder algo:
+					-perform visit for each child postorder(child) then perform visit action for node p
+					-so left subtree,right subtree, then node/root
+				-always in O(n) run time
+			-Breadth First Traversal:
+				-traverse left to right level by level
+					-so if the tree is array implemented, just check each index in order
+				-BFS algo:
+					-initialize queue Q to contain root()
+					-while Q not empty do:
+						-p=Q.dequeue()
+						-perform visit for node p
+						-for each child:
+							-Q.enqueue(child)
+			-Inorder Traversal:
+				-visit a node b/w recursive traverals of its left and right subtrees
+				-algo:
+					-if p has left child lc, then:
+						-inorder(lc)
+					-visit node p
+					-if p has right child rc. then:
+						-inorder(rc)
+					-so its left subtree, root, right subtree
+				-BST for S is a proper BT T s.t. for each internal node p of T:
+					-Node n stores an element of S, denoted as e(p)
+					-elements stored in left subtree of p are less than e(p)
+					-"                  right                 greater       "		
 Module 2:
 	-CHAPTER 4 (Algo Analysis):
 		-The Seven Functions Used in this Book:
