@@ -11,6 +11,8 @@ Module 4:
 Module 3:
 	-CHAPTER 7 (Lists):
 		-The List ADT:
+			-Methods:
+				-size,isEmpty,get(i) where i is the index, set(i,e) sets index i to val e, add(i, e) inserts element e into list so it is at index i, remove(i)
 		-Array Lists:
 		-Positional Lists:
 		-Iterators:
@@ -148,8 +150,39 @@ Module 2:
 				-ex: return n*factorial(n-1) is NOT tail recursion because oan addtional multiplcation is performed after the call is completed
 	-CHAPTER 6(Stacks,Queues, and Deques):
 		-Stacks:
+			-a collection of objects that are inserted and removed according to the principle of LIFO(last in, first out), so most recently addedis the first to get removed
+			-ADT:
+				-has push(e) (adds e to the top of the stack), pop() returns and removes the top element, top() just returns the top w/o removing, size() is num of elements, and isEmpty checks if its empty
+					-in java.util.Stack class its push,pop,peek,size,and empty
+						-do not use this though, its only there for historical reasons
+				-ADT uses generics for the interface
+			-Array Implementation:
+				-bottom of the stack is data[0], keep an int that stores the top index, keep adding to data[k+1], pop data[k] and set it to 0
+				-negative impact is that it has a fixed size, otherwise its very efficient and simple
+					-all methods run in O(1) time with O(N) space usage
+				-set to null when you pop to help with garbage collection
+			-SLL Implementation:
+				-adding is just making it the new head node, popping removes the head
+			-Reversing an Array Using a Stack:
+				-use two for loops, iterate through and push all elements, then iterate through again and pop all in the stack
 		-Queues:
+			-a cousin of the stack, this uses FIFO, or first in first out principle, so the element in the queue the longest is the first to be removed
+				-think of a line or being on hold for customer service
+			-ADT:
+				-enqueue(e) adds element to the back of the queue, dequeue() removes and returns the first element from the queue (or null if empty), first() returns the first element w/o removing, size(), isEmpty()
+			-Array Implementation:
+				-add the normal way, keep track of the front index int val, moving forward one each time you dequeue, and wrap around from N-1 to 0 if needed! also store the size/number of stored elements
+				-this also has O(1) runtimes and has a fixed length constraint
+				-next index for addition is (front + size) % data.length
+			-SLL Implementation:
+				-all run in O(1) again, runs the same way except the head is now the oldest element
 		-Double Ended Queues/Deques:
+			-has both the ability to remove from the top and bottom on the stack/queue
+			-ADT: addFirst(e), addLast(e), removeFirst/Last(), first(),last(), size(),isEmpty()
+			-Can implement with a circular array or a DLL:
+				-circular arrays wrap around from N-1 to 0 index
+				-DLL:
+					-O(1) for all
 
 Module 1:
 	-CHAPTER 1 (Java Primer):
