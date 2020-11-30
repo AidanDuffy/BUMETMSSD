@@ -2,6 +2,24 @@ Aidan Duffy
 Boston University
 METCS 521
 
+Module 4:
+	Chapter 7:
+		-What is a List?:
+		-Lists vs Strings:
+		-Split and Other Functions and...:
+		-Mutable Objects and References:
+		-Tuples:
+		-Lists: The Data Structure:
+		-EPA Example:
+		-List Comprehension:
+		-Plotting:
+	Chapter 9:
+		-Dictionaries:
+		-Sets:
+		-zip and Dictionaries:
+		-Dictionary and Set Comprehensions
+		-Word Frequency Bar Graph
+
 Module 3:
 	Chapter 2:
 		-In-Depth Control:

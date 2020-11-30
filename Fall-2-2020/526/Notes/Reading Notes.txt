@@ -14,11 +14,58 @@ Module 3:
 			-Methods:
 				-size,isEmpty,get(i) where i is the index, set(i,e) sets index i to val e, add(i, e) inserts element e into list so it is at index i, remove(i)
 		-Array Lists:
+			-an array implementation of a list
+			-add and remove need for loops here to shift all elements in the array after being added/removed
+			-O(1) for size, isEmpty, get, set
+			-O(N) for add and remove
+			-Dynamic Arrays:
+				-these are used to provide the sense that the arraylist has no size constraint
+				-if array A reaches capacity, allocate a larger array B, usually with double the capacity and store all the old A data in B
+				-doubling is expensive, but the return of being able to add an additional n elements is very rewarding
+					-use amortization, a sequence of push operations on this dynamic array is quite efficient since add, get, set all should work in O(1) time if there is space, so O(n) on capacities when we need to double
+					-need to resize geometrically not arithmetically, if we use a fixed size increase instead of doubling, the performance is much worse w/ a big-Omega of n^2
+					-also, with geomtric, the final capacity will be proportional to the number of elements in the end, the data structure will use O(n) memory
 		-Positional Lists:
+			-defining an ADT for a list that int indeces are not perfect for, have a linked list in mind while creating the ADT
+			-We need to define an abstract data type called position, supporting the getElement() method, which returns the elem at this position
+				-a position acts as a marker within a broader positional list
+				-position p which is associated with element e in list L does not change, even if index of e changes in L due to insertions or deletions elsewhere in the list, nor does p change if we replace element e stored at p with another element
+			-ADT methods:
+				-first()
+				-last()
+				-before(p) returns position of list L before position p
+				-after(p)
+				-isEmpty()
+				-size()
+				-the methods return associate positions, not elements
+			-skipping the rest
 		-Iterators:
+			-is a software design pattern that abstracts the process of scanning through a sequence of elements, one at a time
+			-has hasNext() and next() methods
+				-while(iter.hasNext()) is very common
+			-remove() removes from the collection the element returned by the most recent call to next()
+			-iterator() returns an iterator of the elements in the collection
+				-Iterator<Type> iter = collection.iterator();
 		-Java Collections Framework:
-		-Sorting Positional Lists:
-		-Case Study: Maintaining Access Frequencies:
+			-List Iterators in Java:
+				-we have a list "cursor" that stores the index of which node is returned by next()
+				-ListIterator has:
+					-add(e), hasNext(),hasPrevious(), previous(),next(),nextIndex(),previousIndex(), previous(), next(), nextIndex(), previousIndex(), remove(), set(e) (replaces element returned by the most recent call to the next or previous operation with e)
+			-List-Based Algos in the Java Collections Framework:
+				-copy(Ldest, Lsrc) copies all elements of Lsrc list into indecies of Ldest list
+				-disjoint(C,D) returns T/F indicating whether the collections C&D are disjoint
+				-fill(L,e) replaces each element of the list L with element e
+				-frequency(C,e) returns number of elements in the collection C that = e
+				-max(C), min(C)
+				-replaceAll(L,e,f) replaces each element in L that equal e to f
+				-reverse(L)
+				-rotate(L,d) rotates elements in list L by distance d in a circular fashion
+				-shuffle(L) pseudorandomly permutes the ordering of the elements in list L
+				-sort(L)
+				-swap(L,i,j) swaps elements at indecies i and j of list L
+				-toArray() returns an array of elements of type Object containing all the elements in this collection 
+				-toArray(A) returns an array of elements of the same element type as A containing all the elements in this collection
+				-asList(A) reutnrs list representation of the array A, with the same element type as the elements of A
 	-CHAPTER 8 (Trees):
 		-General Trees:
 		-Binary Trees:
