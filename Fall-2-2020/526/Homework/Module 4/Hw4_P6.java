@@ -27,6 +27,7 @@ public class Hw4_P6 {
         double[] searchTimes = new double[3];
 
         for (int i = 0; i < 10; i += 1) {
+            System.out.println("Progress Update: Outermost loop is on loop " + String.valueOf(i + 1)); //To keep track
             r.setSeed(System.currentTimeMillis());
             for (int j = 0; j < NUM_KEYS; j += 1) {
                 insertKeys[j] = r.nextInt(1000000) + 1;
