@@ -1,0 +1,4 @@
+Prompt for a file name of text words. 
+Words can be on many lines with multiple words per line.
+
+Read the file and convert the words to a list. 
