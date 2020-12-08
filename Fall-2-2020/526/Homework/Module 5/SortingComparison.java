@@ -1,9 +1,7 @@
 import java.util.Arrays;
 import java.util.Random;
 
-public class Hw5_P7 {
-
-
+public class SortingComparison {
 
     /**
      * This is the insertionSort method from our textbook.
