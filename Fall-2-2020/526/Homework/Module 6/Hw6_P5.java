@@ -89,6 +89,62 @@ public class Hw6_P5 {
         friends = new int[numVertices][numVertices];
         TreeMap<String,String> namesWithFriendsTree = setupAdjaceny(namesWithFriends, friends, numVertices);
         printAdjacenyMatrix(namesWithFriendsTree, friends, numVertices);
-        System.out.println("friends");
+        HashMap<String, Integer> nameIndex = new HashMap<>();
+        int i = 0;
+        for (String name: namesWithFriendsTree.keySet()) {
+            nameIndex.put(name, i++);
+        }
+        Scanner input;
+        int option = 0;
+        while (option != 3) {
+            System.out.print("\nMain Menu\n\nSearch Options:\n1.  Friends of a person\n2.  Friend or not?" +
+                    "\n3.  Exit\n\nEnter Option Number: ");
+            input = new Scanner(System.in);
+            try {
+                option = input.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a valid integer!");
+                continue;
+            }
+            if (option < 1 || option > 3) {
+                System.out.print("\nError! Please enter a valid number!");
+                input = new Scanner(System.in);
+                option = input.nextInt();
+                continue;
+            } else {
+                if (option == 1) {
+                    System.out.print("Please enter the name of a person: ");
+                    input = new Scanner(System.in);
+                    String name = input.next();
+                    if (namesWithFriends.containsKey(name)) {
+                        String[] optionOneFriends = namesWithFriends.get(name).split(",");
+                        for (String buds: optionOneFriends) {
+                            System.out.print(buds + " ");
+                        }
+                        System.out.print("\n");
+                    } else {
+                        System.out.println("This name is not in the adjacency matrix! Try again...");
+                        continue;
+                    }
+                } else if (option == 2) {
+                    System.out.print("Please enter the names of two people, separated by a single space: ");
+                    input = new Scanner(System.in);
+                    String entry = input.nextLine();
+                    String[] names = entry.split(" ");
+                    if (!nameIndex.containsKey(names[0]) || !nameIndex.containsKey(names[1])) {
+                        System.out.println("One of these names is not in the adjacency matrix! Try again...");
+                        continue;
+                    }
+                    int index1 = nameIndex.get(names[0]);
+                    int index2 = nameIndex.get(names[1]);
+                    if (friends[index1][index2] == 1) {
+                        System.out.println("Yes, " + names[0] + " and " + names[1] + " are friends!");
+                    } else {
+                        System.out.println("No, " + names[0] + " and " + names[1] + " are not friends.");
+                    }
+                }
+            }
+        }
+        System.out.println("Exiting...");
     }
 }
