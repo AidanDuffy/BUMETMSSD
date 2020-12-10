@@ -1,3 +1,2 @@
-Fall-2-2020/521/.idea
-Fall-2-2020/521/venv
-Fall-2-2020/526/Homework/.idea
+*.idea/
+*venv/
