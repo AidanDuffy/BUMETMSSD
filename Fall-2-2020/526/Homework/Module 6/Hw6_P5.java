@@ -33,7 +33,7 @@ public class Hw6_P5 {
         return namesWithFriends;
     }
 
-    public static void setupAdjaceny(HashMap<String,String> namesWithFriends, int[][] friends, int numVertices) {
+    public static TreeMap<String,String> setupAdjaceny(HashMap<String,String> namesWithFriends, int[][] friends, int numVertices) {
         TreeMap<String,String> namesWithFriendsTree = new TreeMap<>(namesWithFriends);
         HashMap<String, Integer> nameIndex = new HashMap<>();
         int i = 0;
@@ -50,6 +50,32 @@ public class Hw6_P5 {
                 friends[friendIndex][index] = 1;
             }
         }
+        return namesWithFriendsTree;
+    }
+
+    public static void printAdjacenyMatrix(TreeMap<String,String> namesWithFriendsTree, int[][] friends, int numVertices) {
+        System.out.print("\t\t");
+        for (String name: namesWithFriendsTree.keySet()) {
+            String temp = name;
+            while (temp.length() < 8) {
+                temp += " ";
+            }
+            System.out.print("| " + temp);
+        }
+        System.out.print("\n");
+        int i = 0;
+        for (String name: namesWithFriendsTree.keySet()) {
+            String temp = name;
+            while (temp.length() < 7) {
+                temp += " ";
+            }
+            System.out.print(temp);
+            for (int j = 0; j < numVertices; j += 1) {
+                System.out.print(" |    " + friends[i][j] + "   ");
+            }
+            i += 1;
+            System.out.print("\n");
+        }
     }
 
     public static void main(String[] args) {
@@ -61,7 +87,8 @@ public class Hw6_P5 {
         }
         numVertices = namesWithFriends.size();
         friends = new int[numVertices][numVertices];
-        setupAdjaceny(namesWithFriends, friends, numVertices);
-        System.out.println(friends);
+        TreeMap<String,String> namesWithFriendsTree = setupAdjaceny(namesWithFriends, friends, numVertices);
+        printAdjacenyMatrix(namesWithFriendsTree, friends, numVertices);
+        System.out.println("friends");
     }
 }
