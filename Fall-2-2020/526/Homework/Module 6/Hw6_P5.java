@@ -20,7 +20,7 @@ public class Hw6_P5 {
             String line = myReader.nextLine();
             namesLine = line.split(", ");
             if(namesWithFriends.containsKey(namesLine[0])) {
-                namesWithFriends.put(namesLine[0], namesWithFriends.get(namesLine[0]) + namesLine[1]);
+                namesWithFriends.put(namesLine[0], namesWithFriends.get(namesLine[0]) + "," +  namesLine[1]);
             } else {
                 namesWithFriends.put(namesLine[0], namesLine[1]);
             }
@@ -33,8 +33,23 @@ public class Hw6_P5 {
         return namesWithFriends;
     }
 
-    public static void setupAdjaceny(HashMap<String,String> namesWithFriends, int[][] friends) {
-        
+    public static void setupAdjaceny(HashMap<String,String> namesWithFriends, int[][] friends, int numVertices) {
+        TreeMap<String,String> namesWithFriendsTree = new TreeMap<>(namesWithFriends);
+        HashMap<String, Integer> nameIndex = new HashMap<>();
+        int i = 0;
+        for (String name: namesWithFriendsTree.keySet()) {
+            nameIndex.put(name, i++);
+        }
+        for (String name: namesWithFriendsTree.keySet()) {
+            String cur = namesWithFriends.get(name);
+            String[] friendsNames = cur.split(",");
+            for (String friend : friendsNames) {
+                int friendIndex = nameIndex.get(friend);
+                int index = nameIndex.get(name);
+                friends[index][friendIndex] = 1;
+                friends[friendIndex][index] = 1;
+            }
+        }
     }
 
     public static void main(String[] args) {
@@ -43,10 +58,10 @@ public class Hw6_P5 {
         HashMap<String,String> namesWithFriends = initialSetup();
         if (namesWithFriends == null) {
             return;
-        } else {
-            numVertices = namesWithFriends.size();
-            friends = new int[numVertices][numVertices];
-            setupAdjaceny(namesWithFriends, friends);
         }
+        numVertices = namesWithFriends.size();
+        friends = new int[numVertices][numVertices];
+        setupAdjaceny(namesWithFriends, friends, numVertices);
+        System.out.println(friends);
     }
 }
