@@ -68,7 +68,7 @@ class Jumper(Pet):
         pass
 
 
-class Dog(Jumper):
+class Dog(Jumper, Pet):
     """
     Inheriting from the Pet and Jumper classes, this is a generic Dog class. The kind is canine, and
     the Owner, by default, is named Aidan.
@@ -134,7 +134,7 @@ class SmallDog(Dog):
         return self.name + " says Yip yip!"
 
 
-class Cat(Jumper):
+class Cat(Jumper, Pet):
     """
     Inheriting from the Pet and Jumper classes, this is a generic Cat class. The kind is feline.
     """
