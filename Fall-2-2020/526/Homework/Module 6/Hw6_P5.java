@@ -4,7 +4,10 @@ import java.util.*;
 import java.util.Arrays;
 
 public class Hw6_P5 {
-
+    /**
+     * 
+     * @return
+     */
     public static HashMap<String,String> initialSetup() {
         File friend_input = new File("friends_input.txt");
         Scanner myReader;
