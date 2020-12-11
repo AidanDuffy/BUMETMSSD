@@ -4,9 +4,11 @@ import java.util.*;
 import java.util.Arrays;
 
 public class Hw6_P5 {
+
     /**
-     * 
-     * @return
+     * This method will setup the initial HashMap, storing names as keys and all friends as values. All this information
+     * will be coming from the friends_input text file.
+     * @return the HashMap namesWithFriends which is name:friends.
      */
     public static HashMap<String,String> initialSetup() {
         File friend_input = new File("friends_input.txt");
@@ -18,7 +20,7 @@ public class Hw6_P5 {
             return null;
         }
         HashMap<String,String> namesWithFriends = new HashMap<>();
-        String[] namesLine = new String[2];
+        String[] namesLine;
         while (myReader.hasNextLine()) {
             String line = myReader.nextLine();
             namesLine = line.split(", ");
@@ -36,7 +38,14 @@ public class Hw6_P5 {
         return namesWithFriends;
     }
 
-    public static TreeMap<String,String> setupAdjaceny(HashMap<String,String> namesWithFriends, int[][] friends, int numVertices) {
+    /**
+     * This intakes the information from initialSetup() and constructs the adjacency matrix in friends as well as a
+     * TreeMap, the alphabetical order version of namesWithFriends, which is used for printing the matrix.
+     * @param namesWithFriends is the HashMap (name:friends) from reading the friends_input text file.
+     * @param friends is the actual adjacency matrix.
+     * @return the Map of people and friends in alphabetical order.
+     */
+    public static TreeMap<String,String> setupAdjaceny(HashMap<String,String> namesWithFriends, int[][] friends) {
         TreeMap<String,String> namesWithFriendsTree = new TreeMap<>(namesWithFriends);
         HashMap<String, Integer> nameIndex = new HashMap<>();
         int i = 0;
@@ -56,7 +65,15 @@ public class Hw6_P5 {
         return namesWithFriendsTree;
     }
 
-    public static void printAdjacenyMatrix(TreeMap<String,String> namesWithFriendsTree, int[][] friends, int numVertices) {
+    /**
+     * This method will print out the adjacency matrix in a readable format for users.
+     * @param namesWithFriendsTree is a TreeMap that stores all the people's names as keys with their associated friends
+     *                             as values.
+     * @param friends is the actual adjacency matrix.
+     * @param numVertices is the number of vertices or people involved in the adjacency matrix.
+     */
+    public static void printAdjacenyMatrix(TreeMap<String,String> namesWithFriendsTree, int[][] friends,
+                                           int numVertices) {
         System.out.print("\t\t");
         for (String name: namesWithFriendsTree.keySet()) {
             String temp = name;
@@ -90,7 +107,7 @@ public class Hw6_P5 {
         }
         numVertices = namesWithFriends.size();
         friends = new int[numVertices][numVertices];
-        TreeMap<String,String> namesWithFriendsTree = setupAdjaceny(namesWithFriends, friends, numVertices);
+        TreeMap<String,String> namesWithFriendsTree = setupAdjaceny(namesWithFriends, friends);
         printAdjacenyMatrix(namesWithFriendsTree, friends, numVertices);
         HashMap<String, Integer> nameIndex = new HashMap<>();
         int i = 0;
@@ -99,6 +116,9 @@ public class Hw6_P5 {
         }
         Scanner input;
         int option = 0;
+        /**
+         * Here we will continue on the main menu until the user enters "3" to exit.
+         */
         while (option != 3) {
             System.out.print("\nMain Menu\n\nSearch Options:\n1.  Friends of a person\n2.  Friend or not?" +
                     "\n3.  Exit\n\nEnter Option Number: ");
