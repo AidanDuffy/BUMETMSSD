@@ -1,11 +1,10 @@
 """
-Class: CS521 O2, Fall, 2020
-This is the skeleton file for HW6
-Created 28 July 2020
+Aidan Duffy
+Class: CS 521 - Fall 2
+Date: December 11, 2020
+Homework Problem 6
 The assignment was to work through inheritance by creating a list
 of animals and their behaviours and putting them through their paces!
-Comments in the program will explain where to insert the code using the
-assignment instructions.
 """
 
 
