@@ -57,15 +57,81 @@ Module 3:
 Module 2:
 	Chapter 1:
 		-Variables:
+			-Python associates all values and var names by making a list of names that goes into the structure called a namespace that keeps this list of names and associated values
+			-only the LHS of assignment is changed, so x = math.pi + 2, math.pi is unaffected
+			-naming conventions: separate words by underscores, needs to start with a letter, then anything after can be letters, numbers, or underscores 
 		-Objects and Types:
+			-every "thing" in Python is an object
+				-objects have an identity, some attributes, and zero or more names
+			-every object has an id number, found using the id function
+			-attributes are essentially info about the object
+			-each object is an examply of a type, 1 is an int, 2.5 if a float, etc
+			-knowing type shows us the operations we can use as well as the attributes the object might have
+			- x = 5, y = 8.0: has is type int y is type float with distinct IDs, but if you do x = y, then the 8.0 object now has two names and x is a float with the same ID as y!
+			-Numbers:
+				-Integers:
+					-cannot use leading 0 w/o a letter after showing the base, like 0x for hex or 0o for octal or 0b for binary
+				-FP Numbers:
+					-all numbers with decimal points that are real and sometimes use approximations, for 2.0/3.0 for instance, since computers need to save memory
+					-1.1+2.2 != 3.3 but rather 3.300000000000003, so use decimal module to avoid these approximations
+					-012. is the same as 12.0 here, though
+			-Other Bult-in Types:
+				-Boolean: True or False
+				-String: type str, '' or "" will do, is a sequence of characters
+				-List: a collection type that can have things other than characters, like arrays, separated by []
+				-Dictionary: a map type collection, has key and value pairs, uses {}, first and last names ex:'George':'Washington'
+				-Set: a collection of unique elements, uses {} but no :, supports union and intersection operations
+			-Constructors:
+				-int(variable) returns an integer representation of the object associated with variable
+					-variable is unaffected
+					-if variable is not a number and cannot be represented as an int, "1" is a char but can be int but "a" cannot, then an error is thrown
+						-int(1.8) = 1, but int("1.2") is wrong, cannot convert twice
 		-Operators:
+			-Integer Operators:
+				- + and - signs are used for addition/substraction and * for multiplcation
+				-/ is division but returns a float! not an integer
+					-// returns the integer form, so 4//3 = 1, not 1.3333
+				-% or modulo returns the remainder, so 5%3 = 2
+				- ** is exponentiation
+			-FP Operations:
+				-all the same but returns float, so 5.0%3.0 = 2.0
+			-Order of Operations:
+				-(),**, +x or -x (changing signs), * / % //, + -
+			-Augmented Assignment:
+				- my_int += 5  == my_int = my_int + 5
+				-can use any of the core operations, so *,/,+,-
 		-Your First Module, Math:
-		-Developing an Algorithm:
+			-import module at the start of the file, import math
+			-use math.X for any function of object from math
+				-math.sin
+				-math.cos
+				-math.pi
+				-math.pow
 	Chapter 2:
 		-In-Depth Control:
 			-Booleans:
+				-bool values are True and False
+				-False is 0, True is 1, and an empty string '' is considered false and any nonzero True
 			-Relational and Boolean Operators:
+				->, <, >=, <=, etc
+				-low precedence for boolean operators
+					-3>2, True
+					-5+3 < 3-2, does the < last, so 8 < 1, True
+					-'1' < 2, Illegal!
+					-What is equality?
+						-Two types, different names associated with objects with the same value, and two different names associated with the same object
+						- == checks the value, use id to check actual object
+							-x = 2.5, y = 2.5, z = y, they are all true for ==, but not id(x) == id(y), though id(y) == id(z) is True
+						-floating point rounding can mess up equality testing
+							-use abs(x-y) < .00000001 to test
+							-x = (a+b) + c and y = a + (b+c) can fail x == y
+						-can chain relational ops so:
+							-0<= x <= 10 is fine, but both need to be true to return True
+				-bool operators are:
+					-not x, x and y, x or y
 			-Precedence:
+				-in terms of precedence, everything we did before takes precedent over what comes next:
+					-comparisons, bool NOT, bool AND, then bool OR
 			-Boolean Operators Example & Another Word on Assignments:
 	Chapter 9:
 		-Scope: The Full Story:

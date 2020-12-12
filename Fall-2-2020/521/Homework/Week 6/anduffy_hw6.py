@@ -10,7 +10,8 @@ of animals and their behaviours and putting them through their paces!
 
 class Pet:
     """
-    This is the outermost super class for HW6, which is the most basic form of animal.
+    This is the outermost super class for HW6, which is the most basic form of
+    animal.
     """
     kind = "animal"
     color = "black"
@@ -33,7 +34,8 @@ class Pet:
 
     def do_tricks(self):
         """
-        This notifies the user that the Pet is now doing tricks! For Dogs and Cats, it will also speak and jump.
+        This notifies the user that the Pet is now doing tricks! For Dogs and
+        Cats, it will also speak and jump.
         """
         speak = self.speak()
         jump = self.jump()
@@ -69,8 +71,8 @@ class Jumper(Pet):
 
 class Dog(Jumper, Pet):
     """
-    Inheriting from the Pet and Jumper classes, this is a generic Dog class. The kind is canine, and
-    the Owner, by default, is named Aidan.
+    Inheriting from the Pet and Jumper classes, this is a generic Dog class. The
+    kind is canine, and the Owner, by default, is named Aidan.
     """
     kind = "canine"
 
@@ -86,19 +88,22 @@ class Dog(Jumper, Pet):
         """
         This returns that the dog is rolling over as well as the owner's name.
         """
-        return self.name + " is rolling over!\n" + self.name + "'s owner's name is Aidan."
+        return self.name + " is rolling over!\n" + self.name + "'s owner's " \
+                                                               "name is Aidan."
 
 
 
 class BigDog(Dog):
     """
-    This inherits from the Dog class and simply changes the color to tan, but this is a larger dog.
+    This inherits from the Dog class and simply changes the color to tan, but
+    this is a larger dog.
     """
     color = "tan"
 
     def __str__(self):
         """
-        This returns the large dog's name and color while describing its relative size
+        This returns the large dog's name and color while describing its
+        relative size
         """
         return self.name + " is a very large, muscular, " + self.color + " dog!"
         pass
@@ -115,14 +120,16 @@ class BigDog(Dog):
 
 class SmallDog(Dog):
     """
-    This inherits from the Dog class and simply changes the color to brindle, but this is a small dog or pup.
+    This inherits from the Dog class and simply changes the color to brindle,
+    but this is a small dog or pup.
     """
     color = "brindle"
 
 
     def __str__(self):
         """
-        This returns the small dog's name and color while describing its relative size
+        This returns the small dog's name and color while describing its
+        relative size
         """
         return self.name + " is a tiny, adorable, " + self.color + " pup!"
 
@@ -135,7 +142,8 @@ class SmallDog(Dog):
 
 class Cat(Jumper, Pet):
     """
-    Inheriting from the Pet and Jumper classes, this is a generic Cat class. The kind is feline.
+    Inheriting from the Pet and Jumper classes, this is a generic Cat class.
+    The kind is feline.
     """
     kind = "feline"
 
@@ -155,14 +163,16 @@ class Cat(Jumper, Pet):
 
     def climb(self):
         """
-        This informs the user that the cat with the given name is climbing on the curtains!
+        This informs the user that the cat with the given name is climbing on
+        the curtains!
         """
         return self.name + " is climbing on the curtains!!!"
         pass
 
 class HouseCat(Cat):
     """
-    This inherits from the Cat class and simply changes the color to white, but this is a nonferal house cat.
+    This inherits from the Cat class and simply changes the color to white, but
+    this is a nonferal house cat.
     """
     color = "white"
 
@@ -180,7 +190,8 @@ class HouseCat(Cat):
 
 def main():
     """
-    Here, this program creates instances of all classes (except Jumper) then prints relevant information from
+    Here, this program creates instances of all classes (except Jumper) then
+    prints relevant information from
     all of them.
     :return:
     """
@@ -194,9 +205,11 @@ def main():
 
     for pet in allPets:
         if pet.kind == "canine":
-            print(pet.__str__(),pet.kind,pet.color,pet.do_tricks(), pet.__call__(),sep="\n")
+            print(pet.__str__(),pet.kind,pet.color,pet.do_tricks(),
+                  pet.__call__(),sep="\n")
         elif pet.kind == "feline":
-            print(pet.__str__(),pet.kind,pet.color,pet.do_tricks(), pet.climb(),sep="\n")
+            print(pet.__str__(),pet.kind,pet.color,pet.do_tricks(),
+                  pet.climb(),sep="\n")
         else:
             print(pet.__str__(), pet.kind, pet.color, pet.do_tricks(),sep="\n")
         print("__________________________________________")
