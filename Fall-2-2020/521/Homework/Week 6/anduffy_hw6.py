@@ -26,7 +26,8 @@ class Pet:
 
     def __str__(self):
         """
-        Returns the name, color, and kind of the given Pet in a readable format.
+        Returns the name, color, and kind of the given Pet in a readable
+        format.
         """
         return self.name + " is a " + self.color + " " + self.kind + "."
         pass
@@ -71,8 +72,8 @@ class Jumper(Pet):
 
 class Dog(Jumper, Pet):
     """
-    Inheriting from the Pet and Jumper classes, this is a generic Dog class. The
-    kind is canine, and the Owner, by default, is named Aidan.
+    Inheriting from the Pet and Jumper classes, this is a generic Dog class.
+    The kind is canine, and the Owner, by default, is named Aidan.
     """
     kind = "canine"
 
@@ -105,7 +106,8 @@ class BigDog(Dog):
         This returns the large dog's name and color while describing its
         relative size
         """
-        return self.name + " is a very large, muscular, " + self.color + " dog!"
+        return self.name + " is a very large, muscular, " + self.color + \
+               " dog!"
         pass
 
 
