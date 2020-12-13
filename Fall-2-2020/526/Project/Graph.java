@@ -17,6 +17,7 @@ public class Graph {
 
     /**
      * This constructs a graph with a given list of nodes.
+     *
      * @param nodes is the list of nodes in this graph.
      */
     public Graph(ArrayList<Node> nodes) {
@@ -26,8 +27,9 @@ public class Graph {
 
     /**
      * This constructs a graph with a given list of nodes with a given current position.
+     *
      * @param position is the current position node.
-     * @param nodes is the list of nodes in this graph.
+     * @param nodes    is the list of nodes in this graph.
      */
     public Graph(Node position, ArrayList<Node> nodes) {
         this.position = position;
@@ -36,6 +38,7 @@ public class Graph {
 
     /**
      * This sets the node list to a given array list.
+     *
      * @param nodes is the given list of nodes.
      */
     public void setNodes(ArrayList<Node> nodes) {
@@ -44,6 +47,7 @@ public class Graph {
 
     /**
      * This returns this graph's list of nodes.
+     *
      * @return the graph's list of nodes.
      */
     public ArrayList<Node> getNodes() {
@@ -52,6 +56,7 @@ public class Graph {
 
     /**
      * This sets the current position of this graph to a given node.
+     *
      * @param position is the given node which is the current position for this graph.
      */
     public void setPosition(Node position) {
@@ -60,6 +65,7 @@ public class Graph {
 
     /**
      * This returns this graph's current position Node.
+     *
      * @return the graph's current position.
      */
     public Node getPosition() {
