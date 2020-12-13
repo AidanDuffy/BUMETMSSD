@@ -63,8 +63,8 @@ public class Node {
      * @param neighbor is the the neighbor Node.
      * @param weight   is the weight of the shared edge.
      */
-    public void addEdge(Node neightbor, int weight) {
-        this.neighbors.put(neightbor, weight);
+    public void addEdge(Node neighbor, int weight) {
+        this.neighbors.put(neighbor, weight);
     }
 
     /**
@@ -141,6 +141,24 @@ public class Node {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * This returns the weight between the two given nodes.
+     * @param one is the first given node.
+     * @param two is the second given node.
+     * @return the weight of the shared edge between the two nodes.
+     */
+    public static int findWeight(Node one, Node two) {
+        if (one.equals(null) || two.equals(null)) {
+            return 0;
+        }
+        HashMap<Node, Integer> neighbors = one.getNeighbors();
+        if (neighbors.containsKey(two)) {
+            return neighbors.get(two);
+        } else {
+            return 0;
         }
     }
 }

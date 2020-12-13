@@ -59,56 +59,99 @@ public class project {
         Graph graph = new Graph(nodes);
 
         ArrayList<Character> path = new ArrayList<>();
+        ArrayList<Character> shortestPath = new ArrayList<>();
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the starting Node (single character): ");
-        String nodeID = scanner.nextLine();
-        if(nodeID.length() == 1) {
-            char identifer = nodeID.charAt(0);
-            if (Character.isLetter(identifer) && characterNode.containsKey(identifer)) {
-                graph.setPosition(characterNode.get(identifer));
-                path.add(identifer);
+        Scanner scanner;
+        String nodeID;
+        while (true) {
+            scanner = new Scanner(System.in);
+            System.out.print("Enter the starting Node (single capital character): ");
+            nodeID = scanner.nextLine();
+            if (nodeID.length() == 1) {
+                char identifer = nodeID.charAt(0);
+                if (Character.isLetter(identifer) && characterNode.containsKey(identifer)) {
+                    graph.setPosition(characterNode.get(identifer));
+                    path.add(identifer);
+                    shortestPath.add(identifer);
+                    break;
+                } else {
+                    System.out.println("Please try again and enter a valid character!");
+                }
             } else {
-                System.out.println("Please run again and enter a valid character!");
-                return;
+                System.out.println("Please try again and enter a valid character!");
             }
-        } else {
-            System.out.println("Please run again and enter a valid character!");
-            return;
         }
+        System.out.println("");
         Node temp = graph.getPosition();
         Node exclude = null;
+        int length = 0;
+
+        System.out.println("Algorithm 1: \n");
         //Here is algorithm one running...
         while (graph.getPosition().getIdentifier() != 'Z') {
             Node next = algorithmOne(graph,exclude);
+            //This is to handle backtracking one node
             if (path.contains(next.getIdentifier())) {
-                path.remove(graph.getPosition().getIdentifier());
+                shortestPath.remove(shortestPath.size() - 1);
                 exclude = graph.getPosition();
+                path.add(next.getIdentifier());
+                length -= Node.findWeight(next,graph.getPosition());
                 graph.setPosition(next);
                 continue;
             }
             path.add(next.getIdentifier());
+            shortestPath.add(next.getIdentifier());
+            length += Node.findWeight(next,graph.getPosition());
             graph.setPosition(next);
             exclude = null;
         }
-        System.out.println(path);
+
+        System.out.print("\tSequence of all nodes: " + path.get(0));
+        for (int i = 1; i < path.size(); i += 1) {
+            System.out.print("->" + path.get(i));
+        }
+        System.out.print("\n\tShortest path: " + shortestPath.get(0));
+        for (int i = 1; i < shortestPath.size(); i += 1) {
+            System.out.print("->" + shortestPath.get(i));
+        }
+        System.out.print("\n\tShortest path length: " + length + "\n\n");
+
+        length = 0;
         path = new ArrayList<>();
+        shortestPath = new ArrayList<>();
         path.add(temp.getIdentifier());
+        shortestPath.add(temp.getIdentifier());
         graph.setPosition(temp);
+
+        System.out.println("Algorithm 2: \n");
         //Here is algorithm two running...
         while (graph.getPosition().getIdentifier() != 'Z') {
             Node next = algorithmTwo(graph,exclude);
+            //This is to handle backtracking one node
             if (path.contains(next.getIdentifier())) {
-                path.remove(graph.getPosition().getIdentifier());
+                shortestPath.remove(shortestPath.size() - 1);
                 exclude = graph.getPosition();
+                path.add(next.getIdentifier());
+                length -= Node.findWeight(next,graph.getPosition());
                 graph.setPosition(next);
                 continue;
             }
             path.add(next.getIdentifier());
+            shortestPath.add(next.getIdentifier());
+            length += Node.findWeight(next,graph.getPosition());
             graph.setPosition(next);
             exclude = null;
         }
-        System.out.println(path);
+
+        System.out.print("\tSequence of all nodes: " + path.get(0));
+        for (int i = 1; i < path.size(); i += 1) {
+            System.out.print("->" + path.get(i));
+        }
+        System.out.print("\n\tShortest path: " + shortestPath.get(0));
+        for (int i = 1; i < shortestPath.size(); i += 1) {
+            System.out.print("->" + shortestPath.get(i));
+        }
+        System.out.print("\n\tShortest path length: " + length + "\n\n");
     }
 
 }
