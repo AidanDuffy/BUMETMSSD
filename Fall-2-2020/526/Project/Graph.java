@@ -1,3 +1,6 @@
+import java.io.*;
+import java.util.*;
+
 /**
  * This is the class for the graph which will be traversed by the algorithms.
  */
@@ -37,6 +40,15 @@ public class Graph {
     }
 
     /**
+     * This returns this graph's list of nodes.
+     *
+     * @return the graph's list of nodes.
+     */
+    public ArrayList<Node> getNodes() {
+        return nodes;
+    }
+
+    /**
      * This sets the node list to a given array list.
      *
      * @param nodes is the given list of nodes.
@@ -46,12 +58,12 @@ public class Graph {
     }
 
     /**
-     * This returns this graph's list of nodes.
+     * This returns this graph's current position Node.
      *
-     * @return the graph's list of nodes.
+     * @return the graph's current position.
      */
-    public ArrayList<Node> getNodes() {
-        return nodes;
+    public Node getPosition() {
+        return position;
     }
 
     /**
@@ -64,11 +76,62 @@ public class Graph {
     }
 
     /**
-     * This returns this graph's current position Node.
+     * This intakes the graph input text file and creates the graph and populates the
+     * characterNode hashmap
      *
-     * @return the graph's current position.
+     * @param graph_file    is the graph input text file.
+     * @param characterNode is the HashMap which pairs the character ID with the node.
+     * @return this returns the array list of all nodes for graph constructor.
      */
-    public Node getPosition() {
-        return position;
+    public static ArrayList<Node> constructGraph(File graph_file,
+                                                 HashMap<Character, Node> characterNode) {
+        ArrayList<Node> nodes = new ArrayList<>();
+        try {
+            FileReader fr = new FileReader(graph_file);
+            BufferedReader br = new BufferedReader(fr);
+            String line = br.readLine();
+            //This first loop creates new empty Nodes, just with a character ID
+            for (int i = 0; i < line.length(); i += 1) {
+                char letter = line.charAt(i);
+                if (letter == ' ' || letter == '\n') {
+                    continue;
+                }
+                Node current = new Node(letter);
+                characterNode.put(letter, current);
+            }
+            Scanner scanner;
+            Set<Character> nodeIDs = characterNode.keySet();
+            ArrayList<Character> nodeIDsArrayList = new ArrayList<>(nodeIDs);
+            int index;
+            char neighborID;
+            Node neighborNode;
+            int weight;
+            char current_letter;
+            Node current_Node;
+
+            while ((line = br.readLine()) != null) {
+                current_letter = line.charAt(0);
+                current_Node = characterNode.get(current_letter);
+                scanner = new Scanner(line.substring(1));
+                index = 0;
+                while (scanner.hasNext()) {
+                    if (scanner.hasNextInt()) {
+                        weight = scanner.nextInt();
+                        if (weight == 0) {
+                            index += 1;
+                            continue;
+                        }
+                        neighborID = nodeIDsArrayList.get(index++);
+                        neighborNode = characterNode.get(neighborID);
+                        current_Node.addEdge(neighborNode, weight);
+                    }
+                }
+                nodes.add(current_Node);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return nodes;
     }
 }
