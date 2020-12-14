@@ -14,8 +14,6 @@ public class Node {
 
     //This is this node's character name, like 'A'.
     private char identifier;
-    //This is all the adjacent vertecies and the weights of the edge.
-    private HashMap<Node, Integer> neighbors;
     //This is this node's direct distance to Z.
     private int direct_distance;
 
@@ -23,7 +21,7 @@ public class Node {
      * This generates an empty Node with an empty HashMap of neighbors;
      */
     public Node() {
-        this.neighbors = new HashMap<>();
+
     }
 
     /**
@@ -34,7 +32,6 @@ public class Node {
      */
     public Node(char identifier) {
         this.identifier = identifier;
-        this.neighbors = new HashMap<>();
     }
 
     /**
@@ -47,25 +44,8 @@ public class Node {
     public Node(char identifier, int direct_distance) {
         this.identifier = identifier;
         this.direct_distance = direct_distance;
-        this.neighbors = new HashMap<>();
     }
 
-    /**
-     * This constructs a new Node with a specific ID and distance to Z with an
-     * empty list of neighbors.
-     *
-     * @param identifier      is the character that IDs this node.
-     * @param neighbors       is the map of all adjacent vertices to this node,
-     *                        with the value being the weight of their shared
-     *                        edge.
-     * @param direct_distance is this node's direct distance to node Z.
-     */
-    public Node(char identifier, HashMap<Node, Integer> neighbors,
-                int direct_distance) {
-        this.identifier = identifier;
-        this.neighbors = neighbors;
-        this.direct_distance = direct_distance;
-    }
 
     /**
      * This sets the direct distances to node Z of all the nodes in the graph.
@@ -75,7 +55,7 @@ public class Node {
      * @param characterNode    is the HashMap which pairs the character ID with
      *                         the node.
      */
-    public static void setDirectDistances(
+    public static void setDirectDistancesFromFile(
             File direct_distances, HashMap<Character, Node> characterNode) {
         try {
             FileReader fr = new FileReader(direct_distances);
@@ -102,35 +82,6 @@ public class Node {
     }
 
     /**
-     * This returns the weight between the two given nodes.
-     *
-     * @param one is the first given node.
-     * @param two is the second given node.
-     * @return the weight of the shared edge between the two nodes.
-     */
-    public static int findWeight(Node one, Node two) {
-        if (one.equals(null) || two.equals(null)) {
-            return 0;
-        }
-        HashMap<Node, Integer> neighbors = one.getNeighbors();
-        if (neighbors.containsKey(two)) {
-            return neighbors.get(two);
-        } else {
-            return 0;
-        }
-    }
-
-    /**
-     * This adds an edge to this nodes HashMap of neighbors.
-     *
-     * @param neighbor is the the neighbor Node.
-     * @param weight   is the weight of the shared edge.
-     */
-    public void addEdge(Node neighbor, int weight) {
-        this.neighbors.put(neighbor, weight);
-    }
-
-    /**
      * This returns this node's direct distance to Z.
      *
      * @return this node's direct distance to the destination node Z.
@@ -146,15 +97,6 @@ public class Node {
      */
     public void setDirectDistance(int direct_distance) {
         this.direct_distance = direct_distance;
-    }
-
-    /**
-     * This returns this node's list of neighbors.
-     *
-     * @return
-     */
-    public HashMap<Node, Integer> getNeighbors() {
-        return neighbors;
     }
 
     /**

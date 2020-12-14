@@ -13,11 +13,16 @@ public class project {
      */
     public static Node algorithmOne(Graph graph, ArrayList<Node> exclude) {
         Node position = graph.getPosition();
-        HashMap<Node, Integer> neighbors = position.getNeighbors();
+        ArrayList<Edge> edges = graph.getNodesEdgeList(position);
         int minimum_weight = Integer.MAX_VALUE;
-        Set<Node> nodes = neighbors.keySet();
         Node next = null;
-        for (Node current : nodes) {
+        for (Edge edge : edges) {
+            Node current;
+            if (position.equals(edge.getNodes()[0])) {
+                current = edge.getNodes()[1];
+            } else {
+                current = edge.getNodes()[0];
+            }
             if (current.getDirectDistance() < minimum_weight &&
                     !exclude.contains(current)) {
                 minimum_weight = current.getDirectDistance();
@@ -38,14 +43,19 @@ public class project {
      */
     public static Node algorithmTwo(Graph graph, ArrayList<Node> exclude) {
         Node position = graph.getPosition();
-        HashMap<Node, Integer> neighbors = position.getNeighbors();
+        ArrayList<Edge> edges = graph.getNodesEdgeList(position);
         int minimum_weight = Integer.MAX_VALUE;
-        Set<Node> nodes = neighbors.keySet();
         Node next = null;
-        for (Node current : nodes) {
-            if (neighbors.get(current) + current.getDirectDistance() <
+        for (Edge edge : edges) {
+            Node current;
+            if (position.equals(edge.getNodes()[0])) {
+                current = edge.getNodes()[1];
+            } else {
+                current = edge.getNodes()[0];
+            }
+            if (edge.getWeight() + current.getDirectDistance() <
                     minimum_weight && !exclude.contains(current)) {
-                minimum_weight = neighbors.get(current)
+                minimum_weight = edge.getWeight()
                         + current.getDirectDistance();
                 next = current;
             }
@@ -94,16 +104,15 @@ public class project {
                                     int algoNumber) {
         System.out.println("Algorithm " + algoNumber + ": \n");
         ArrayList<Character> path = new ArrayList<>();
-        LinkedList<Character> shortestPath = new LinkedList<>();
+        ArrayList<Character> shortestPath = new ArrayList<>();
         path.add(identifier);
         shortestPath.add(identifier);
-        Node temp = graph.getPosition();
         ArrayList<Node> exclude = new ArrayList<>();
         int length = 0;
         Node next;
-        char tmp;
         //Here is the algorithm running...
         while (graph.getPosition().getIdentifier() != 'Z') {
+            Node current = graph.getPosition();
             if (algoNumber == 1) {
                 next = algorithmOne(graph, exclude);
             } else {
@@ -111,17 +120,16 @@ public class project {
             }
             //This is to handle backtracking
             if (path.contains(next.getIdentifier())) {
-                if (graph.getPosition().getNeighbors().size() == 1) {
+                if (graph.getNodesEdgeList(current).size() == 1) {
                     shortestPath.remove(shortestPath.size() - 1);
                     exclude.add(graph.getPosition());
-                    length -= Node.findWeight(next, graph.getPosition());
+                    length -= graph.getEdge(next,current).getWeight();
                     graph.setPosition(next);
                 } else {
                     if (shortestPath.contains(next.getIdentifier())) {
-                        length -= graph.getEdge(
-                                next,graph.getPosition()).getWeight();
+                        length -= graph.getEdge(next,current).getWeight();
                         shortestPath.remove(shortestPath.size() - 1);
-                        exclude.add(graph.getPosition());
+                        exclude.add(current);
                         graph.setPosition(next);
                     } else {
                         exclude.add(next);
@@ -132,7 +140,7 @@ public class project {
             }
             path.add(next.getIdentifier());
             shortestPath.add(next.getIdentifier());
-            length += Node.findWeight(next, graph.getPosition());
+            length += graph.getEdge(next,current).getWeight();
             graph.setPosition(next);
         }
 
@@ -152,16 +160,9 @@ public class project {
         File graph_file = new File("graph_input.txt");
 
         HashMap<Character, Node> characterNode = new HashMap();
-        Graph graph = new Graph(Graph.constructGraph(graph_file,
-                characterNode));
-        try {
-            Graph.generateEdges(graph);
-        } catch (IllegalArgumentException e) {
-            System.out.print("The program failed to construct the graph, bad" +
-                    "input file.");
-            return;
-        }
-        Node.setDirectDistances(direct_distances, characterNode);
+        Graph graph = new Graph();
+        Graph.constructGraph(graph, graph_file, characterNode);
+        Node.setDirectDistancesFromFile(direct_distances, characterNode);
 
         char identifier = getStartingNode(characterNode);
         graph.setPosition(characterNode.get(identifier));

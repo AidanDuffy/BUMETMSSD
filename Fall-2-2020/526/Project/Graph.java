@@ -95,12 +95,13 @@ public class Graph {
      * This intakes the graph input text file and creates the graph and
      * populates the characterNode hashmap
      *
+     * @param graph  is the graph being constructed
      * @param graph_file    is the graph input text file.
      * @param characterNode is the HashMap which pairs the character ID with the
      *                      node.
      * @return this returns the array list of all nodes for graph constructor.
      */
-    public static ArrayList<Node> constructGraph(
+    public static ArrayList<Node> constructGraph(Graph graph,
             File graph_file, HashMap<Character, Node> characterNode) {
         ArrayList<Node> nodes = new ArrayList<>();
         try {
@@ -125,6 +126,7 @@ public class Graph {
             int weight;
             char current_letter;
             Node current_Node;
+            Edge edge;
 
             while ((line = br.readLine()) != null) {
                 current_letter = line.charAt(0);
@@ -140,7 +142,10 @@ public class Graph {
                         }
                         neighborID = nodeIDsArrayList.get(index++);
                         neighborNode = characterNode.get(neighborID);
-                        current_Node.addEdge(neighborNode, weight);
+                        edge = new Edge(current_Node, neighborNode, weight);
+                        if (graph.edgeNotAdded(current_Node, edge)) {
+                            graph.insertEdge(edge);
+                        }
                     }
                 }
                 nodes.add(current_Node);
@@ -150,42 +155,6 @@ public class Graph {
             e.printStackTrace();
         }
         return nodes;
-    }
-
-    /**
-     * After running the graph construction method, run this to create the edge
-     * list for this graph.
-     *
-     * @throws Exception if the graph has no vertices setup, which is needed to
-     *                   generate the list of edges.
-     */
-    public static void generateEdges(Graph graph) throws
-            IllegalArgumentException {
-        if (graph.numVertices() == 0) {
-            throw new IllegalArgumentException("This graph has not been " +
-                    "constructed yet!");
-        }
-        ArrayList<Node> nodes = graph.vertices();
-        HashMap<Node,ArrayList<Edge>> nodesWithEdges =graph.getNodesWithEdges();
-        HashMap<Node, Integer> nodeNeighbors;
-        ArrayList<Edge> nodesEdges;
-        Edge edge;
-        Node nodeOne, nodeTwo;
-        for (int i = 0; i < graph.numVertices(); i += 1) {
-            nodeOne = nodes.get(i);
-            nodeNeighbors = nodeOne.getNeighbors();
-            for (int j = i + 1; j < graph.numVertices(); j += 1) {
-                nodeTwo = nodes.get(j);
-                if(nodeNeighbors.containsKey(nodeTwo)) {
-                    edge = new Edge(nodeOne, nodeTwo,
-                            nodeNeighbors.get(nodeTwo));
-                    if (graph.edgeNotAdded(nodeOne, edge)) {
-                        graph.insertEdge(edge);
-                    }
-                }
-            }
-        }
-
     }
 
     /**

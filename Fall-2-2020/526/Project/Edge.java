@@ -111,19 +111,8 @@ public class Edge {
      *
      * @param one is one of the two nodes.
      * @param two is the other of the two nodes.
-     * @throws Exception if the two nodes are not neighbors.
      */
-    public void setNodes(Node one, Node two) throws Exception {
-        if (getWeight() == -1) {
-            HashMap<Node, Integer> oneAdj = one.getNeighbors();
-            HashMap<Node, Integer> twoAdj = two.getNeighbors();
-            if (oneAdj.size() > 0 && oneAdj.containsKey(two)) {
-                setWeight(oneAdj.get(two));
-            } else if (twoAdj.size() > 0 && twoAdj.containsKey(one)) {
-                setWeight(twoAdj.get(one));
-            } else
-                throw new Exception("These nodes are not neighbors!");
-        }
+    public void setNodes(Node one, Node two) {
         setNodeOne(one);
         setNodeTwo(two);
     }
