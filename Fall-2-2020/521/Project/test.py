@@ -23,17 +23,13 @@ def testSetupAndChanges():
                                  categories, balance, age,points_cash_back)
     card.purchase(1000)
     card.payOffCard(700)
-    if card.checkBalance() != 300:
-        return False
-    if card.getCPP() != 1:
-        return False
-    if card.checkPointsOrCash() != "C":
-        return False
+    assert (card.checkBalance() == 300)
+    assert (card.getCPP() == 1)
+    assert (card.checkPointsOrCash() == "C")
     test = "template:Mastercard:Citi:Double Cash:C:SUB:False:Categories:" \
            "else-2:0:300"
     repstr = card.__repr__()
-    if repstr != test:
-        return False
+    assert (test == repstr)
     return True
 
 def testSUB():
@@ -50,19 +46,14 @@ def testSUB():
     card = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
                                  categories,balance, age,points_cash_back, cpp)
     sub = card.getSUB()
-    if sub.checkActive() is False:
-        return False
-    if sub.getProgress() != 0:
-        return False
+    assert (sub.checkActive())
+    assert (sub.getProgress() == 0)
     card.purchase(3000)
-    if sub.getProgress() != 3000:
-        return False
+    assert (sub.getProgress() == 3000)
     card.purchase(1000)
-    if sub.checkActive() is True:
-        return False
+    assert (sub.checkActive() is False)
     card.purchase(5000)
-    if sub.getProgress() != 4000:
-        return False
+    assert (sub.getProgress() == 4000)
     return True
 
 def testSelectCategory():
@@ -90,12 +81,9 @@ def testSelectCategory():
     card2 = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
                                   categories, balance, age, points_cash_back,
                                   cpp)
-    if card1.checkWhichCategory("dining") != 2:
-        return False
-    if card2.checkWhichCategory("dining") != 8:
-        return False
-    if card2.checkWhichCategory("gas") != 2:
-        return False
+    assert (card1.checkWhichCategory("dining") == 2)
+    assert (card2.checkWhichCategory("dining") == 8)
+    assert (card2.checkWhichCategory("gas") == 2)
     return True
 
 def main():
