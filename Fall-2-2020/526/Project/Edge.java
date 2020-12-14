@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This class is for a singular Edge within the larger graph.
@@ -130,15 +131,36 @@ public class Edge {
     /**
      * This checks if the given edge is made of the two edges.
      *
-     * @param edge is the given edge.
-     * @param one  is one of the two nodes.
-     * @param two  is the other of the two nodes.
+     * @param one is one of the two nodes.
+     * @param two is the other of the two nodes.
      * @return true if this edge consists of the give edges, false otherwise.
      */
-    public boolean checkEdge(Edge edge, Node one, Node two) {
-        Node[] nodes = edge.getNodes();
+    public boolean checkEdge(Node one, Node two) {
+        Node[] nodes = this.getNodes();
         if (one.equals(nodes[0]) && two.equals(nodes[1])) {
             return true;
         } else return one.equals(nodes[1]) && two.equals(nodes[0]);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Edge edge = (Edge) o;
+
+        boolean nodeOrderOne = Objects.equals(nodeOne, edge.nodeOne) &&
+                Objects.equals(nodeTwo, edge.nodeTwo);
+        boolean nodeOrderTwo = Objects.equals(nodeTwo, edge.nodeOne) &&
+                Objects.equals(nodeOne, edge.nodeTwo);
+        boolean result = (weight == edge.weight) && (nodeOrderOne
+                || nodeOrderTwo);
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash1 = Objects.hash(weight, nodeOne, nodeTwo);
+        int hash2 = Objects.hash(weight, nodeTwo, nodeOne);
+        return Objects.hash(hash1,hash2);
     }
 }

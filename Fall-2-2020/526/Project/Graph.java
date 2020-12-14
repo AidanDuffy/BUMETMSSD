@@ -16,6 +16,8 @@ public class Graph {
     private ArrayList<Node> nodes;
     //This is a list of all edges in the graph
     private ArrayList<Edge> edges;
+    //This is a HashMap of all the nodes mapped to a list of all its edges.
+    private HashMap<Node, ArrayList<Edge>> nodesWithEdges;
     //This is the current Node in the graph.
     private Node position;
 
@@ -27,6 +29,7 @@ public class Graph {
         this.position = new Node();
         this.nodes = new ArrayList<>();
         this.edges = new ArrayList<>();
+        this.nodesWithEdges = new HashMap<>();
     }
 
     /**
@@ -38,6 +41,7 @@ public class Graph {
         this.position = new Node();
         this.edges = new ArrayList<>();
         this.nodes = nodes;
+        this.nodesWithEdges = new HashMap<>();
     }
 
     /**
@@ -51,20 +55,40 @@ public class Graph {
         this.position = position;
         this.nodes = nodes;
         this.edges = new ArrayList<>();
+        this.nodesWithEdges = new HashMap<>();
     }
 
     /**
-     * This constructs a graph with a given list of nodes, map of edges, and
+     * This constructs a graph with a given list of nodes, list of edges, and
      * current position.
      *
      * @param position is the current position node.
      * @param nodes    is the list of nodes in this graph.
-     * @param edges    is the hash map of edges in this graph.
+     * @param edges    is the list of edges in this graph.
      */
     public Graph(Node position, ArrayList<Node> nodes, ArrayList<Edge> edges) {
         this.position = position;
         this.nodes = nodes;
         this.edges = edges;
+        this.nodesWithEdges = new HashMap<>();
+    }
+
+    /**
+     * This constructs a graph with a given list of nodes, list of edges, map of
+     * nodes mapped to a list of their edges, and the current position.
+     *
+     * @param position       is the current position node.
+     * @param nodes          is the list of nodes in this graph.
+     * @param edges          is the list of edges in this graph.
+     * @param nodesWithEdges is map of nodes mapped to a list
+     *                       of their edges.
+     */
+    public Graph(Node position, ArrayList<Node> nodes, ArrayList<Edge> edges,
+                 HashMap<Node, ArrayList<Edge>> nodesWithEdges) {
+        this.position = position;
+        this.nodes = nodes;
+        this.edges = edges;
+        this.nodesWithEdges = nodesWithEdges;
     }
 
     /**
@@ -132,15 +156,70 @@ public class Graph {
      * After running the graph construction method, run this to create the edge
      * list for this graph.
      *
-     * @param graph is the graph that needs edges.
      * @throws Exception if the graph has no vertices setup, which is needed to
-     * generate the list of edges.
+     *                   generate the list of edges.
      */
-    public static void generateEdges(Graph graph) throws Exception {
+    public static void generateEdges(Graph graph) throws
+            IllegalArgumentException {
         if (graph.numVertices() == 0) {
-            throw new Exception("This graph has not been constructed yet!");
+            throw new IllegalArgumentException("This graph has not been " +
+                    "constructed yet!");
         }
         ArrayList<Node> nodes = graph.vertices();
+        HashMap<Node,ArrayList<Edge>> nodesWithEdges =graph.getNodesWithEdges();
+        HashMap<Node, Integer> nodeNeighbors;
+        ArrayList<Edge> nodesEdges;
+        Edge edge;
+        Node nodeOne, nodeTwo;
+        for (int i = 0; i < graph.numVertices(); i += 1) {
+            nodeOne = nodes.get(i);
+            nodeNeighbors = nodeOne.getNeighbors();
+            for (int j = i + 1; j < graph.numVertices(); j += 1) {
+                nodeTwo = nodes.get(j);
+                if(nodeNeighbors.containsKey(nodeTwo)) {
+                    edge = new Edge(nodeOne, nodeTwo,
+                            nodeNeighbors.get(nodeTwo));
+                    if (graph.edgeNotAdded(nodeOne, edge)) {
+                        graph.insertEdge(edge);
+                    }
+                }
+            }
+        }
+
+    }
+
+    /**
+     * This inserts a given edge into the graph's list of edges and the map
+     * of nodes:list of edges
+     * @param edge is the given edge that will be added.
+     */
+    public void insertEdge(Edge edge) {
+        ArrayList<Edge> edges = this.edges();
+        HashMap<Node,ArrayList<Edge>> nodesWithEdges = this.getNodesWithEdges();
+        edges.add(edge);
+        this.setEdges(edges);
+        Node[] edgeNodes = edge.getNodes();
+        for(Node node: edgeNodes) {
+            edges = this.getNodesEdgeList(node);
+            edges.add(edge);
+            nodesWithEdges.put(node,edges);
+        }
+        this.setNodesWithEdges(nodesWithEdges);
+    }
+
+    /**
+     * This returns if the graph has already accounted for the given edge.
+     * @param node is the node the edge comes from.
+     * @param edge is the given edge.
+     * @return true if the edge has not been accounted for, false otherwise
+     */
+    public boolean edgeNotAdded(Node node, Edge edge) {
+        ArrayList<Edge> edges = getNodesEdgeList(node);
+        if (edges == null) {
+            return true;
+        } else {
+            return (!edges.contains(edge));
+        }
     }
 
     /**
@@ -181,6 +260,23 @@ public class Graph {
     }
 
     /**
+     * This retrieves the map of this graph's nodes mapped to edges.
+     * @return the map of the graph's nodes:list of edges.
+     */
+    public HashMap<Node, ArrayList<Edge>> getNodesWithEdges() {
+        return nodesWithEdges;
+    }
+
+    /**
+     * This sets the graphs map of nodes mapped to edges.
+     * @param nodesWithEdges the given map.
+     */
+    public void setNodesWithEdges(HashMap<Node, ArrayList<Edge>>
+                                          nodesWithEdges) {
+        this.nodesWithEdges = nodesWithEdges;
+    }
+
+    /**
      * This returns this graph's list of nodes.
      *
      * @return the graph's list of nodes.
@@ -207,10 +303,44 @@ public class Graph {
         return edges;
     }
 
-    public Edge getEdge(Graph graph, Node one, Node two) {
-        for (Edge edge: graph.edges) {
+    /**
+     * This sets the graphs list of edges to a given array list.
+     * @param edges the array list of edges.
+     */
+    public void setEdges(ArrayList<Edge> edges) {
+        this.edges = edges;
+    }
 
+    /**
+     * This checks all the edges for this graph to see if there exists an edge
+     * shared between two given nodes.
+     *
+     * @param one is one of the two nodes.
+     * @param two is the other of the two nodes.
+     * @return if this edge exists, then it returns the edge, otherwise null.
+     */
+    public Edge getEdge(Node one, Node two) {
+        ArrayList<Edge> edges = getNodesEdgeList(one);
+        for (Edge edge : edges) {
+            if (edge.checkEdge(one, two)) {
+                return edge;
+            }
         }
         return null;
     }
+
+    /**
+     * This returns a given node's list of edges.
+     * @param node is the node
+     * @return the list of edges for this node.
+     */
+    public ArrayList<Edge> getNodesEdgeList(Node node) {
+        HashMap<Node, ArrayList<Edge>> nodesWithEdges = getNodesWithEdges();
+        if (nodesWithEdges.containsKey(node)) {
+            return nodesWithEdges.get(node);
+        } else {
+            return new ArrayList<Edge>();
+        }
+    }
+
 }
