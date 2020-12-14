@@ -38,7 +38,7 @@ class CreditCard:
         self.balance = balance
         self.age = age
         self.points_cash = points_cash_back
-        self.cpp = cpp
+        self.cpp = float(cpp)
         if (self.age > self.sub.getMonths()):
             self.sub.deactivateSUB()
 
@@ -46,7 +46,7 @@ class CreditCard:
         """
         :return: this credit card in a format for the user cards text file
         """
-        result = self.__getHolderName() + "\n"
+        result = self.__getHolderName() + ":"
         result += self.network + ":" + self.issuer + ":" + self.card_name
         if self.checkPointsOrCash() == 'C':
             result += ":C:SUB:"
@@ -58,7 +58,8 @@ class CreditCard:
             result += "," + sub.getReward() + "," + sub.getMin() + ","\
                       + sub.getProgress() + "," + sub.getMonths()
         result += ":Categories:"
-        result += self.printCategories()
+        result += self.printCategories() + ":" + str(self.getAge()) + ":" \
+                  + str(self.checkBalance())
         return result
 
     def purchase(self, cost):
@@ -78,6 +79,13 @@ class CreditCard:
         name.
         """
         return self.__holder
+
+    def setHolderName(self, holder):
+        """
+        Sets the card holder's name
+        :return: none
+        """
+        self.__holder = holder
 
     def checkBalance(self):
         """
@@ -137,6 +145,12 @@ class CreditCard:
         """
         self.cpp = cpp
 
+    def getAge(self):
+        """
+        :return: the age, in months, of this card.
+        """
+        return self.age
+
     def getCategories(self):
         """
         :return: the dict of categories:cash back/points multiplier
@@ -153,7 +167,7 @@ class CreditCard:
         categories_dict = dict()
         for category in category_list:
             parts = list(category.split("-"))
-            categories_dict[parts[0]] = parts[1]
+            categories_dict[parts[0]] = float(parts[1])
         return categories_dict
 
     def checkWhichCategory(self, category):
@@ -165,9 +179,9 @@ class CreditCard:
         """
         cat_dict = self.getCategories()
         if category in cat_dict.keys():
-            return cat_dict.get(category)
+            return cat_dict.get(category)*self.getCPP()
         else:
-            return cat_dict.get("else")
+            return cat_dict.get("else")*self.getCPP()
 
     def printCategories(self):
         """
@@ -178,7 +192,12 @@ class CreditCard:
         cat_dict = self.getCategories()
         result = ""
         for category in cat_dict.keys():
-            result += category + "-" + str(cat_dict.get(category)) + ","
+            multiplier = (cat_dict.get(category))
+            if multiplier.is_integer():
+                multiplier = str(multiplier)
+                result += category + "-" + multiplier[:len(multiplier)-1] + ","
+            else:
+                result += category + "-" + multiplier + ","
         return result[:len(result)-2] #Need to remove last comma
 
 class SignUpBonus:
@@ -191,12 +210,20 @@ class SignUpBonus:
         This creates a new sign-up bonus object given a string of info.
         :param info: is the SUB info provided by the database file or user.
         """
-        self.active = True
+        if info == "False":
+            self.active = False
+            self.minimum = 0
+            self.months = 0
+            return
         sub = list(info.split(","))
-        self.reward = sub[0]
-        self.minimum = sub[1]
-        self.months = sub[2]
+        self.reward = int(sub[0])
+        self.minimum = int(sub[1])
+        self.months = int(sub[2])
         self.progress = 0
+        if self.minimum == 0:
+            self.active = False
+        else:
+            self.active = True
 
     def setProgress(self, progress):
         """
@@ -206,7 +233,7 @@ class SignUpBonus:
         :return: none
         """
         self.progress += progress
-        if (self.progress > self.minimum):
+        if (self.progress >= self.minimum):
             self.deactivateSUB()
 
     def deactivateSUB(self):
