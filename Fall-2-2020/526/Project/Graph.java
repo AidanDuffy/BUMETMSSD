@@ -1,21 +1,32 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+import java.util.Set;
 
 /**
  * This is the class for the graph which will be traversed by the algorithms.
  */
 public class Graph {
 
-    private ArrayList<Node> nodes; //This is just a list of the nodes in this graph.
-    private Node position; //This is the current Node in the graph.
+    //This is a list of the nodes (vertices) in this graph.
+    private ArrayList<Node> nodes;
+    //This is a list of all edges in the graph
+    private ArrayList<Edge> edges;
+    //This is the current Node in the graph.
+    private Node position;
 
     /**
-     * This creates an empty list of nodes for the graph and sets the
-     * positon to an empty Node.
+     * This creates an empty list of nodes and map of edges for the graph and
+     * sets the positon to an empty Node.
      */
     public Graph() {
         this.position = new Node();
         this.nodes = new ArrayList<>();
+        this.edges = new ArrayList<>();
     }
 
     /**
@@ -25,11 +36,13 @@ public class Graph {
      */
     public Graph(ArrayList<Node> nodes) {
         this.position = new Node();
+        this.edges = new ArrayList<>();
         this.nodes = nodes;
     }
 
     /**
-     * This constructs a graph with a given list of nodes with a given current position.
+     * This constructs a graph with a given list of nodes with a given current
+     * position.
      *
      * @param position is the current position node.
      * @param nodes    is the list of nodes in this graph.
@@ -37,54 +50,34 @@ public class Graph {
     public Graph(Node position, ArrayList<Node> nodes) {
         this.position = position;
         this.nodes = nodes;
+        this.edges = new ArrayList<>();
     }
 
     /**
-     * This returns this graph's list of nodes.
+     * This constructs a graph with a given list of nodes, map of edges, and
+     * current position.
      *
-     * @return the graph's list of nodes.
+     * @param position is the current position node.
+     * @param nodes    is the list of nodes in this graph.
+     * @param edges    is the hash map of edges in this graph.
      */
-    public ArrayList<Node> getNodes() {
-        return nodes;
-    }
-
-    /**
-     * This sets the node list to a given array list.
-     *
-     * @param nodes is the given list of nodes.
-     */
-    public void setNodes(ArrayList<Node> nodes) {
-        this.nodes = nodes;
-    }
-
-    /**
-     * This returns this graph's current position Node.
-     *
-     * @return the graph's current position.
-     */
-    public Node getPosition() {
-        return position;
-    }
-
-    /**
-     * This sets the current position of this graph to a given node.
-     *
-     * @param position is the given node which is the current position for this graph.
-     */
-    public void setPosition(Node position) {
+    public Graph(Node position, ArrayList<Node> nodes, ArrayList<Edge> edges) {
         this.position = position;
+        this.nodes = nodes;
+        this.edges = edges;
     }
 
     /**
-     * This intakes the graph input text file and creates the graph and populates the
-     * characterNode hashmap
+     * This intakes the graph input text file and creates the graph and
+     * populates the characterNode hashmap
      *
      * @param graph_file    is the graph input text file.
-     * @param characterNode is the HashMap which pairs the character ID with the node.
+     * @param characterNode is the HashMap which pairs the character ID with the
+     *                      node.
      * @return this returns the array list of all nodes for graph constructor.
      */
-    public static ArrayList<Node> constructGraph(File graph_file,
-                                                 HashMap<Character, Node> characterNode) {
+    public static ArrayList<Node> constructGraph(
+            File graph_file, HashMap<Character, Node> characterNode) {
         ArrayList<Node> nodes = new ArrayList<>();
         try {
             FileReader fr = new FileReader(graph_file);
@@ -133,5 +126,91 @@ public class Graph {
             e.printStackTrace();
         }
         return nodes;
+    }
+
+    /**
+     * After running the graph construction method, run this to create the edge
+     * list for this graph.
+     *
+     * @param graph is the graph that needs edges.
+     * @throws Exception if the graph has no vertices setup, which is needed to
+     * generate the list of edges.
+     */
+    public static void generateEdges(Graph graph) throws Exception {
+        if (graph.numVertices() == 0) {
+            throw new Exception("This graph has not been constructed yet!");
+        }
+        ArrayList<Node> nodes = graph.vertices();
+    }
+
+    /**
+     * This sets the node list to a given array list.
+     *
+     * @param nodes is the given list of nodes.
+     */
+    public void setNodes(ArrayList<Node> nodes) {
+        this.nodes = nodes;
+    }
+
+    /**
+     * This returns this graph's current position Node.
+     *
+     * @return the graph's current position.
+     */
+    public Node getPosition() {
+        return position;
+    }
+
+    /**
+     * This sets the current position of this graph to a given node.
+     *
+     * @param position is the given node which is the current position for this
+     *                 graph.
+     */
+    public void setPosition(Node position) {
+        this.position = position;
+    }
+
+    /**
+     * This returns the number of vertices in this graph.
+     *
+     * @return number of vertices in the graph as an integer.
+     */
+    public int numVertices() {
+        return this.nodes.size();
+    }
+
+    /**
+     * This returns this graph's list of nodes.
+     *
+     * @return the graph's list of nodes.
+     */
+    public ArrayList<Node> vertices() {
+        return nodes;
+    }
+
+    /**
+     * This returns the number of edges in this graph.
+     *
+     * @return number of edges in the graph as an integer.
+     */
+    public int numEdges() {
+        return this.edges.size();
+    }
+
+    /**
+     * This returns this graph's list of edges.
+     *
+     * @return the graph's list of edges.
+     */
+    public ArrayList<Edge> edges() {
+        return edges;
+    }
+
+    public Edge getEdge(Graph graph, Node one, Node two) {
+        for (Edge edge: graph.edges) {
+
+        }
+        return null;
     }
 }
