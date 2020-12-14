@@ -50,7 +50,7 @@ def parseUserData(user_data):
     template_wallet = list()
     line = user_data.readline()
     line = line[:len(line) - 1]
-    while (line is not None):
+    while (line is not ""):
         card_parts = list(line.split(":"))
         holder = card_parts[0]
         network = card_parts[1]
@@ -87,10 +87,10 @@ def saveUserCards(wallet, user_data):
     """
     This saves all of the user card information in a text file for next time.
     :param wallet: is the list of this user's cards
-    :return:
+    :return: none
     """
+    holder = input("What is the holder's name? ")
     for card in wallet:
-        holder = input("What is the holder's name? ")
         network = card.getNetwork()
         issuer = card.getIssuer()
         card_name = card.getCardName()
@@ -272,6 +272,7 @@ def main(ccdb, user_data):
         wallet = list()
     else:
         wallet_empty = False
+        user = open(user_data, "r+")
         wallet = parseUserData(user)
 
     menu_value = -1
@@ -304,6 +305,7 @@ def main(ccdb, user_data):
         elif menu_value == 6:
             checkCPP(wallet)
     print("Exiting...")
+    user = open(user_data, "r+")
     saveUserCards(wallet,user)
     user.close()
     database.close()

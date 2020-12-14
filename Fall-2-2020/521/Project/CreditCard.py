@@ -35,8 +35,8 @@ class CreditCard:
         self.card_name = name
         self.sub = SignUpBonus(sub_info)
         self.categories = self.buildCategories(categories)
-        self.balance = balance
-        self.age = age
+        self.balance = int(balance)
+        self.age = int(age)
         self.points_cash = points_cash_back
         self.cpp = float(cpp)
         if (self.age > self.sub.getMonths()):
