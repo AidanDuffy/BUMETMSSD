@@ -5,6 +5,8 @@ Date: December 15, 2020
 Final Project
 Description: This is the main project file for the credit card choosing program
 Future Goals: Add a Wallet Class for additional accessor/mutator methods.
+Add a function that prints out all a user's cards
+Incorporate naming schemes to separate user info.
 """
 
 import CreditCard
@@ -81,7 +83,7 @@ def parseUserData(user_data):
 									 cash_back_points, cpp)
 		if sub_list[0] == "True":
 			sub = card.getSUB()
-			sub.setProgress(int(sub_list[3]))
+			sub.setProgress(int(card_parts[11]))
 		template_wallet.append(card)
 		line = user_data.readline()
 		line = line[:len(line) - 1]
@@ -115,9 +117,9 @@ def saveUserCards(wallet, user_data):
 		balance = card.checkBalance()
 		age = card.getAge()
 		line = [holder, network, issuer, card_name,
-				cash_back_points + "," + cpp,
+				str(cash_back_points) + "," + str(cpp),
 				"SUB", sub_info, "Categories", categories, str(age),
-				str(balance)]
+				str(balance), str(sub.getProgress())]
 		line = ":".join(line)
 		user_data.write(line + "\n")
 
@@ -131,6 +133,7 @@ def addCard(wallet, template_wallet):
 	:param template_wallet: is list of all credit cards this program can handle
 	:return: True or False depending on the success of the function.
 	"""
+	name = input("What is the name on the card? ")
 	issuer = input("Which bank is the issuer? ")
 	selected = False
 	new_card = None
@@ -161,16 +164,16 @@ def addCard(wallet, template_wallet):
 		issuer = new_card.getIssuer()
 		card_name = new_card.getCardName()
 		cats = new_card.printCategories()
+		p_or_c = new_card.checkPointsOrCash()
 		cpp = new_card.getCPP()
 		sub_info = str(sub.getReward()) + "," + str(sub.getMin()) + "," + \
 				   str(sub.getMonths())
 		if yesNo == "Y":
 			balance = 0
 			age = 0
-			result = CreditCard.CreditCard(card_name, network, issuer,
-										   card_name,
+			result = CreditCard.CreditCard(name,network, issuer,card_name,
 										   sub_info, cats, balance, age,
-										   new_card.checkPointsOrCash(), cpp)
+										   p_or_c, cpp)
 			break
 		elif yesNo == "N":
 			while (True):
@@ -182,10 +185,9 @@ def addCard(wallet, template_wallet):
 				except:
 					print("Please enter valid numbers!")
 
-			result = CreditCard.CreditCard(card_name, network, issuer,
-										   card_name,
+			result = CreditCard.CreditCard(name, network, issuer, card_name,
 										   sub_info, cats, balance, age,
-										   new_card.checkPointsOrCash, cpp)
+										   p_or_c, cpp)
 			break
 		else:
 			print("Error! Please enter in Y or N!")
@@ -201,7 +203,7 @@ def decider(wallet):
 	:param wallet: is the list of credit cards for this given user
 	:return: True or False depending on the success of the function.
 			 if True, it will return a list:the card issuer, name,
-			 the spending category.
+			 the spending category and the value of the rewards.
 	Future Goals: Update to include a map to consolidate the menu section,
 	ex: {"Food":"dining,groceries"}; find out how to not have to hardcode
 	quarterly categories for card like the Chase Freedom Flex/Discover It.
@@ -227,7 +229,7 @@ def decider(wallet):
 	sub_cards = list()
 	subs = False
 	for card in wallet:
-		sub = card.checkSUB()
+		sub = card.getSUB()
 		if sub.checkActive():
 			sub_cards.append(card)
 	if len(sub_cards) == 1:
@@ -238,200 +240,212 @@ def decider(wallet):
 		found.append(0)
 	elif len(sub_cards) > 1:
 		subs = True
-		menu_value = -1
-		while (menu_value < 0 or menu_value > 6):
-			print("Spending Categories:\n\t1. Food\n\t2. Travel\n\t3. Transit"
-				  "\n\t4. Gas\n\t5. Online Shopping\n\t6. Other\n")
-			menu_value = input("Please enter one of the above values or 0 "
-							   "to cancel: ")
-			try:
-				menu_value = int(menu_value)
-			except:
-				print("Error: Not an integer! Please enter a valid input!")
-				continue
-			category = ""
-			if menu_value == 0:
-				break
-			elif menu_value < 0 or menu_value > 6:
-				print(
-					"Error: Not a valid integer! Please enter a valid number!")
-				continue
-			elif menu_value == 1:
-				print(
-					"You have selected Food! Please select a subcategory:\n\t1."
-					" Dining\n\t2.  Groceries")
-				subcategory = input(
-					"Please enter an above values, anything else "
+	menu_value = -1
+	while (menu_value < 0 or menu_value > 6):
+		print("Spending Categories:\n\t1. Food\n\t2. Travel\n\t3. Transit"
+			  "\n\t4. Gas\n\t5. Online Shopping\n\t6. Other\n")
+		menu_value = input("Please enter one of the above values or 0 "
+						   "to cancel: ")
+		try:
+			menu_value = int(menu_value)
+		except:
+			print("Error: Not an integer! Please enter a valid input!")
+			continue
+		category = ""
+		if menu_value == 0:
+			break
+		elif menu_value < 0 or menu_value > 6:
+			print("Error: Not a valid integer! Please enter a valid number!")
+			continue
+		elif menu_value == 1:
+			print("You have selected Food! Please select a subcategory:\n\t"
+				"1. Dining\n\t2. Groceries")
+			subcategory = input("Please enter an above values, anything else "
 					"to leave this category: ")
-				try:
-					subcategory = int(subcategory)
-					if subcategory == 1:
-						category = "dining"
-					elif subcategory == 2:
-						amazon = ""
-						while amazon != "N" and amazon != "Y":
-							amazon = input(
-								"Are you shopping at Whole Foods? (Y/N):  ")
-							if amazon == "N":
-								category = "grocery"
-							elif amazon == "Y":
-								category = "grocery(Whole Foods)"
-							else:
-								print("Invalid input")
-					else:
-						print("Exiting the food category...")
-						continue
-				except:
+			try:
+				subcategory = int(subcategory)
+				if subcategory == 1:
+					category = "dining"
+				elif subcategory == 2:
+					amazon = ""
+					while amazon != "N" and amazon != "Y":
+						amazon = input(
+							"Are you shopping at Whole Foods? (Y/N):  ")
+						if amazon == "N":
+							category = "grocery"
+						elif amazon == "Y":
+							category = "grocery(Whole Foods)"
+						else:
+							print("Invalid input")
+				else:
 					print("Exiting the food category...")
 					continue
-			elif menu_value == 2:
-				print(
-					"You have selected Travel! Please select a subcategory:\n"
-					"\t1. Flights\n\t2. Hotels\n\t3. Chase\n\t4. AMEX")
-				subcategory = input(
-					"Please enter an above value, anything else to "
+			except:
+				print("Exiting the food category...")
+				continue
+		elif menu_value == 2:
+			print("You have selected Travel! Please select a subcategory:\n"
+				"\t1. Flights\n\t2. Hotels\n\t3. Chase\n\t4. AMEX")
+			subcategory = input("Please enter an above value, anything else to "
 					"leave this category: ")
-				try:
-					subcategory = int(subcategory)
+			try:
+				subcategory = int(subcategory)
+				if subcategory == 1:
+					category = "travel"
+				elif subcategory == 2:
+					print("You have selected Hotel! Are you booking:\n\t1."
+						  "With an IHG partner\n\t2. Elsewhere")
+					subcategory = int(input("Option: "))
 					if subcategory == 1:
+						category = "hotel(IHG)"
+					else:
 						category = "travel"
-					elif subcategory == 2:
-						print("You have selected Hotel! Are you booking:\n\t1."
-							  "With an IHG partner\n\t2. Elsewhere")
-						subcategory = int(input("Option: "))
-						if subcategory == 1:
-							category = "hotel(IHG)"
-						else:
-							category = "travel"
-					elif subcategory == 3:
-						category = "travel(Chase)"
-					elif subcategory == 4:
-						category = "travel(AMEX)"
-					else:
-						print("Exiting the Travel category...")
-						continue
-				except:
-					print("Error! Exiting the Travel category...")
-					continue
-			elif menu_value == 3:
-				category = "transit"
-			elif menu_value == 4:
-				category = "gas"
-			elif menu_value == 5:
-				print("You have selected Online Shopping! Please select a "
-					  "subcategory:\n\t1. Amazon\n\t2. Walmart\n\t3. Elsewhere")
-				subcategory = input(
-					"Please enter an above value, anything else to "
-					"leave this category: ")
-				try:
-					subcategory = int(subcategory)
-					if subcategory == 1:
-						category = "online shopping(Amazon)"
-					elif subcategory == 2:
-						category = "online shopping(Walmart)"
-					elif subcategory == 3:
-						category = "online shopping"
-					else:
-						print("Exiting the Online Shopping category...")
-						continue
-				except:
-					print("Error! Exiting the Online Shopping category...")
-					continue
-			elif menu_value == 6:
-				print(
-					"You have selected Other! Please select a subcategory:\n\t1."
-					" Streaming\n\t2. Utilies\n\t3. Drugstores\n\t4. Other")
-				subcategory = input(
-					"Please enter an above value, anything else to "
-					"leave this category: ")
-				try:
-					subcategory = int(subcategory)
-					if subcategory == 1:
-						category = "streaming"
-					elif subcategory == 2:
-						category = "utilities"
-					elif subcategory == 3:
-						category = "drugstores"
-					elif subcategory == 4:
-						category = "else"
-					else:
-						print("Exiting the Other category...")
-						continue
-				except:
-					print("Error! Exiting the Other category...")
-					continue
-			paypal = ""
-			while paypal != "N" and paypal != "Y":
-				paypal = input(
-					"Will you be purchasing through PayPal? (Y/N):  ")
-				if paypal == "Y":
-					category = category + "(PayPal)"
-					break
-				elif paypal == "N":
-					break
+				elif subcategory == 3:
+					category = "travel(Chase)"
+				elif subcategory == 4:
+					category = "travel(AMEX)"
 				else:
-					print("Invalid input")
-			break
-
-		best = list()
-		best.append(0)
-		best.append(0)
-		if subs:
-			for card in sub_cards:
-				sub = card.checkSUB()
-				value = card.checkCategory(category)
-				if "(" in category:
-					if "PayPal" in category:
-						category = category[:len(category) - 8]
-						if (card.checkCategory("quarterly") !=
-								card.checkCategory("else")):
-							value = .01 * card.checkCategory("quarterly")
-							value += card.checkCategory(category)
-					if "IHG" in category:
-						if value != 25 * .6:
-							value += .01 * card.checkCategory("travel")
-					if "Whole Foods" in category:
-						if value == card.checkCategory("else"):
-							value += .01 * card.checkCategory("grocery")
-					if "Amazon" in category:
-						if value == card.checkCategory("else"):
-							value += .01 * card.checkCategory(
-								"online shopping")
-				value += sub.getROS()
-				if value > best[0]:
-					best[0] = value
-					best[1] = card
-				value = 0
-
-		else:
-			for card in wallet:
-				value = card.checkCategory(category)
-				if "(" in category:
-					if "PayPal" in category:
-						temp = category[:len(category) - 8]
-						if card.checkCategory(
-								"quarterly") != card.checkCategory(
-							"else"):
-							value = .01 * card.checkCategory("quarterly")
-							value += card.checkCategory(temp)
-					if "IHG" in category:
-						if value != 25 * .6:
-							value += .01 * card.checkCategory("travel")
-					if "Whole Foods" in category:
-						if value == card.checkCategory("else"):
-							value += .01 * card.checkCategory("grocery")
-					if "Amazon" in category:
-						if value == card.checkCategory("else"):
-							value += .01 * card.checkCategory(
-								"online shopping")
-				if value > best[0]:
-					best[0] = value
-					best[1] = card
-				value = 0
-		found = list()
+					print("Exiting the Travel category...")
+					continue
+			except:
+				print("Error! Exiting the Travel category...")
+				continue
+		elif menu_value == 3:
+			category = "transit"
+		elif menu_value == 4:
+			category = "gas"
+		elif menu_value == 5:
+			print("You have selected Online Shopping! Please select a "
+				  "subcategory:\n\t1. Amazon\n\t2. Walmart\n\t3. Elsewhere")
+			subcategory = input(
+				"Please enter an above value, anything else to "
+				"leave this category: ")
+			try:
+				subcategory = int(subcategory)
+				if subcategory == 1:
+					category = "online shopping(Amazon)"
+				elif subcategory == 2:
+					category = "online shopping(Walmart)"
+				elif subcategory == 3:
+					category = "online shopping"
+				else:
+					print("Exiting the Online Shopping category...")
+					continue
+			except:
+				print("Error! Exiting the Online Shopping category...")
+				continue
+		elif menu_value == 6:
+			print("You have selected Other! Please select a subcategory:\n\t1."
+					" Streaming\n\t2. Utilies\n\t3. Drugstores\n\t4. Other")
+			subcategory = input("Please enter an above value, anything else to "
+					"leave this category: ")
+			try:
+				subcategory = int(subcategory)
+				if subcategory == 1:
+					category = "streaming"
+				elif subcategory == 2:
+					category = "utilities"
+				elif subcategory == 3:
+					category = "drugstores"
+				elif subcategory == 4:
+					category = "else"
+				else:
+					print("Exiting the Other category...")
+					continue
+			except:
+				print("Error! Exiting the Other category...")
+				continue
+		paypal = ""
+		while paypal != "N" and paypal != "Y":
+			paypal = input(
+				"Will you be purchasing through PayPal? (Y/N):  ")
+			if paypal == "Y":
+				category = category + "(PayPal)"
+				break
+			elif paypal == "N":
+				break
+			else:
+				print("Invalid input")
+		break
+	best = list()
+	best.append(0)
+	best.append(0)
+	tie = list()
+	if subs:
+		for card in sub_cards:
+			sub = card.getSUB()
+			value = card.checkCategory(category)
+			if "(" in category:
+				if "PayPal" in category:
+					category = category[:len(category) - 8]
+					if (card.checkCategory("quarterly") !=
+							card.checkCategory("else")):
+						value = card.checkCategory("quarterly")
+						value += card.checkCategory(category)
+				if "IHG" in category:
+					if value != 25 * .6:
+						value += card.checkCategory("travel")
+				if "Whole Foods" in category:
+					if value == card.checkCategory("else"):
+						value += card.checkCategory("grocery")
+				if "Amazon" in category:
+					if value == card.checkCategory("else"):
+						value += card.checkCategory(
+							"online shopping")
+			value += sub.getROS()
+			if value > best[0]:
+				best[0] = value
+				best[1] = card
+				tie = list()
+			elif value == best[0]:
+				tie.append(card)
+				tie.append(best[1])
+			value = 0
+		print("Note: This recommendation is made because"
+			  " of a sign-up bonus, not only multipliers!")
+	else:
+		for card in wallet:
+			value = card.checkCategory(category)
+			if "(" in category:
+				if "PayPal" in category:
+					temp = category[:len(category) - 8]
+					if card.checkCategory(
+							"quarterly") != card.checkCategory(
+						"else"):
+						value = card.checkCategory("quarterly")
+						value += card.checkCategory(temp)
+				if "IHG" in category:
+					if value != 25 * .6:
+						value += card.checkCategory("travel")
+				if "Whole Foods" in category:
+					if value == card.checkCategory("else"):
+						value += card.checkCategory("grocery")
+				if "Amazon" in category:
+					if value == card.checkCategory("else"):
+						value += card.checkCategory(
+							"online shopping")
+			if value > best[0]:
+				best[0] = value
+				best[1] = card
+				tie = list()
+			elif value == best[0]:
+				if len(tie) == 0:
+					tie.append(best[1])
+				tie.append(card)
+			value = 0
+	found = list()
+	if len(tie) == 0:
 		card = best[1]
-		found.append(card.getIssuer(), card.getCardName(), category)
-		return found
+		found.append(card.getIssuer())
+		found.append(card.getCardName())
+		found.append(category)
+		found.append(best[0])
+	else:
+		found.append("tie")
+		found.append(tie)
+		found.append(category)
+		found.append(best[0])
+	return found
 
 
 def checkBalance(wallet):
@@ -441,7 +455,7 @@ def checkBalance(wallet):
 	:return: True or False depending on the success of the function.
 			 if True, it will return a list:the card issuer, name, and balance.
 	"""
-	whichCard = input("Which card are you checking the balance for? (Enter"
+	whichCard = input("Which card are you checking the balance for? (Enter "
 					  "in Issuer,Card Name) ")
 	card_parts = list(whichCard.split(","))
 	found = False
@@ -450,8 +464,8 @@ def checkBalance(wallet):
 			if card.getIssuer() == card_parts[0]:
 				if card.getCardName() == card_parts[1]:
 					found = card_parts
-				found.append(card.checkBalance())
-				break
+					found.append(card.checkBalance())
+					break
 	return found
 
 
@@ -462,7 +476,7 @@ def makePayment(wallet):
 	:return: True or False depending on the success of the function.
 			 if True, it will return a list:the card issuer and name.
 	"""
-	whichCard = input("Which card are you making a payment for? (Enter"
+	whichCard = input("Which card are you making a payment for? (Enter "
 					  "in Issuer,Card Name) ")
 	amount = input("How much are you paying off? (Use integers): ")
 	found = False
@@ -490,7 +504,7 @@ def checkSUB(wallet):
 			 if True, it will return a list: sign-up bonus object and
 			 the card issuer and name.
 	"""
-	whichCard = input("Which card are you checking the SUB for? (Enter"
+	whichCard = input("Which card are you checking the SUB for? (Enter "
 					  "in Issuer,Card Name) ")
 	card_parts = list(whichCard.split(","))
 	found = False
@@ -513,7 +527,7 @@ def checkCPP(wallet):
 	:return: True or False depending on the success of the function.
 			 if True, it will return a list: the issuer, name, and CPP
 	"""
-	whichCard = input("Which card are you checking the balance for? (Enter"
+	whichCard = input("Which card are you checking the balance for? (Enter "
 					  "in Issuer,Card Name) ")
 	card_parts = list(whichCard.split(","))
 	found = False
@@ -558,6 +572,7 @@ def main(ccdb, user_data):
 		except:
 			print("Error: Not an integer! Please enter a valid input!")
 			continue
+		print("\n\n")
 		function_success = False
 		if menu_value == 0:
 			break
@@ -575,19 +590,26 @@ def main(ccdb, user_data):
 		elif menu_value == 2:
 			function_success = decider(wallet)
 			if function_success:
+				reward = function_success[3]
 				category = function_success[2]
+				if function_success[0] == "tie":
+					print("It's a tie for purchases in the", category,
+						  "category. You should see a", reward,"percent"
+						  " return with the following cards:")
+					for card in function_success[1]:
+						print("\t",card.getIssuer(),card.getCardName())
 				card_name = function_success[1]
 				card_issuer = function_success[0]
 				if category == -1:
 					print("Success! You only have one card: the", card_issuer,
 						  card_name, "is what you use for all purchases!")
-					break
 				elif category == 0:
 					print("Success! You have one card with an active SUB: use",
 						  "the", card_issuer, card_name, "for all purchases!")
 				else:
 					print("Success! Use the", card_issuer, card_name, "for",
-						  "purchases in the", category, "category.")
+						  "purchases in the", category, "category. You "
+						  "should see a", reward,"percent return!")
 		elif menu_value == 3:
 			function_success = checkBalance(wallet)
 			if function_success:
@@ -611,15 +633,17 @@ def main(ccdb, user_data):
 				card_name = function_success[2]
 				card_issuer = function_success[1]
 				if sub.checkActive() is False:
-					print("Success! Unfortunately, your", card_issuer, " ",
+					print("Success! Unfortunately, your ", card_issuer, " ",
 						  card_name, "'s sign-up bonus is no longer active",
 						  sep="")
 					continue
-				res = "Success! Here is the sign-up bonus information for your "
-				+ card_issuer, " ", card_name, ":\n\tSUB Reward: " + \
-				sub.getReward() + "\n\tMinimum Spend: " + sub.getMin() + "\n\t"
-				"Progress: " + sub.getProgress() + "\nMonths: " + sub.getMonths()
-				print(res)
+				print("Success! Here is the sign-up bonus information for" \
+					 " your",card_issuer,card_name, ":\n\tSUB " \
+					 "Reward:", str(sub.getReward()),\
+					 "\n\tMinimum Spend:",\
+					 str(sub.getMin()),"\n\tProgress: ",\
+					 str(sub.getProgress()),"\n\tMonths: ",\
+					 str(sub.getMonths()),"\n\n")
 		elif menu_value == 6:
 			function_success = checkCPP(wallet)
 			if function_success:

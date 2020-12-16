@@ -59,8 +59,8 @@ class CreditCard:
         sub = self.sub
         result += str(sub.active)
         if sub.active:
-            result += "," + sub.getReward() + "," + sub.getMin() + "," \
-                      + sub.getProgress() + "," + sub.getMonths()
+            result += "," + str(sub.getReward())+ "," +str(sub.getMin())+"," \
+                      + str(sub.getProgress()) + "," + str(sub.getMonths())
         result += ":Categories:"
         result += self.printCategories() + ":" + str(self.getAge()) + ":" \
                   + str(self.checkBalance())
@@ -174,7 +174,7 @@ class CreditCard:
             categories_dict[parts[0]] = float(parts[1])
         return categories_dict
 
-    def checkWhichCategory(self, category):
+    def checkCategory(self, category):
         """
         This will take a given string category (i.e. dining) and check the
         rewards value.
@@ -202,7 +202,7 @@ class CreditCard:
                 result += category + "-" + multiplier[
                                            :len(multiplier) - 1] + ","
             else:
-                result += category + "-" + multiplier + ","
+                result += category + "-" + str(multiplier) + ","
         return result[:len(result) - 2]  # Need to remove last comma
 
 
@@ -220,6 +220,7 @@ class SignUpBonus:
             self.active = False
             self.minimum = 0
             self.months = 0
+            self.progress = 0
             return
         sub = list(info.split(","))
         self.reward = int(sub[0])
@@ -229,9 +230,12 @@ class SignUpBonus:
         """
         This is the return on spending for the "else" category, must be set
         by with CPP. It defaults to 1.0 for CPP for cash back cards, needs
-		to be updated for points.
-		"""
-        self.ROS = (self.getReward() * 1.0) / self.getMinimum
+        to be updated for points.
+        """
+        if self.getMin() == 0:
+            self.deactivateSUB()
+        else:
+            self.ROS = (self.getReward() * 1.0) / self.getMin()
         if self.minimum == 0:
             self.active = False
         else:
@@ -243,7 +247,7 @@ class SignUpBonus:
         :param cpp: is the cents per point on this card
         :return: none
         """
-        self.ROS = (self.getReward() * .01 * cpp) / self.getMinimum
+        self.ROS = (self.getReward() * .01 * cpp) / self.getMin()
 
     def getROS(self):
         """
