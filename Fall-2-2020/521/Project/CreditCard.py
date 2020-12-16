@@ -5,13 +5,15 @@ Date: December 15, 2020
 Final Project
 Description: This is a user-defined class, as requested in the project
 guidelines that is for the creation of CreditCard objects.
+Future Goals: Consolidate constructor, allow for other constructors.
+Allow for subcategories built in from the parse file.
 """
 
 
 class CreditCard:
 
     def __init__(self, holder, network, issuer, name, sub_info, categories,
-                 balance, age, points_cash_back, cpp = 1):
+                 balance, age, points_cash_back, cpp=1):
         """
         This constructs a new credit card with the given parameters. The main
         program will ensure everything is full passed in.
@@ -39,6 +41,8 @@ class CreditCard:
         self.age = int(age)
         self.points_cash = points_cash_back
         self.cpp = float(cpp)
+        if (self.points_cash == "P"):
+            self.sub.setROS(self.getCPP())
         if (self.age > self.sub.getMonths()):
             self.sub.deactivateSUB()
 
@@ -55,7 +59,7 @@ class CreditCard:
         sub = self.sub
         result += str(sub.active)
         if sub.active:
-            result += "," + sub.getReward() + "," + sub.getMin() + ","\
+            result += "," + sub.getReward() + "," + sub.getMin() + "," \
                       + sub.getProgress() + "," + sub.getMonths()
         result += ":Categories:"
         result += self.printCategories() + ":" + str(self.getAge()) + ":" \
@@ -179,9 +183,9 @@ class CreditCard:
         """
         cat_dict = self.getCategories()
         if category in cat_dict.keys():
-            return cat_dict.get(category)*self.getCPP()
+            return cat_dict.get(category) * self.getCPP()
         else:
-            return cat_dict.get("else")*self.getCPP()
+            return cat_dict.get("else") * self.getCPP()
 
     def printCategories(self):
         """
@@ -195,10 +199,12 @@ class CreditCard:
             multiplier = (cat_dict.get(category))
             if multiplier.is_integer():
                 multiplier = str(multiplier)
-                result += category + "-" + multiplier[:len(multiplier)-1] + ","
+                result += category + "-" + multiplier[
+                                           :len(multiplier) - 1] + ","
             else:
                 result += category + "-" + multiplier + ","
-        return result[:len(result)-2] #Need to remove last comma
+        return result[:len(result) - 2]  # Need to remove last comma
+
 
 class SignUpBonus:
     """
@@ -220,10 +226,31 @@ class SignUpBonus:
         self.minimum = int(sub[1])
         self.months = int(sub[2])
         self.progress = 0
+        """
+        This is the return on spending for the "else" category, must be set
+        by with CPP. It defaults to 1.0 for CPP for cash back cards, needs
+		to be updated for points.
+		"""
+        self.ROS = (self.getReward() * 1.0) / self.getMinimum
         if self.minimum == 0:
             self.active = False
         else:
             self.active = True
+
+        def setROS(self, cpp):
+            """
+        This sets/updates the return on spend for this card's sign-up bonus.
+        :param cpp: is the cents per point on this card
+        :return: none
+        """
+            self.ROS = (self.getReward() * .01 * cpp) / self.getMinimum
+
+        def getROS(self):
+            """
+        This gives the user the return on spend for the SUB.
+        :return: the float value for the return on spend for this SUB
+        """
+            return self.ROS
 
     def setProgress(self, progress):
         """
@@ -254,7 +281,7 @@ class SignUpBonus:
     def getMonths(self):
         """
         This gives the user the number of months left on the SUB.
-        :return:
+        :return: the int value for the number of months left on this SUB.
         """
         return self.months
 

@@ -1,4 +1,0 @@
-Duffy:Mastercard:Chase:Freedom Flex:SUB,1:SUB:True,20000,500,0,3:Categories:quarterly-5.,travel(Chase)-5.,dining-3.,drugstores-3.,else-1:0:0
-Duffy:AMEX:AMEX:Platinum:SUB,1:SUB:True,75000,4000,0,3:Categories:travel-5.,else-1:0:0
-Duffy:Mastercard:Citi:Double Cash:SUB,1:SUB:False:Categories:else-2:0:0
-Duffy:Discover:Discover:Discover It:C,1:SUB:False:Categories:quarterly-5.,else-1:0:0

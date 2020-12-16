@@ -9,6 +9,7 @@ properly
 
 import CreditCard
 
+
 def testSetupAndChanges():
     holder = "template"
     network = "Mastercard"
@@ -20,7 +21,7 @@ def testSetupAndChanges():
     age = 0
     points_cash_back = "C"
     card = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
-                                 categories, balance, age,points_cash_back)
+                                 categories, balance, age, points_cash_back)
     card.purchase(1000)
     card.payOffCard(700)
     assert (card.checkBalance() == 300)
@@ -31,6 +32,7 @@ def testSetupAndChanges():
     repstr = card.__repr__()
     assert (test == repstr)
     return True
+
 
 def testSUB():
     holder = "template"
@@ -44,7 +46,8 @@ def testSUB():
     points_cash_back = "P"
     cpp = 2
     card = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
-                                 categories,balance, age,points_cash_back, cpp)
+                                 categories, balance, age, points_cash_back,
+                                 cpp)
     sub = card.getSUB()
     assert (sub.checkActive())
     assert (sub.getProgress() == 0)
@@ -55,6 +58,7 @@ def testSUB():
     card.purchase(5000)
     assert (sub.getProgress() == 4000)
     return True
+
 
 def testSelectCategory():
     holder = "template"
@@ -86,6 +90,7 @@ def testSelectCategory():
     assert (card2.checkWhichCategory("gas") == 2)
     return True
 
+
 def main():
     check = testSetupAndChanges()
     if check:
@@ -102,6 +107,7 @@ def main():
         print("Category Selection test passed!")
     else:
         print("Category Selection test failed...")
+
 
 if __name__ == "__main__":
     main()
