@@ -12,7 +12,7 @@ Incorporate naming schemes to separate user info.
 import CreditCard
 
 
-def parseDatabase(database):
+def parse_database(database):
 	"""
 	This takes an input file and parses through, creating a number of template
 	cards
@@ -47,7 +47,7 @@ def parseDatabase(database):
 	return template_wallet
 
 
-def parseUserData(user_data):
+def parse_user_data(user_data):
 	"""
 	This parses through the user's saved credit card info.
 	:param user_data: is the open user cards text file
@@ -82,15 +82,15 @@ def parseUserData(user_data):
 									 categories, balance, age,
 									 cash_back_points, cpp)
 		if sub_list[0] == "True":
-			sub = card.getSUB()
-			sub.setProgress(int(sub_list[3]))
+			sub = card.get_sign_up_bonus()
+			sub.set_progress(int(sub_list[3]))
 		template_wallet.append(card)
 		line = user_data.readline()
 		line = line[:len(line) - 1]
 	return template_wallet
 
 
-def saveUserCards(wallet, user_data):
+def save_user_cards(wallet, user_data):
 	"""
 	This saves all of the user card information in a text file for next time.
 	:param wallet: is the list of this user's cards
@@ -100,7 +100,7 @@ def saveUserCards(wallet, user_data):
 		user_data.write(card.__repr__() + "\n")
 
 
-def addCard(wallet, template_wallet):
+def add_card(wallet, template_wallet):
 	"""
 	This is adds a new card to the user wallet from the template_wallet, but
 	it is populated with any user provided information, such as age of account
@@ -115,10 +115,10 @@ def addCard(wallet, template_wallet):
 	new_card = None
 	yesNo = ""
 	for card in template_wallet:
-		if card.getIssuer() != issuer:
+		if card.get_issuer() != issuer:
 			continue
 		while yesNo != "Y" or yesNo != "N":
-			yesNo = input("Is it the " + card.getCardName()
+			yesNo = input("Is it the " + card.get_card_name()
 						  + "(Input Y or N)? ")
 			if yesNo == "Y":
 				selected = True
@@ -135,15 +135,15 @@ def addCard(wallet, template_wallet):
 		return
 	while yesNo != "Y" or yesNo != "N":
 		yesNo = input("Is the card new (Input Y or N)? ")
-		sub = new_card.getSUB()
-		network = new_card.getNetwork()
-		issuer = new_card.getIssuer()
-		card_name = new_card.getCardName()
-		cats = new_card.printCategories()
-		p_or_c = new_card.checkPointsOrCash()
-		cpp = new_card.getCPP()
-		sub_info = str(sub.getReward()) + "," + str(sub.getMin()) + "," + \
-				   str(sub.getMonths())
+		sub = new_card.get_sign_up_bonus()
+		network = new_card.get_network()
+		issuer = new_card.get_issuer()
+		card_name = new_card.get_card_name()
+		cats = new_card.print_categories()
+		p_or_c = new_card.check_points_or_cash()
+		cpp = new_card.get_cents_per_point()
+		sub_info = str(sub.get_reward()) + "," + str(sub.get_minimum_spend())+\
+				   "," + str(sub.get_months())
 		if yesNo == "Y":
 			balance = 0
 			age = 0
@@ -193,27 +193,29 @@ def decider(wallet):
 	elif len(wallet) == 1:
 		card = wallet[0]
 		found = list()
-		found.append(card.getIssuer())
-		found.append(card.getCardName())
+		found.append(card.get_issuer())
+		found.append(card.get_card_name())
 		found.append(-1)
 		return found
 	"""
-	First, we need to check for any valid SUBs. If so, if there is one,
+	First, we need to check for any valid sign_up_bonus. If so, if there's one,
 	then that will be selected, otherwise, narrow the options to just 
-	those with active SUBs and do the usual process.
+	those with active sign_up_bonus and do the usual process.
 	"""
 	sub_cards = list()
 	subs = False
 	for card in wallet:
-		sub = card.getSUB()
-		if sub.checkActive():
+		sub = card.get_sign_up_bonus()
+		if sub.check_active():
 			sub_cards.append(card)
+			subs = True
 	if len(sub_cards) == 1:
 		found = list()
 		card = sub_cards[0]
-		found.append(card.getIssuer())
-		found.append(card.getCardName())
+		found.append(card.get_issuer())
+		found.append(card.get_card_name())
 		found.append(0)
+		return found
 	elif len(sub_cards) > 1:
 		subs = True
 	menu_value = -1
@@ -262,8 +264,8 @@ def decider(wallet):
 		elif menu_value == 2:
 			print("You have selected Travel! Please select a subcategory:\n"
 				"\t1. Flights\n\t2. Hotels\n\t3. Chase\n\t4. AMEX")
-			subcategory = input("Please enter an above value, anything else to "
-					"leave this category: ")
+			subcategory = input("Please enter an above value, anything else "
+					"to leave this category: ")
 			try:
 				subcategory = int(subcategory)
 				if subcategory == 1:
@@ -313,8 +315,8 @@ def decider(wallet):
 		elif menu_value == 6:
 			print("You have selected Other! Please select a subcategory:\n\t1."
 					" Streaming\n\t2. Utilies\n\t3. Drugstores\n\t4. Other")
-			subcategory = input("Please enter an above value, anything else to "
-					"leave this category: ")
+			subcategory = input("Please enter an above value, anything else to"
+					" leave this category: ")
 			try:
 				subcategory = int(subcategory)
 				if subcategory == 1:
@@ -349,26 +351,26 @@ def decider(wallet):
 	tie = list()
 	if subs:
 		for card in sub_cards:
-			sub = card.getSUB()
-			value = card.checkCategory(category)
+			sub = card.get_sign_up_bonus()
+			value = card.check_categories(category)
 			if "(" in category:
 				if "PayPal" in category:
 					category = category[:len(category) - 8]
-					if (card.checkCategory("quarterly") !=
-							card.checkCategory("else")):
-						value = card.checkCategory("quarterly")
-						value += card.checkCategory(category)
+					if (card.check_categories("quarterly") !=
+							card.check_categories("else")):
+						value = card.check_categories("quarterly")
+						value += card.check_categories(category)
 				if "IHG" in category:
 					if value != 25 * .6:
-						value += card.checkCategory("travel")
+						value += card.check_categories("travel")
 				if "Whole Foods" in category:
-					if value == card.checkCategory("else"):
-						value += card.checkCategory("grocery")
+					if value == card.check_categories("else"):
+						value += card.check_categories("grocery")
 				if "Amazon" in category:
-					if value == card.checkCategory("else"):
-						value += card.checkCategory(
+					if value == card.check_categories("else"):
+						value += card.check_categories(
 							"online shopping")
-			value += sub.getROS()
+			value += sub.get_return_on_spend()
 			if value > best[0]:
 				best[0] = value
 				best[1] = card
@@ -381,24 +383,24 @@ def decider(wallet):
 			  " of a sign-up bonus, not only multipliers!")
 	else:
 		for card in wallet:
-			value = card.checkCategory(category)
+			value = card.check_categories(category)
 			if "(" in category:
 				if "PayPal" in category:
 					temp = category[:len(category) - 8]
-					if card.checkCategory(
-							"quarterly") != card.checkCategory(
+					if card.check_categories(
+							"quarterly") != card.check_categories(
 						"else"):
-						value = card.checkCategory("quarterly")
-						value += card.checkCategory(temp)
+						value = card.check_categories("quarterly")
+						value += card.check_categories(temp)
 				if "IHG" in category:
 					if value != 25 * .6:
-						value += card.checkCategory("travel")
+						value += card.check_categories("travel")
 				if "Whole Foods" in category:
-					if value == card.checkCategory("else"):
-						value += card.checkCategory("grocery")
+					if value == card.check_categories("else"):
+						value += card.check_categories("grocery")
 				if "Amazon" in category:
-					if value == card.checkCategory("else"):
-						value += card.checkCategory(
+					if value == card.check_categories("else"):
+						value += card.check_categories(
 							"online shopping")
 			if value > best[0]:
 				best[0] = value
@@ -412,8 +414,8 @@ def decider(wallet):
 	found = list()
 	if len(tie) == 0:
 		card = best[1]
-		found.append(card.getIssuer())
-		found.append(card.getCardName())
+		found.append(card.get_issuer())
+		found.append(card.get_card_name())
 		found.append(category)
 		found.append(best[0])
 	else:
@@ -424,35 +426,35 @@ def decider(wallet):
 	return found
 
 
-def checkBalance(wallet):
+def check_balance(wallet):
 	"""
 	This checks the balance on a given user card.
 	:param wallet: is the list of credit cards for this given user
 	:return: True or False depending on the success of the function.
 			 if True, it will return a list:the card issuer, name, and balance.
 	"""
-	whichCard = input("Which card are you checking the balance for? (Enter "
+	which_card = input("Which card are you checking the balance for? (Enter "
 					  "in Issuer,Card Name) ")
-	card_parts = list(whichCard.split(","))
+	card_parts = list(which_card.split(","))
 	found = False
 	if len(card_parts) == 2:
 		for card in wallet:
-			if card.getIssuer() == card_parts[0]:
-				if card.getCardName() == card_parts[1]:
+			if card.get_issuer() == card_parts[0]:
+				if card.get_card_name() == card_parts[1]:
 					found = card_parts
-					found.append(card.checkBalance())
+					found.append(card.check_balance())
 					break
 	return found
 
 
-def makePayment(wallet):
+def make_payment(wallet):
 	"""
 	This makes a payment to a given user card.
 	:param wallet: is the list of credit cards for this given user
 	:return: True or False depending on the success of the function.
 			 if True, it will return a list:the card issuer and name.
 	"""
-	whichCard = input("Which card are you making a payment for? (Enter "
+	which_card = input("Which card are you making a payment for? (Enter "
 					  "in Issuer,Card Name) ")
 	amount = input("How much are you paying off? (Use integers): ")
 	found = False
@@ -460,19 +462,19 @@ def makePayment(wallet):
 		amount = int(amount)
 	except:
 		return found
-	card_parts = list(whichCard.split(","))
+	card_parts = list(which_card.split(","))
 	if len(card_parts) == 2:
 		for card in wallet:
-			if card.getIssuer() == card_parts[0]:
-				if card.getCardName() == card_parts[1]:
-					card.payOffCard(amount)
+			if card.get_issuer() == card_parts[0]:
+				if card.get_card_name() == card_parts[1]:
+					card.pay_off_card(amount)
 					found = card_parts
 					found.append(amount)
 					break
 	return found
 
 
-def checkSUB(wallet):
+def check_sign_up_bonus(wallet):
 	"""
 	This checks the sign up bonus information of a given user card.
 	:param wallet: is the list of credit cards for this given user
@@ -480,39 +482,39 @@ def checkSUB(wallet):
 			 if True, it will return a list: sign-up bonus object and
 			 the card issuer and name.
 	"""
-	whichCard = input("Which card are you checking the SUB for? (Enter "
-					  "in Issuer,Card Name) ")
-	card_parts = list(whichCard.split(","))
+	which_card = input("Which card are you checking the sign_up_bonus for? "
+					   "(Enter in Issuer,Card Name) ")
+	card_parts = list(which_card.split(","))
 	found = False
 	if len(card_parts) == 2:
 		for card in wallet:
-			if card.getIssuer() == card_parts[0]:
-				if card.getCardName() == card_parts[1]:
+			if card.get_issuer() == card_parts[0]:
+				if card.get_card_name() == card_parts[1]:
 					found = list()
-					found.append(card.getSUB())
-					found.append(card.getIssuer())
-					found.append(card.getCardName())
+					found.append(card.get_sign_up_bonus())
+					found.append(card.get_issuer())
+					found.append(card.get_card_name())
 					break
 	return found
 
 
-def checkCPP(wallet):
+def check_cents_per_point(wallet):
 	"""
 	This checks the cents per point value of a given user card.
 	:param wallet: is the list of credit cards for this given user
 	:return: True or False depending on the success of the function.
 			 if True, it will return a list: the issuer, name, and CPP
 	"""
-	whichCard = input("Which card are you checking the balance for? (Enter "
+	which_card = input("Which card are you checking the balance for? (Enter "
 					  "in Issuer,Card Name) ")
-	card_parts = list(whichCard.split(","))
+	card_parts = list(which_card.split(","))
 	found = False
 	if len(card_parts) == 2:
 		for card in wallet:
-			if card.getIssuer() == card_parts[0]:
-				if card.getCardName() == card_parts[1]:
+			if card.get_issuer() == card_parts[0]:
+				if card.get_card_name() == card_parts[1]:
 					found = card_parts
-					found.append(card.getCPP)
+					found.append(card.get_cents_per_point)
 					break
 	return found
 
@@ -527,14 +529,14 @@ def main(ccdb, user_data):
 	database = open(ccdb, "r+")
 	user = open(user_data, "r+")
 
-	template_wallet = parseDatabase(database)
+	template_wallet = parse_database(database)
 	if len(user.read()) == 0:
 		wallet_empty = True
 		wallet = list()
 	else:
 		wallet_empty = False
 		user = open(user_data, "r+")
-		wallet = parseUserData(user)
+		wallet = parse_user_data(user)
 	menu_value = -1
 	while (menu_value != 0):
 		print(
@@ -556,7 +558,7 @@ def main(ccdb, user_data):
 			print("Error: Not a valid integer! Please enter a valid number!")
 			continue
 		elif menu_value == 1:
-			function_success = addCard(wallet, template_wallet)
+			function_success = add_card(wallet, template_wallet)
 			if function_success:
 				print("Successfully added your card to your digital wallet!")
 			else:
@@ -576,7 +578,7 @@ def main(ccdb, user_data):
 						  "category. You should see a", reward,"percent"
 						  " return with the following cards:")
 					for card in function_success[1]:
-						print("\t",card.getIssuer(),card.getCardName())
+						print("\t",card.get_issuer(),card.get_card_name())
 				card_name = function_success[1]
 				card_issuer = function_success[0]
 				if category == -1:
@@ -590,7 +592,7 @@ def main(ccdb, user_data):
 						  "purchases in the", category, "category. You "
 						  "should see a", reward,"percent return!")
 		elif menu_value == 3:
-			function_success = checkBalance(wallet)
+			function_success = check_balance(wallet)
 			if function_success:
 				balance = function_success[0]
 				card_name = function_success[2]
@@ -598,7 +600,7 @@ def main(ccdb, user_data):
 				print("Success! The balance on your", card_issuer,
 					  card_name, "is", balance, ".")
 		elif menu_value == 4:
-			function_success = makePayment(wallet)
+			function_success = make_payment(wallet)
 			if function_success:
 				card_name = function_success[1]
 				card_issuer = function_success[0]
@@ -606,25 +608,25 @@ def main(ccdb, user_data):
 				print("Success! You have made a payment on your",
 					  card_issuer, card_name, "of", payment, "!")
 		elif menu_value == 5:
-			function_success = checkSUB(wallet)
+			function_success = check_sign_up_bonus(wallet)
 			if function_success:
 				sub = function_success[0]
 				card_name = function_success[2]
 				card_issuer = function_success[1]
-				if sub.checkActive() is False:
+				if sub.check_active() is False:
 					print("Success! Unfortunately, your ", card_issuer, " ",
 						  card_name, "'s sign-up bonus is no longer active",
 						  sep="")
 					continue
 				print("Success! Here is the sign-up bonus information for" \
-					 " your",card_issuer,card_name, ":\n\tSUB " \
-					 "Reward:", str(sub.getReward()),\
+					 " your",card_issuer,card_name, ":\n\tsign_up_bonus " \
+					 "Reward:", str(sub.get_reward()),\
 					 "\n\tMinimum Spend:",\
-					 str(sub.getMin()),"\n\tProgress: ",\
-					 str(sub.getProgress()),"\n\tMonths: ",\
-					 str(sub.getMonths()),"\n\n")
+					 str(sub.get_minimum_spend()),"\n\tProgress: ",\
+					 str(sub.get_progress()),"\n\tMonths: ",\
+					 str(sub.get_months()),"\n\n")
 		elif menu_value == 6:
-			function_success = checkCPP(wallet)
+			function_success = check_cents_per_point(wallet)
 			if function_success:
 				print("Success! The", function_success[0], function_success[1],
 					  "point value in cents per point (CPP) is",
@@ -635,7 +637,7 @@ def main(ccdb, user_data):
 					"input! Try again!")
 	print("Exiting...")
 	user = open(user_data, "r+")
-	saveUserCards(wallet, user)
+	save_user_cards(wallet, user)
 	user.close()
 	database.close()
 
