@@ -62,7 +62,7 @@ def parseUserData(user_data):
 		network = card_parts[1]
 		issuer = card_parts[2]
 		card_name = card_parts[3]
-		cash_back_points = card_parts[5]
+		cash_back_points = card_parts[4]
 		if "," in cash_back_points:
 			cpp = float(cash_back_points[2:])
 			cash_back_points = cash_back_points[0]
@@ -83,7 +83,7 @@ def parseUserData(user_data):
 									 cash_back_points, cpp)
 		if sub_list[0] == "True":
 			sub = card.getSUB()
-			sub.setProgress(int(card_parts[11]))
+			sub.setProgress(int(sub_list[3]))
 		template_wallet.append(card)
 		line = user_data.readline()
 		line = line[:len(line) - 1]
@@ -96,32 +96,8 @@ def saveUserCards(wallet, user_data):
 	:param wallet: is the list of this user's cards
 	:return: none
 	"""
-	holder = input("What is the holder's name? ")
 	for card in wallet:
-		network = card.getNetwork()
-		issuer = card.getIssuer()
-		card_name = card.getCardName()
-		cash_back_points = card.checkPointsOrCash()
-		cpp = card.getCPP()
-		if cpp.is_integer():
-			cpp = str(cpp)
-			cpp = cpp[:len(cpp) - 2]
-		sub = card.getSUB()
-		if sub.checkActive() is False:
-			sub_info = "False"
-		else:
-			sub_info = "True," + str(sub.getReward()) + "," \
-					   + str(sub.getMin()) + "," + str(sub.getProgress()) \
-					   + "," + str(sub.getMonths())
-		categories = card.printCategories()
-		balance = card.checkBalance()
-		age = card.getAge()
-		line = [holder, network, issuer, card_name,
-				str(cash_back_points) + "," + str(cpp),
-				"SUB", sub_info, "Categories", categories, str(age),
-				str(balance), str(sub.getProgress())]
-		line = ":".join(line)
-		user_data.write(line + "\n")
+		user_data.write(card.__repr__() + "\n")
 
 
 def addCard(wallet, template_wallet):
@@ -586,6 +562,9 @@ def main(ccdb, user_data):
 			else:
 				print("It appears we do not currently support the card you are"
 					  "looking for! Check back again later.!")
+			continue
+		elif len(wallet) == 0:
+			print("Try adding a card first!\n")
 			continue
 		elif menu_value == 2:
 			function_success = decider(wallet)

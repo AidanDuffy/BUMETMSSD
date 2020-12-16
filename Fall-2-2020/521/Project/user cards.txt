@@ -1,3 +1,1 @@
-A:Mastercard:Chase:Freedom Flex:SUB,1:SUB:False:Categories:quarterly-5.,travel(Chase)-5.,dining-3.,drugstores-3.,else-1:9:800:0
-A:Mastercard:Chase:IHG Rewards Club Premier:SUB,1:SUB:False:Categories:hotel(IHG)-25.,gas-2.,grocery-2.,restaurant-2.,else-1:10:0:0
-A:AMEX:AMEX:Platinum:SUB,1:SUB:False:Categories:travel(AMEX)-5.,travel-5.,else-1:10:0:0
+Aidan:AMEX:AMEX:Gold:P,2.0:SUB:True,60000,4000,0,6:Categories:dining-4.,grocery-4.,travel(AMEX)-3.,else-1:0:0
