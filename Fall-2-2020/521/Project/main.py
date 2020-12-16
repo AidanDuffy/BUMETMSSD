@@ -7,6 +7,7 @@ Description: This is the main project file for the credit card choosing program
 Future Goals: Add a Wallet Class for additional accessor/mutator methods.
 Add a function that prints out all a user's cards
 Incorporate naming schemes to separate user info.
+Implement an actual user interface for easier usage
 """
 
 import CreditCard
@@ -131,7 +132,6 @@ def add_card(wallet, template_wallet):
 		if selected:
 			break
 	if selected is False:
-		print("Error: This issuer was not found in your wallet! Try again!")
 		return
 	while yesNo != "Y" or yesNo != "N":
 		yesNo = input("Is the card new (Input Y or N)? ")
@@ -198,7 +198,7 @@ def decider(wallet):
 		found.append(-1)
 		return found
 	"""
-	First, we need to check for any valid sign_up_bonus. If so, if there's one,
+	First, we need to check for any valid SUB. If so, if there's one,
 	then that will be selected, otherwise, narrow the options to just 
 	those with active sign_up_bonus and do the usual process.
 	"""
@@ -362,13 +362,13 @@ def decider(wallet):
 						value += card.check_categories(category)
 				if "IHG" in category:
 					if value != 25 * .6:
-						value += card.check_categories("travel")
+						value = card.check_categories("travel")
 				if "Whole Foods" in category:
 					if value == card.check_categories("else"):
-						value += card.check_categories("grocery")
+						value = card.check_categories("grocery")
 				if "Amazon" in category:
 					if value == card.check_categories("else"):
-						value += card.check_categories(
+						value = card.check_categories(
 							"online shopping")
 			value += sub.get_return_on_spend()
 			if value > best[0]:
@@ -394,13 +394,13 @@ def decider(wallet):
 						value += card.check_categories(temp)
 				if "IHG" in category:
 					if value != 25 * .6:
-						value += card.check_categories("travel")
+						value = card.check_categories("travel")
 				if "Whole Foods" in category:
 					if value == card.check_categories("else"):
-						value += card.check_categories("grocery")
+						value = card.check_categories("grocery")
 				if "Amazon" in category:
 					if value == card.check_categories("else"):
-						value += card.check_categories(
+						value = card.check_categories(
 							"online shopping")
 			if value > best[0]:
 				best[0] = value
@@ -482,7 +482,7 @@ def check_sign_up_bonus(wallet):
 			 if True, it will return a list: sign-up bonus object and
 			 the card issuer and name.
 	"""
-	which_card = input("Which card are you checking the sign_up_bonus for? "
+	which_card = input("Which card are you checking the SUB for? "
 					   "(Enter in Issuer,Card Name) ")
 	card_parts = list(which_card.split(","))
 	found = False
@@ -562,8 +562,8 @@ def main(ccdb, user_data):
 			if function_success:
 				print("Successfully added your card to your digital wallet!")
 			else:
-				print("It appears we do not currently support the card you are"
-					  "looking for! Check back again later.!")
+				print("It appears we do not currently support the card or "
+					  "issuer you are looking for! Check back again later!")
 			continue
 		elif len(wallet) == 0:
 			print("Try adding a card first!\n")
@@ -571,14 +571,7 @@ def main(ccdb, user_data):
 		elif menu_value == 2:
 			function_success = decider(wallet)
 			if function_success:
-				reward = function_success[3]
 				category = function_success[2]
-				if function_success[0] == "tie":
-					print("It's a tie for purchases in the", category,
-						  "category. You should see a", reward,"percent"
-						  " return with the following cards:")
-					for card in function_success[1]:
-						print("\t",card.get_issuer(),card.get_card_name())
 				card_name = function_success[1]
 				card_issuer = function_success[0]
 				if category == -1:
@@ -588,6 +581,15 @@ def main(ccdb, user_data):
 					print("Success! You have one card with an active SUB: use",
 						  "the", card_issuer, card_name, "for all purchases!")
 				else:
+					reward = function_success[3]
+					if function_success[0] == "tie":
+						print("It's a tie for purchases in the", category,
+							  "category. You should see a", reward, "percent"
+							  " return with the following cards:")
+						for card in function_success[1]:
+							print("\t", card.get_issuer(),
+								  card.get_card_name())
+						continue
 					print("Success! Use the", card_issuer, card_name, "for",
 						  "purchases in the", category, "category. You "
 						  "should see a", reward,"percent return!")
@@ -619,7 +621,7 @@ def main(ccdb, user_data):
 						  sep="")
 					continue
 				print("Success! Here is the sign-up bonus information for" \
-					 " your",card_issuer,card_name, ":\n\tsign_up_bonus " \
+					 " your",card_issuer,card_name, ":\n\tSUB " \
 					 "Reward:", str(sub.get_reward()),\
 					 "\n\tMinimum Spend:",\
 					 str(sub.get_minimum_spend()),"\n\tProgress: ",\

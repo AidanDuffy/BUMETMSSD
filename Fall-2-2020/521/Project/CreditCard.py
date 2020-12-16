@@ -41,10 +41,12 @@ class CreditCard:
         self.age = int(age)
         self.points_cash = points_cash_back
         self.cpp = float(cpp)
-        if (self.points_cash == "P"):
+        if (self.points_cash == "P" and self.sub.check_active()):
             self.sub.set_return_on_spend(self.get_cents_per_point())
         if (self.age > self.sub.get_months()):
             self.sub.deactivate_sign_up_bonus()
+        if self.balance != 0 and self.sub.check_active():
+            self.sub.set_progress(self.check_balance())
 
     def __repr__(self):
         """
@@ -221,6 +223,7 @@ class SignUpBonus:
             self.active = False
             self.minimum = 0
             self.months = 0
+            self.reward = 0
             self.progress = 0
             return
         sub = list(info.split(","))

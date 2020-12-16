@@ -1,1 +1,0 @@
-Aidan:AMEX:AMEX:Gold:P,2.0:SUB:True,60000,4000,0,6:Categories:dining-4.,grocery-4.,travel(AMEX)-3.,else-1:0:0
