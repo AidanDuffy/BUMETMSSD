@@ -237,20 +237,20 @@ class SignUpBonus:
         else:
             self.active = True
 
-        def setROS(self, cpp):
-            """
+    def setROS(self, cpp):
+        """
         This sets/updates the return on spend for this card's sign-up bonus.
         :param cpp: is the cents per point on this card
         :return: none
         """
-            self.ROS = (self.getReward() * .01 * cpp) / self.getMinimum
+        self.ROS = (self.getReward() * .01 * cpp) / self.getMinimum
 
-        def getROS(self):
-            """
+    def getROS(self):
+        """
         This gives the user the return on spend for the SUB.
         :return: the float value for the return on spend for this SUB
         """
-            return self.ROS
+        return self.ROS
 
     def setProgress(self, progress):
         """
