@@ -41,9 +41,9 @@ class CreditCard:
         self.age = int(age)
         self.points_cash = points_cash_back
         self.cpp = float(cpp)
-        if (self.points_cash == "P" and self.sub.check_active()):
+        if self.points_cash == "P" and self.sub.check_active():
             self.sub.set_return_on_spend(self.get_cents_per_point())
-        if (self.age > self.sub.get_months()):
+        if self.age > self.sub.get_months():
             self.sub.deactivate_sign_up_bonus()
         if self.balance != 0 and self.sub.check_active():
             self.sub.set_progress(self.check_balance())
@@ -61,8 +61,8 @@ class CreditCard:
         sub = self.sub
         result += str(sub.active)
         if sub.active:
-            result += "," + str(sub.get_reward())+ "," +\
-                      str(sub.get_minimum_spend())+"," \
+            result += "," + str(sub.get_reward()) + "," + \
+                      str(sub.get_minimum_spend()) + "," \
                       + str(sub.get_progress()) + "," + str(sub.get_months())
         result += ":Categories:"
         result += self.print_categories() + ":" + str(self.get_age()) + ":" \
@@ -268,7 +268,7 @@ class SignUpBonus:
         :return: none
         """
         self.progress += progress
-        if (self.progress >= self.minimum):
+        if self.progress >= self.minimum:
             self.deactivate_sign_up_bonus()
 
     def deactivate_sign_up_bonus(self):

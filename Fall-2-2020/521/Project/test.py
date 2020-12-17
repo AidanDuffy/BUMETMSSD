@@ -92,6 +92,7 @@ def test_select_category():
     assert (card2.check_categories("gas") == 2)
     return True
 
+
 def test_decider():
     holder = "template"
     network = "AMEX"
@@ -117,7 +118,7 @@ def test_decider():
     points_cash_back = "C"
     card1 = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
                                   categories, balance, age, points_cash_back)
-    assert(card.get_sign_up_bonus().check_active() is False)
+    assert (card.get_sign_up_bonus().check_active() is False)
     wallet = list()
     wallet.append(card)
     wallet.append(card1)
@@ -138,7 +139,8 @@ def test_decider():
     age = 0
     points_cash_back = "P"
     card2 = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
-                                  categories, balance, age,points_cash_back,2)
+                                  categories, balance, age, points_cash_back,
+                                  2)
     assert card2.get_sign_up_bonus().check_active()
     wallet.append(card2)
     print("Won't type anything, will always return card2 as it has the SUB")
