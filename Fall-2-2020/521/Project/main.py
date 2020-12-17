@@ -13,7 +13,7 @@ Future Goals: 1. Add a Wallet Class for additional accessor/mutator methods.
 affected cards.
 """
 
-import CreditCard
+import credit_card
 
 
 def parse_database(database):
@@ -41,10 +41,10 @@ def parse_database(database):
         categories = card_parts[7]
         balance = 0
         age = 0
-        card = CreditCard.CreditCard("template", network, issuer, card_name,
-                                     sub_info,
-                                     categories, balance, age,
-                                     cash_back_points, cpp)
+        card = credit_card.CreditCard("template", network, issuer, card_name,
+                                      sub_info,
+                                      categories, balance, age,
+                                      cash_back_points, cpp)
         template_wallet.append(card)
         line = database.readline()
         line = line[:len(line) - 1]
@@ -81,10 +81,10 @@ def parse_user_data(user_data):
         categories = card_parts[8]
         balance = card_parts[10]
         age = card_parts[9]
-        card = CreditCard.CreditCard(holder, network, issuer, card_name,
-                                     sub_str,
-                                     categories, balance, age,
-                                     cash_back_points, cpp)
+        card = credit_card.CreditCard(holder, network, issuer, card_name,
+                                      sub_str,
+                                      categories, balance, age,
+                                      cash_back_points, cpp)
         if sub_list[0] == "True":
             sub = card.get_sign_up_bonus()
             sub.set_progress(int(sub_list[3]))
@@ -153,9 +153,9 @@ def add_card(wallet, template_wallet):
         if yes_no == "Y":
             balance = 0
             age = 0
-            result = CreditCard.CreditCard(name, network, issuer, card_name,
-                                           sub_info, cats, balance, age,
-                                           p_or_c, cpp)
+            result = credit_card.CreditCard(name, network, issuer, card_name,
+                                            sub_info, cats, balance, age,
+                                            p_or_c, cpp)
             break
         elif yes_no == "N":
             while True:
@@ -167,9 +167,9 @@ def add_card(wallet, template_wallet):
                 except:
                     print("Please enter valid numbers!")
 
-            result = CreditCard.CreditCard(name, network, issuer, card_name,
-                                           sub_info, cats, balance, age,
-                                           p_or_c, cpp)
+            result = credit_card.CreditCard(name, network, issuer, card_name,
+                                            sub_info, cats, balance, age,
+                                            p_or_c, cpp)
             break
         else:
             print("Error! Please enter in Y or N!")

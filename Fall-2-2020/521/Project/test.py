@@ -7,7 +7,7 @@ Description: This is a test file that is meant to check functions are working
 properly
 """
 
-import CreditCard
+import credit_card
 
 from main import decider
 
@@ -22,8 +22,8 @@ def test_setup_and_changes():
     balance = 0
     age = 0
     points_cash_back = "C"
-    card = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
-                                 categories, balance, age, points_cash_back)
+    card = credit_card.CreditCard(holder, network, issuer, name, sub_info,
+                                  categories, balance, age, points_cash_back)
     card.purchase(1000)
     card.pay_off_card(700)
     assert (card.check_balance() == 300)
@@ -47,9 +47,9 @@ def test_sign_up_bonus():
     age = 0
     points_cash_back = "P"
     cpp = 2
-    card = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
-                                 categories, balance, age, points_cash_back,
-                                 cpp)
+    card = credit_card.CreditCard(holder, network, issuer, name, sub_info,
+                                  categories, balance, age, points_cash_back,
+                                  cpp)
     sub = card.get_sign_up_bonus()
     assert (sub.check_active())
     assert (sub.get_progress() == 0)
@@ -72,8 +72,8 @@ def test_select_category():
     balance = 0
     age = 0
     points_cash_back = "C"
-    card1 = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
-                                  categories, balance, age, points_cash_back)
+    card1 = credit_card.CreditCard(holder, network, issuer, name, sub_info,
+                                   categories, balance, age, points_cash_back)
     holder = "template"
     network = "AMEX"
     issuer = "AMEX"
@@ -84,9 +84,9 @@ def test_select_category():
     age = 0
     points_cash_back = "P"
     cpp = 2
-    card2 = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
-                                  categories, balance, age, points_cash_back,
-                                  cpp)
+    card2 = credit_card.CreditCard(holder, network, issuer, name, sub_info,
+                                   categories, balance, age, points_cash_back,
+                                   cpp)
     assert (card1.check_categories("dining") == 2)
     assert (card2.check_categories("dining") == 8)
     assert (card2.check_categories("gas") == 2)
@@ -104,9 +104,9 @@ def test_decider():
     age = 10
     points_cash_back = "P"
     cpp = 2
-    card = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
-                                 categories, balance, age, points_cash_back,
-                                 cpp)
+    card = credit_card.CreditCard(holder, network, issuer, name, sub_info,
+                                  categories, balance, age, points_cash_back,
+                                  cpp)
     holder = "template"
     network = "Mastercard"
     issuer = "Citi"
@@ -116,8 +116,8 @@ def test_decider():
     balance = 0
     age = 0
     points_cash_back = "C"
-    card1 = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
-                                  categories, balance, age, points_cash_back)
+    card1 = credit_card.CreditCard(holder, network, issuer, name, sub_info,
+                                   categories, balance, age, points_cash_back)
     assert (card.get_sign_up_bonus().check_active() is False)
     wallet = list()
     wallet.append(card)
@@ -138,9 +138,9 @@ def test_decider():
     balance = 0
     age = 0
     points_cash_back = "P"
-    card2 = CreditCard.CreditCard(holder, network, issuer, name, sub_info,
-                                  categories, balance, age, points_cash_back,
-                                  2)
+    card2 = credit_card.CreditCard(holder, network, issuer, name, sub_info,
+                                   categories, balance, age, points_cash_back,
+                                   2)
     assert card2.get_sign_up_bonus().check_active()
     wallet.append(card2)
     print("Won't type anything, will always return card2 as it has the SUB")
