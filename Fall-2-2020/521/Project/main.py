@@ -164,7 +164,7 @@ def add_card(wallet, template_wallet):
                     age = int(input("Please enter the age in months of the "
                                     "card: "))
                     break
-                except:
+                except ValueError:
                     print("Please enter valid numbers!")
 
             result = credit_card.CreditCard(name, network, issuer, card_name,
@@ -239,7 +239,7 @@ def decider(wallet):
                            "to cancel: ")
         try:
             menu_value = int(menu_value)
-        except:
+        except ValueError:
             print("Error: Not an integer! Please enter a valid input!")
             continue
         category = ""
@@ -271,7 +271,7 @@ def decider(wallet):
                 else:
                     print("Exiting the food category...")
                     continue
-            except:
+            except ValueError:
                 print("Exiting the food category...")
                 continue
         elif menu_value == 2:
@@ -298,7 +298,7 @@ def decider(wallet):
                 else:
                     print("Exiting the Travel category...")
                     continue
-            except:
+            except ValueError:
                 print("Error! Exiting the Travel category...")
                 continue
         elif menu_value == 3:
@@ -322,7 +322,7 @@ def decider(wallet):
                 else:
                     print("Exiting the Online Shopping category...")
                     continue
-            except:
+            except ValueError:
                 print("Error! Exiting the Online Shopping category...")
                 continue
         elif menu_value == 6:
@@ -343,7 +343,7 @@ def decider(wallet):
                 else:
                     print("Exiting the Other category...")
                     continue
-            except:
+            except ValueError:
                 print("Error! Exiting the Other category...")
                 continue
         paypal = ""
@@ -391,7 +391,7 @@ def decider(wallet):
                     if value == card.check_categories("else"):
                         value = card.check_categories(
                             "online shopping")
-            value += sub.get_return_on_spend()
+            value += sub.get_return_on_spend()*100
             if value > best[0]:
                 best[0] = value
                 best[1] = card
@@ -399,7 +399,6 @@ def decider(wallet):
             elif value == best[0]:
                 tie.append(card)
                 tie.append(best[1])
-            value = 0
         print("Note: This recommendation is made because"
               " of a sign-up bonus, not only multipliers!")
     else:
@@ -430,7 +429,6 @@ def decider(wallet):
                 if len(tie) == 0:
                     tie.append(best[1])
                 tie.append(card)
-            value = 0
     found = list()
     if len(tie) == 0:
         card = best[1]
@@ -480,7 +478,7 @@ def make_payment(wallet):
     found = False
     try:
         amount = int(amount)
-    except:
+    except ValueError:
         return found
     card_parts = list(which_card.split(","))
     if len(card_parts) == 2:
@@ -567,7 +565,7 @@ def main(ccdb, user_data):
         menu_value = (input("Please enter one of the above values: "))
         try:
             menu_value = int(menu_value)
-        except:
+        except ValueError:
             print("Error: Not an integer! Please enter a valid input!")
             continue
         print("\n\n")
