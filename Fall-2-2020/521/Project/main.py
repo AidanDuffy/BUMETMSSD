@@ -148,7 +148,7 @@ def add_card(wallet, template_wallet):
         cats = new_card.print_categories()
         p_or_c = new_card.check_points_or_cash()
         cpp = new_card.get_cents_per_point()
-        sub_info = str(sub.get_reward()) + "," + str(sub.get_minimum_spend())\
+        sub_info = str(sub.get_reward()) + "," + str(sub.get_minimum_spend()) \
                    + "," + str(sub.get_months())
         if yes_no == "Y":
             balance = 0
@@ -230,6 +230,7 @@ def decider(wallet):
     categories until a user has selected a valid one, providing the function
     with all the necessary information.
     """
+    category = ""
     menu_value = -1
     while menu_value < 0 or menu_value > 6:
         print("Spending Categories:\n\t1. Food\n\t2. Travel\n\t3. Transit"
@@ -524,7 +525,7 @@ def check_cents_per_point(wallet):
     :return: True or False depending on the success of the function.
              if True, it will return a list: the issuer, name, and CPP
     """
-    which_card = input("Which card are you checking the balance for? (Enter "
+    which_card = input("Which card are you checking the CPP for? (Enter "
                        "in Issuer,Card Name) ")
     card_parts = list(which_card.split(","))
     found = False
@@ -533,7 +534,7 @@ def check_cents_per_point(wallet):
             if card.get_issuer() == card_parts[0]:
                 if card.get_card_name() == card_parts[1]:
                     found = card_parts
-                    found.append(card.get_cents_per_point)
+                    found.append(card.get_cents_per_point())
                     break
     return found
 
@@ -613,9 +614,9 @@ def main(ccdb, user_data):
         elif menu_value == 3:
             function_success = check_balance(wallet)
             if function_success:
-                balance = function_success[0]
-                card_name = function_success[2]
-                card_issuer = function_success[1]
+                balance = function_success[2]
+                card_name = function_success[1]
+                card_issuer = function_success[0]
                 print("Success! The balance on your", card_issuer,
                       card_name, "is", balance, ".")
         elif menu_value == 4:

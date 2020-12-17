@@ -9,7 +9,8 @@ Future Goals: Consolidate constructor, allow for other constructors.
 Allow for subcategories built in from the parse file.
 """
 
-import sign_up_bonus
+import sign_up_bonus as sub
+
 
 class CreditCard:
 
@@ -36,7 +37,7 @@ class CreditCard:
         self.network = network
         self.issuer = issuer
         self.card_name = name
-        self.sub = sign_up_bonus(sub_info)
+        self.sub = sub.SignUpBonus(sub_info)
         self.categories = self.build_categories(categories)
         self.balance = int(balance)
         self.age = int(age)
