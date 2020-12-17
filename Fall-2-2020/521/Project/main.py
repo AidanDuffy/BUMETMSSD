@@ -14,84 +14,7 @@ affected cards.
 """
 
 import credit_card
-
-
-def parse_database(database):
-    """
-    This takes an input file and parses through, creating a number of template
-    cards
-    :param database: is the opened credit card db file.
-    :return: a list of template credit cards
-    """
-    template_wallet = list()
-    line = database.readline()
-    line = line[:len(line) - 1]
-    while line != "END":
-        card_parts = list(line.split(":"))
-        network = card_parts[0]
-        issuer = card_parts[1]
-        card_name = card_parts[2]
-        cash_back_points = card_parts[3]
-        if "," in cash_back_points:
-            cpp = float(cash_back_points[2:])
-            cash_back_points = cash_back_points[0]
-        else:
-            cpp = 1
-        sub_info = card_parts[5]
-        categories = card_parts[7]
-        balance = 0
-        age = 0
-        card = credit_card.CreditCard("template", network, issuer, card_name,
-                                      sub_info,
-                                      categories, balance, age,
-                                      cash_back_points, cpp)
-        template_wallet.append(card)
-        line = database.readline()
-        line = line[:len(line) - 1]
-    return template_wallet
-
-
-def parse_user_data(user_data):
-    """
-    This parses through the user's saved credit card info.
-    :param user_data: is the open user cards text file
-    :return: a list of all the cards the user has
-    """
-    template_wallet = list()
-    line = user_data.readline()
-    line = line[:len(line) - 1]
-    while line is not "":
-        card_parts = list(line.split(":"))
-        holder = card_parts[0]
-        network = card_parts[1]
-        issuer = card_parts[2]
-        card_name = card_parts[3]
-        cash_back_points = card_parts[4]
-        if "," in cash_back_points:
-            cpp = float(cash_back_points[2:])
-            cash_back_points = cash_back_points[0]
-        else:
-            cpp = 1.0
-        sub_info = card_parts[6]
-        sub_list = list(sub_info.split(","))
-        if sub_list[0] == "False":
-            sub_str = sub_info
-        else:
-            sub_str = sub_list[1] + "," + sub_list[2] + "," + sub_list[4]
-        categories = card_parts[8]
-        balance = card_parts[10]
-        age = card_parts[9]
-        card = credit_card.CreditCard(holder, network, issuer, card_name,
-                                      sub_str,
-                                      categories, balance, age,
-                                      cash_back_points, cpp)
-        if sub_list[0] == "True":
-            sub = card.get_sign_up_bonus()
-            sub.set_progress(int(sub_list[3]))
-        template_wallet.append(card)
-        line = user_data.readline()
-        line = line[:len(line) - 1]
-    return template_wallet
+from wallet import Wallet
 
 
 def save_user_cards(wallet, user_data):
@@ -101,7 +24,7 @@ def save_user_cards(wallet, user_data):
     :param user_data: is the file which all this data will be saved to.
     :return: none
     """
-    for card in wallet:
+    for card in wallet.get_cards():
         user_data.write(card.__repr__() + "\n")
 
 
@@ -120,7 +43,7 @@ def add_card(wallet, template_wallet):
     selected = False
     new_card = None
     yes_no = ""
-    for card in template_wallet:
+    for card in template_wallet.get_cards():
         if card.get_issuer() != issuer:
             continue
         while yes_no != "Y" or yes_no != "N":
@@ -149,7 +72,7 @@ def add_card(wallet, template_wallet):
         p_or_c = new_card.check_points_or_cash()
         cpp = new_card.get_cents_per_point()
         sub_info = str(sub.get_reward()) + "," + str(sub.get_minimum_spend()) \
-                   + "," + str(sub.get_months())
+            + "," + str(sub.get_months())
         if yes_no == "Y":
             balance = 0
             age = 0
@@ -175,7 +98,7 @@ def add_card(wallet, template_wallet):
             print("Error! Please enter in Y or N!")
 
     if selected:
-        wallet.append(result)
+        wallet.add_card(result)
     return selected
 
 
@@ -195,10 +118,10 @@ def decider(wallet):
     dining card.
     """
     found = False
-    if len(wallet) == 0:
+    if len(wallet.get_cards()) == 0:
         return found
-    elif len(wallet) == 1:
-        card = wallet[0]
+    elif len(wallet.get_cards()) == 1:
+        card = wallet.get_cards()[0]
         found = list()
         found.append(card.get_issuer())
         found.append(card.get_card_name())
@@ -211,7 +134,7 @@ def decider(wallet):
     """
     sub_cards = list()
     subs = False
-    for card in wallet:
+    for card in wallet.get_cards():
         sub = card.get_sign_up_bonus()
         if sub.check_active():
             sub_cards.append(card)
@@ -238,6 +161,15 @@ def decider(wallet):
             break
         else:
             print("Invalid input")
+    main_categories = wallet.get_generic_category_names()
+    if category in main_categories:
+        best_card = wallet.find_best_for_category(category)
+        found = list()
+        found.append(best_card.get_issuer())
+        found.append(best_card.get_card_name())
+        found.append(category)
+        found.append(best_card.check_categories(category))
+        return found
     best = list()
     best.append(0)
     best.append(0)
@@ -270,7 +202,7 @@ def decider(wallet):
                 if value == card.check_categories("else"):
                     value = card.check_categories("online shopping")
         if subs:
-            value += sub.get_return_on_spend()*100
+            value += sub.get_return_on_spend() * 100
         if value > best[0]:
             best[0] = value
             best[1] = card
@@ -280,7 +212,7 @@ def decider(wallet):
             tie.append(best[1])
     if subs:
         print("Note: This recommendation is made because"
-          " of a sign-up bonus, not only multipliers!")
+              " of a sign-up bonus, not only multipliers!")
     found = list()
     if len(tie) == 0:
         card = best[1]
@@ -533,7 +465,6 @@ def main_menu(template_wallet, wallet):
             print("Error: Not an integer! Please enter a valid input!")
             continue
         print("\n\n")
-        function_success = False
         if menu_value == 0:
             break
         elif menu_value == 1:
@@ -544,7 +475,7 @@ def main_menu(template_wallet, wallet):
                 print("It appears we do not currently support the card or "
                       "issuer you are looking for! Check back again later!")
             continue
-        elif len(wallet) == 0:
+        elif len(wallet.get_cards()) == 0:
             print("Try adding a card first!\n")
             continue
         elif menu_value == 2:
@@ -635,13 +566,13 @@ def main(ccdb, user_data):
     database = open(ccdb, "r+")
     user = open(user_data, "r+")
 
-    template_wallet = parse_database(database)
-    if len(user.read()) == 0:
-        wallet = list()
-    else:
+    template_wallet = Wallet()
+    template_wallet.construct_template_wallet(database)
+    wallet = Wallet()
+    if len(user.read()) > 0:
         user = open(user_data, "r+")
-        wallet = parse_user_data(user)
-    main_menu(template_wallet,wallet)
+        wallet.construct_user_wallet(user)
+    main_menu(template_wallet, wallet)
     user = open(user_data, "r+")
     save_user_cards(wallet, user)
     user.close()
