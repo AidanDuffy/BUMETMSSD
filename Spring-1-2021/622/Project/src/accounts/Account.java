@@ -1,3 +1,4 @@
+package accounts;
 //An account tied to a specific user, which contains assets of some value,
 //either owned or owed.
 
