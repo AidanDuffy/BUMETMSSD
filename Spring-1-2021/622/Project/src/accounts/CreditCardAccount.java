@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class CreditCardAccount extends Account{
 
     protected int currentCard;
-    protected ArrayList<CreditCard> listOfCards;
+    private ArrayList<CreditCard> listOfCards;
     public String issuer;
 
     public CreditCardAccount(String owner) {
@@ -20,8 +20,8 @@ public class CreditCardAccount extends Account{
         this.currentCard = -1;
     }
 
-    public void addCard(String number, String cvc, int expMonth, int expYear, double value, double creditLimit) {
-        CreditCard card = new CreditCard(number,cvc,expMonth,expYear,value, creditLimit);
+    public void addCard(String name, String number, String cvc, int expMonth, int expYear, double value, double creditLimit) {
+        CreditCard card = new CreditCard(name, number,cvc,expMonth,expYear,value, creditLimit);
         if (getCurrentCard() == -1) {
             setCurrentCard(0);
         }
@@ -71,6 +71,16 @@ public class CreditCardAccount extends Account{
         setValue(getValue() + amount);
         CreditCard card = this.listOfCards.get(getCurrentCard());
         card.purchase(amount);
+    }
+
+    public void displayBalancesAndLimits() {
+        System.out.println("Card Balances | Card Limits");
+        System.out.println("For all " + getIssuer() + " cards");
+        for (CreditCard card: this.listOfCards) {
+            double remaining = card.getCreditLimit() - card.getValue();
+            System.out.println(card.getName());
+            System.out.println("\t\tBalance: " + card.getValue() + " | Remaining Limit: " + remaining);
+        }
     }
 
     public int getCurrentCard() {

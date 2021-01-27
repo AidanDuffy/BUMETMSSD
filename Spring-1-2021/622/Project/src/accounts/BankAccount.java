@@ -16,12 +16,12 @@ public class BankAccount extends Account {
 
     @Override
     public void credit(double amount) {
-        this.value -= amount;
+        this.value += amount;
     }
 
     @Override
     public void debit(double amount) {
-        this.value += amount;
+        this.value -= amount;
     }
 
     public int getAccountNumber() {

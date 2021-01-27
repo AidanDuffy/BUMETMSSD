@@ -2,6 +2,7 @@ package accounts.creditcard;
 
 public class CreditCard {
 
+    public String name;
     protected String number;
     protected String cvc;
     protected int expMonth;
@@ -9,7 +10,8 @@ public class CreditCard {
     protected double value;
     public double creditLimit;
 
-    public CreditCard(String number, String cvc, int expMonth, int expYear, double value, double creditLimit) {
+    public CreditCard(String name, String number, String cvc, int expMonth, int expYear, double value, double creditLimit) {
+        this.name = name;
         this.number = number;
         this.cvc = cvc;
         this.expMonth = expMonth;
@@ -20,6 +22,10 @@ public class CreditCard {
 
     public double getCreditLimit() {
         return creditLimit;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public double getValue(){
@@ -36,6 +42,10 @@ public class CreditCard {
 
     public void setCreditLimit(double creditLimit) {
         this.creditLimit = creditLimit;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setValue(double value) {
