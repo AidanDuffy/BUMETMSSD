@@ -1,7 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 
-public class Main {
+public class FinFree {
     public static void main(String[] args) {
 
     }
