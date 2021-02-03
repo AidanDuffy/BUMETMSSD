@@ -3,6 +3,9 @@ package accounts;
 import accounts.creditcard.CreditCard;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CreditCardAccount extends Account{
@@ -123,16 +126,33 @@ public class CreditCardAccount extends Account{
 
     @Override
     public String toString() {
-        return "CreditCardAccount{" +
-                "currentCard=" + currentCard +
-                ", listOfCards=" + listOfCards +
-                ", issuer='" + issuer + '\'' +
-                '}';
+        String data = "C{" + issuer;
+        for(CreditCard card: this.listOfCards) {
+            data += "," + card.toString();
+        }
+        data += "}";
+        return data;
     }
 
     @Override
     public boolean writeToFile(File file) {
         String data = toString();
+        try {
+            FileReader reader = new FileReader(file.getName());
+            String current = "";
+            while (reader.ready()) {
+                current += Character.toString(reader.read());
+            }
+            current += "\n";
+            reader.close();
+            FileWriter writer = new FileWriter(file.getName());
+            writer.append(current).append(data);
+            writer.close();
+            return true;
+        } catch (IOException e) {
+            System.out.println("An error occurred when trying to write credit card account info.");
+            e.printStackTrace();
+        }
         return false;
     }
 }

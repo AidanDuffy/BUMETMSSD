@@ -58,7 +58,7 @@ public class AccountBalanceTest {
     }
 
     @Test
-    public void testInvestment(){
+    public void testInvestmentBasics(){
         String firm = "Vanguard";
         int number = 123456789;
         String type = "Brokerage";

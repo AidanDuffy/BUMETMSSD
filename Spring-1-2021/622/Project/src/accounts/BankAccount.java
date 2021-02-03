@@ -1,6 +1,9 @@
 package accounts;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class BankAccount extends Account {
 
@@ -80,17 +83,33 @@ public class BankAccount extends Account {
 
     @Override
     public String toString() {
-        return "BankAccount{" +
-                "accountType='" + accountType + '\'' +
-                ", accountNumber=" + accountNumber +
-                ", bank='" + bank + '\'' +
-                ", interestRate=" + interestRate +
+        return "B{" + accountType +
+                "," + accountNumber +
+                "," + bank +
+                "," + value +
+                "," + interestRate +
                 '}';
     }
 
     @Override
     public boolean writeToFile(File file) {
         String data = toString();
+        try {
+            FileReader reader = new FileReader(file.getName());
+            String current = "";
+            while (reader.ready()) {
+                current += Character.toString(reader.read());
+            }
+            current += "\n";
+            reader.close();
+            FileWriter writer = new FileWriter(file.getName());
+            writer.append(current).append(data);
+            writer.close();
+            return true;
+        } catch (IOException e) {
+            System.out.println("An error occurred when trying to write bank account info.");
+            e.printStackTrace();
+        }
         return false;
     }
 }

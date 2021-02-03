@@ -51,4 +51,10 @@ public class CreditCard {
     public void setValue(double value) {
         this.value = value;
     }
+
+    public String toString() {
+        return getName() + ";" + this.number + ";" + this.cvc + ";" +
+                this.expMonth + ";" + this.expYear + ";" +
+                getValue() + ";" + getCreditLimit();
+    }
 }
