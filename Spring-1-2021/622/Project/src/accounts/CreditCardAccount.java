@@ -135,8 +135,11 @@ public class CreditCardAccount extends Account{
     }
 
     @Override
-    public boolean writeToFile(File file) {
-        String data = toString();
+    public boolean writeToFile(File file) throws NoCreditCardException {
+        if (this.getCurrentCard() == -1) {
+            throw new NoCreditCardException();
+        }
+        String data = this.toString();
         try {
             FileReader reader = new FileReader(file.getName());
             String current = "";

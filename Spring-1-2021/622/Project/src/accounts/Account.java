@@ -22,5 +22,5 @@ public abstract class Account {
     public abstract void setOwner(String owner);
     public abstract void setValue(double amount);
     public abstract String toString();
-    public abstract boolean writeToFile(File file);
+    public abstract boolean writeToFile(File file) throws NoCreditCardException;
 }

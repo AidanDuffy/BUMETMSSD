@@ -3,6 +3,7 @@ package accounts_test;
 import accounts.BankAccount;
 import accounts.CreditCardAccount;
 import accounts.InvestmentAccount;
+import accounts.NoCreditCardException;
 import org.junit.Test;
 
 import java.io.File;
@@ -38,6 +39,15 @@ public class AccountToStringTest {
     public void testCreditCardString(){
         CreditCardAccount account = new CreditCardAccount();
         account.setIssuer("AMEX");
+        String test = account.toString();
+        assertEquals(test.length(), 7);
+        File file = new File("fileWriteTest.txt");
+        try {
+            account.writeToFile(file);
+            assertEquals(true,false);
+        } catch (NoCreditCardException e) {
+            assertEquals(true,true);
+        }
         String number = "1111 2222 3333 4444";
         String cvc = "012";
         int month = 10;
@@ -79,8 +89,11 @@ public class AccountToStringTest {
         assertEquals(card[5], Double.toString(account.getValue()));
         assertEquals(card[6], Double.toString(limit));
         System.out.println(str);
-        File file = new File("fileWriteTest.txt");
-        account.writeToFile(file);
+        try{
+            account.writeToFile(file);
+        } catch (NoCreditCardException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
