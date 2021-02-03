@@ -2,6 +2,8 @@ package accounts;
 //An account tied to a specific user, which contains assets of some value,
 //either owned or owed.
 
+import java.io.File;
+
 public abstract class Account {
     //Pedagogical: (1) Attributes, (2) Constructors, (3) Methods,
     // are ordered alphabetically by type.
@@ -19,4 +21,6 @@ public abstract class Account {
     public abstract double getValue();
     public abstract void setOwner(String owner);
     public abstract void setValue(double amount);
+    public abstract String toString();
+    public abstract boolean writeToFile(File file);
 }

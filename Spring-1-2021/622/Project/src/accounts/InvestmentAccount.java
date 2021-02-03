@@ -1,5 +1,7 @@
 package accounts;
 
+import java.io.File;
+
 public class InvestmentAccount extends Account{
 
     public String firm;
@@ -85,5 +87,24 @@ public class InvestmentAccount extends Account{
     @Override
     public void setValue(double amount) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "InvestmentAccount{" +
+                "firm='" + firm + '\'' +
+                ", accountNumber=" + accountNumber +
+                ", accountType='" + accountType + '\'' +
+                ", contributions=" + contributions +
+                '}';
+    }
+
+    @Override
+    public boolean writeToFile(File file) {
+        String data = toString();
+        try {
+            file.wr
+        }
+        return false;
     }
 }

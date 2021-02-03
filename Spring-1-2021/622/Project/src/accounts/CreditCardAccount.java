@@ -1,6 +1,8 @@
 package accounts;
 
 import accounts.creditcard.CreditCard;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class CreditCardAccount extends Account{
@@ -117,5 +119,20 @@ public class CreditCardAccount extends Account{
     @Override
     public void setValue(double amount) {
         this.value = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "CreditCardAccount{" +
+                "currentCard=" + currentCard +
+                ", listOfCards=" + listOfCards +
+                ", issuer='" + issuer + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean writeToFile(File file) {
+        String data = toString();
+        return false;
     }
 }

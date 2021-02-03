@@ -1,5 +1,7 @@
 package accounts;
 
+import java.io.File;
+
 public class BankAccount extends Account {
 
     public String accountType; //This determines if the account is checking, savings, or a CD.
@@ -74,5 +76,21 @@ public class BankAccount extends Account {
     @Override
     public void setValue(double amount) {
         this.value = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "BankAccount{" +
+                "accountType='" + accountType + '\'' +
+                ", accountNumber=" + accountNumber +
+                ", bank='" + bank + '\'' +
+                ", interestRate=" + interestRate +
+                '}';
+    }
+
+    @Override
+    public boolean writeToFile(File file) {
+        String data = toString();
+        return false;
     }
 }
