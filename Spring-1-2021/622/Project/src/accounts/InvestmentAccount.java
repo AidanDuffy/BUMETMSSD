@@ -1,11 +1,6 @@
 package accounts;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
-public class InvestmentAccount extends Account{
+public class InvestmentAccount extends Account {
 
     public String firm;
     protected int accountNumber;
@@ -49,10 +44,6 @@ public class InvestmentAccount extends Account{
         return firm;
     }
 
-    @Override
-    public String getOwner() {
-        return owner;
-    }
 
     @Override
     public double getValue() {
@@ -83,11 +74,6 @@ public class InvestmentAccount extends Account{
     }
 
     @Override
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    @Override
     public void setValue(double amount) {
         this.value = value;
     }
@@ -104,27 +90,5 @@ public class InvestmentAccount extends Account{
                     "," + accountType + "," + value + '}';
         }
         return data;
-    }
-
-    @Override
-    public boolean writeToFile(File file) {
-        String data = toString();
-        try {
-            FileReader reader = new FileReader(file.getName());
-            String current = "";
-            while (reader.ready()) {
-                current += Character.toString(reader.read());
-            }
-            current += "\n";
-            reader.close();
-            FileWriter writer = new FileWriter(file.getName());
-            writer.append(current).append(data);
-            writer.close();
-            return true;
-        } catch (IOException e) {
-            System.out.println("An error occurred when trying to write investment account info.");
-            e.printStackTrace();
-        }
-        return false;
     }
 }

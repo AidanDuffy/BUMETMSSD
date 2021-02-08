@@ -10,7 +10,7 @@ public class FinFree {
     static String accountFile = "C:\\Users\\Aidan\\Documents\\BUMETMSSD\\Spring-1-2021\\622\\Project\\resources\\SavedAccounts.txt"; //Ran into issues with this path, will need to resolve in the future.
 
     public static void main(String[] args) {
-        String owner = "User"; //Eventually, will read owner name from the accounts file first.
+        String owner = "users.User"; //Eventually, will read owner name from the accounts file first.
         ArrayList<Account> accounts = readAccounts(); // This wll contain all of this user's account objects.
         boolean menu = mainMenu(owner, accounts);
         if (menu) {
@@ -80,7 +80,7 @@ public class FinFree {
     }
 
     public static void writeAccounts(ArrayList<Account> accounts) {
-        File acc = new File(accountFile);
+        /**File acc = new File(accountFile);
         for (Account account: accounts) {
             if (account instanceof BankAccount) {
                 ((BankAccount)account).writeToFile(acc);
@@ -95,7 +95,7 @@ public class FinFree {
             } else {
                 System.out.println("FAIL");
             }
-        }
+        }*/
     }
 
     public static boolean mainMenu(String owner, ArrayList<Account> accounts) {

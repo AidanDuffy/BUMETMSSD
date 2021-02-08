@@ -1,11 +1,6 @@
 package accounts;
 
 import accounts.creditcard.CreditCard;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class CreditCardAccount extends Account{
@@ -13,12 +8,6 @@ public class CreditCardAccount extends Account{
     protected int currentCard;
     private ArrayList<CreditCard> listOfCards;
     public String issuer;
-
-    public CreditCardAccount(String owner) {
-        this.listOfCards = new ArrayList<>();
-        this.owner = owner;
-        this.currentCard = -1;
-    }
 
     public CreditCardAccount(){
         this.listOfCards = new ArrayList<>();
@@ -97,11 +86,6 @@ public class CreditCardAccount extends Account{
     }
 
     @Override
-    public String getOwner() {
-        return this.owner;
-    }
-
-    @Override
     public double getValue() {
         return this.value;
     }
@@ -112,11 +96,6 @@ public class CreditCardAccount extends Account{
 
     public void setIssuer(String issuer) {
         this.issuer = issuer;
-    }
-
-    @Override
-    public void setOwner(String owner) {
-        this.owner = owner;
     }
 
     @Override
@@ -132,30 +111,5 @@ public class CreditCardAccount extends Account{
         }
         data += "}";
         return data;
-    }
-
-    @Override
-    public boolean writeToFile(File file) throws NoCreditCardException {
-        if (this.getCurrentCard() == -1) {
-            throw new NoCreditCardException();
-        }
-        String data = this.toString();
-        try {
-            FileReader reader = new FileReader(file.getName());
-            String current = "";
-            while (reader.ready()) {
-                current += Character.toString(reader.read());
-            }
-            current += "\n";
-            reader.close();
-            FileWriter writer = new FileWriter(file.getName());
-            writer.append(current).append(data);
-            writer.close();
-            return true;
-        } catch (IOException e) {
-            System.out.println("An error occurred when trying to write credit card account info.");
-            e.printStackTrace();
-        }
-        return false;
     }
 }

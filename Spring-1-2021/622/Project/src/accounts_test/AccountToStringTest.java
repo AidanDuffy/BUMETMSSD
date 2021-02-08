@@ -4,7 +4,9 @@ import accounts.BankAccount;
 import accounts.CreditCardAccount;
 import accounts.InvestmentAccount;
 import accounts.NoCreditCardException;
+import accounts.creditcard.CreditCard;
 import org.junit.Test;
+import users.AccountFileAndValue;
 
 import java.io.File;
 
@@ -32,7 +34,11 @@ public class AccountToStringTest {
         assertEquals(dataList[4], Double.toString(interest));
         System.out.println(str);
         File file = new File("fileWriteTest.txt");
-        bankAccount.writeToFile(file);
+        AccountFileAndValue<BankAccount> acc = new AccountFileAndValue<BankAccount>(bankAccount, bankAccount.getValue());
+        try {
+            acc.writeToFile(file);
+        } catch (NoCreditCardException e) {
+        }
     }
 
     @Test
@@ -42,8 +48,9 @@ public class AccountToStringTest {
         String test = account.toString();
         assertEquals(test.length(), 7);
         File file = new File("fileWriteTest.txt");
+        AccountFileAndValue<CreditCardAccount> acc = new AccountFileAndValue<CreditCardAccount>(account, account.getValue());
         try {
-            account.writeToFile(file);
+            acc.writeToFile(file);
             assertEquals(true,false);
         } catch (NoCreditCardException e) {
             assertEquals(true,true);
@@ -89,8 +96,9 @@ public class AccountToStringTest {
         assertEquals(card[5], Double.toString(account.getValue()));
         assertEquals(card[6], Double.toString(limit));
         System.out.println(str);
-        try{
-            account.writeToFile(file);
+        acc.update(account.getValue());
+        try {
+            acc.writeToFile(file);
         } catch (NoCreditCardException e) {
             e.printStackTrace();
         }
@@ -127,7 +135,11 @@ public class AccountToStringTest {
         assertEquals(dataList[4], Double.toString(contribution));
         System.out.println(str);
         File file = new File("fileWriteTest.txt");
-        account.writeToFile(file);
+        AccountFileAndValue<InvestmentAccount> acc = new AccountFileAndValue<InvestmentAccount>(account, account.getValue());
+        try {
+            acc.writeToFile(file);
+        } catch (NoCreditCardException e) {
+        }
     }
 
 }

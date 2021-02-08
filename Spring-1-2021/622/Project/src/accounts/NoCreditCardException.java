@@ -1,7 +1,7 @@
 package accounts;
 
 public class NoCreditCardException extends Exception{
-    NoCreditCardException() {
+    public NoCreditCardException() {
     }
 
     public String toString(){
