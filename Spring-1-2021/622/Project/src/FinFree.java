@@ -41,6 +41,12 @@ public class FinFree {
                 continue;
             } else if (option == 0) {
                 return true;
+            } else if (option == 5) {
+                System.out.println("Your net worth is " + Double.toString(user.getNetWorth()));
+                return true;
+            } else if (option == 5) {
+                System.out.println("Your cash balance in your bank accounts is currently " + Double.toString(user.getNetCash()));
+                return true;
             }
         }
     }
