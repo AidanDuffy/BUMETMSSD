@@ -4,7 +4,6 @@ import accounts.BankAccount;
 import accounts.CreditCardAccount;
 import accounts.InvestmentAccount;
 import accounts.NoCreditCardException;
-import accounts.creditcard.CreditCard;
 import org.junit.Test;
 import users.AccountFileAndValue;
 
@@ -33,7 +32,7 @@ public class AccountToStringTest {
         assertEquals(dataList[3], Double.toString(deposit));
         assertEquals(dataList[4], Double.toString(interest));
         System.out.println(str);
-        File file = new File("fileWriteTest.txt");
+        File file = new File("accounts_test/fileWriteTest.txt");
         AccountFileAndValue<BankAccount> acc = new AccountFileAndValue<BankAccount>(bankAccount, bankAccount.getValue());
         try {
             acc.writeToFile(file);
@@ -47,7 +46,7 @@ public class AccountToStringTest {
         account.setIssuer("AMEX");
         String test = account.toString();
         assertEquals(test.length(), 7);
-        File file = new File("fileWriteTest.txt");
+        File file = new File("accounts_test/fileWriteTest.txt");
         AccountFileAndValue<CreditCardAccount> acc = new AccountFileAndValue<CreditCardAccount>(account, account.getValue());
         try {
             acc.writeToFile(file);
@@ -134,7 +133,7 @@ public class AccountToStringTest {
         assertEquals(dataList[3], Double.toString(contribution + investment));
         assertEquals(dataList[4], Double.toString(contribution));
         System.out.println(str);
-        File file = new File("fileWriteTest.txt");
+        File file = new File("accounts_test/fileWriteTest.txt");
         AccountFileAndValue<InvestmentAccount> acc = new AccountFileAndValue<InvestmentAccount>(account, account.getValue());
         try {
             acc.writeToFile(file);

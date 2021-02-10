@@ -25,13 +25,23 @@ public class AccountFileAndValue<T> {
         value = val;
     }
 
+    public double getValue() {
+        return value;
+    }
+
+    public void update(double value) {
+        this.value = value;
+        this.file_str = account.toString();
+    }
+
     public boolean writeToFile(File file) throws NoCreditCardException {
         String in_braces = file_str.substring(2,file_str.length() - 1);
         if (in_braces.split(",").length == 1) {
             throw new NoCreditCardException();
         }
         try {
-            FileReader reader = new FileReader(file.getName());
+            String test = file.getAbsolutePath();
+            FileReader reader = new FileReader(file.getAbsolutePath());
             String current = "";
             while (reader.ready()) {
                 current += Character.toString(reader.read());
@@ -47,14 +57,5 @@ public class AccountFileAndValue<T> {
             e.printStackTrace();
         }
         return false;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public void update(double value) {
-        this.value = value;
-        this.file_str = account.toString();
     }
 }
