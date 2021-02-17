@@ -3,8 +3,9 @@ package accounts;
 //either owned or owed.
 
 import java.io.File;
+import java.io.Serializable;
 
-public abstract class Account {
+public abstract class Account implements Serializable {
     //Pedagogical: (1) Attributes, (2) Constructors, (3) Methods,
     // are ordered alphabetically by type.
 

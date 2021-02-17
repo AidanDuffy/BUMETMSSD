@@ -2,10 +2,9 @@ package users;
 
 import accounts.*;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class AccountFileAndValue<T> {
 
@@ -44,17 +43,19 @@ public class AccountFileAndValue<T> {
             throw new NoCreditCardException();
         }
         try {
-            String test = file.getAbsolutePath();
-            FileReader reader = new FileReader(file.getAbsolutePath());
-            String current = "";
-            while (reader.ready()) {
-                current += Character.toString(reader.read());
+            DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file.getAbsolutePath()));
+            DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file.getAbsolutePath()));
+            byte[] bytes = new byte[(int)file.length()];
+            dataInputStream.read(bytes);
+            byte[] toStringByte = account.toString().getBytes(StandardCharsets.UTF_8);
+            byte[] combined = new byte[bytes.length + toStringByte.length];
+            for (int i = 0; i < bytes.length; i += 1) {
+                combined[i] = bytes[i];
             }
-            current += "\n";
-            reader.close();
-            FileWriter writer = new FileWriter(file.getName());
-            writer.append(current).append(file_str);
-            writer.close();
+            for (int i = 0; i < toStringByte.length; i += 1) {
+                combined[i + bytes.length] = bytes[i];
+            }
+            dataOutputStream.write(combined);
             return true;
         } catch (IOException e) {
             System.out.println("An error occurred when trying to write credit card account info.");

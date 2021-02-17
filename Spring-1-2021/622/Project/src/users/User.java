@@ -1,6 +1,7 @@
 package users;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import accounts.*;
 
@@ -80,10 +81,10 @@ public class User {
     public void readAccounts(File file) {
         String accFileContents = "";
         try {
-            FileReader reader = new FileReader(file);
-            while(reader.ready()) {
-                accFileContents += (char) reader.read();
-            }
+            DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file.getAbsolutePath()));
+            byte[] bytes = new byte[(int)file.length()];
+            dataInputStream.read(bytes);
+            accFileContents = new String(bytes, StandardCharsets.UTF_8);
             String[] accountStrings = accFileContents.split("\n");
             for (String accountString: accountStrings) {
                 String data = accountString.substring(2,accountString.length() - 1);

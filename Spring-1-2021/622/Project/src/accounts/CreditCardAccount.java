@@ -85,9 +85,17 @@ public class CreditCardAccount extends Account{
         return this.issuer;
     }
 
+    public ArrayList<CreditCard> getListOfCards() {
+        return listOfCards;
+    }
+
     @Override
     public double getValue() {
         return this.value;
+    }
+
+    public int numberOfCards(){
+        return this.listOfCards.size();
     }
 
     public void setCurrentCard(int current) {
