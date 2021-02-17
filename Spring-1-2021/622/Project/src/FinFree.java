@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class FinFree {
 
@@ -204,12 +205,12 @@ public class FinFree {
                 "\n\n\t1.Check monthly net income\n\t2. Check net income year to date\n\t3. Check monthly spending" +
                 "\n\t4. Check bank account balance\n\t5. Check investment account value" +
                 "\n\t6. Check credit card account balance\n\t7. Add a new account\n\t8. Bank Deposit\n\t9. Bank Withdrawal" +
-                "\n\t10. Pay Off Credit Card Bill\n\t11. Make a Purchase\n\t0. Exit";
+                "\n\t10. Pay Off Credit Card Bill\n\t11. Make a Purchase\n\t12. Display all account values\n\t0. Exit\n";
         Scanner scanner = new Scanner(System.in);
         boolean result = false;
         while (true) {
-            worth = "Cash: " + user.getNetCash() + "\nCredit Card Debt: " + user.getNetDebt() + "\nNet Worth: " + user.getNetWorth();
-            System.out.println(menu+"\n" + worth);
+            worth = "Cash: " + String.format("%.2f\nCredit Card Debt: %.2f\nNet Worth: %.2f",user.getNetCash(),user.getNetDebt(),user.getNetWorth());
+            System.out.println(worth+"\n\n" + menu);
             int option = 0;
             try {
                 option = scanner.nextInt();
@@ -218,7 +219,7 @@ public class FinFree {
                 continue;
             }
             result = false;
-            if (option > 11 || option < 0) {
+            if (option > 12 || option < 0) {
                 System.out.println("Please enter a valid integer!");
                 continue;
             } else if (option == 0) {
@@ -244,9 +245,11 @@ public class FinFree {
                 result = bankDepositWithdraw(user, option);
             } else if (option == 10 || option == 11) {
                 result = creditPurchasePayOff(user, option);
-            }
-            if (result) {
-                user.writeAccounts(new File(accountFile));
+            } else if (option == 12) {
+                String[] str = user.getAllAccountValues();
+                Stream<String> stream = Stream.of(str);
+                stream.forEach(s -> System.out.printf("%s\n",s));
+                System.out.println();
             }
         }
     }

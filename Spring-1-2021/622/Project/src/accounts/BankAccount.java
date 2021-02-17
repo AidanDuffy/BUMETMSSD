@@ -79,8 +79,8 @@ public class BankAccount extends Account {
         return "B{" + accountType +
                 "," + accountNumber +
                 "," + bank +
-                "," + value +
+                "," + String.format("%.2f",value) +
                 "," + interestRate +
-                '}';
+                "}";
     }
 }

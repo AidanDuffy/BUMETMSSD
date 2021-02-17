@@ -55,6 +55,6 @@ public class CreditCard {
     public String toString() {
         return getName() + ";" + this.number + ";" + this.cvc + ";" +
                 this.expMonth + ";" + this.expYear + ";" +
-                getValue() + ";" + getCreditLimit();
+                String.format("%.2f",getValue()) + ";" + getCreditLimit();
     }
 }

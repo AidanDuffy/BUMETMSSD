@@ -57,6 +57,15 @@ public class InvestmentAccount extends Account {
         }
     }
 
+    public void retirementContributions(double contributions, boolean credit) {
+        if (getAccountType().contains("IRA") || getAccountType().contains("401(k)")) {
+            setContributions(getContributions() + contributions);
+            if (credit) {
+                credit(contributions);
+            }
+        }
+    }
+
     public void setAccountNumber(int accountNumber) {
         this.accountNumber = accountNumber;
     }
@@ -83,11 +92,11 @@ public class InvestmentAccount extends Account {
         String data;
         if (getAccountType().contains("IRA") || getAccountType().contains("401(k)")) {
             data = "I{" + firm + "," + accountNumber +
-                    "," + accountType + "," + value + "," + contributions +
+                    "," + accountType + "," + String.format("%.2f,%.2f",value,contributions)+
                     '}';
         } else {
             data = "I{" + firm + "," + accountNumber +
-                    "," + accountType + "," + value + '}';
+                    "," + accountType + "," + String.format("%.2f",value) + "}";
         }
         return data;
     }

@@ -44,22 +44,36 @@ public class User {
         return account_by_type;
     }
 
+    public String[] getAllAccountValues() {
+        ArrayList<Account> accs = getAccounts();
+        String[] res = new String[accs.size()];
+        for (int i = 0; i < accs.size(); i += 1) {
+            Account a = accs.get(i);
+            String temp = "";
+            if (a instanceof BankAccount) {
+                temp += ((BankAccount) a).bank + " " + ((BankAccount) a).accountType + ": " + String.format("%.2f",a.getValue());
+            } else if (a instanceof CreditCardAccount) {
+                temp += ((CreditCardAccount) a).issuer + String.format(": %.2f", a.getValue());
+            } else if (a instanceof InvestmentAccount) {
+                temp += ((InvestmentAccount) a).firm + " " + ((InvestmentAccount) a).accountType + ": " + String.format("%.2f",a.getValue());
+            }
+            res[i] = temp;
+        }
+        return res;
+    }
+
     public double getNetCash() {
         double cash = 0.0;
-        for (AccountFileAndValue a: this.accounts) {
-            if (a.account instanceof BankAccount) {
-                cash += a.getValue();
-            }
+        for (Account a: (ArrayList<Account>) getAccountsByType(0)) {
+            cash += a.getValue();
         }
         return cash;
     }
 
     public double getNetDebt() {
         double debt = 0.0;
-        for (AccountFileAndValue a: this.accounts) {
-            if (a.account instanceof CreditCardAccount) {
-                debt += a.getValue();
-            }
+        for (Account a: (ArrayList<Account>) getAccountsByType(1)) {
+            debt += a.getValue();
         }
         return debt;
     }
@@ -69,11 +83,9 @@ public class User {
     }
 
     public double getNetWorth() {
-        double worth = getNetCash() - getNetDebt();
-        for (AccountFileAndValue a: this.accounts) {
-            if (a.account instanceof InvestmentAccount) {
-                worth += a.getValue();
-            }
+        double worth = this.getNetCash() - this.getNetDebt();
+        for (Account a: (ArrayList<Account>) getAccountsByType(2)) {
+            worth += a.getValue();
         }
         return worth;
     }
@@ -86,8 +98,11 @@ public class User {
             dataInputStream.read(bytes);
             accFileContents = new String(bytes, StandardCharsets.UTF_8);
             String[] accountStrings = accFileContents.split("\n");
+            if (accountStrings.length == 1 && accountStrings[0].equals("")) {
+                return;
+            }
             for (String accountString: accountStrings) {
-                String data = accountString.substring(2,accountString.length() - 1);
+                String data = accountString.substring(2,accountString.length() - 2);
                 String[] dataArray = data.split(",");
                 switch (accountString.charAt(0)) {
                     case 'B':
@@ -116,7 +131,7 @@ public class User {
                         InvestmentAccount accountInvest = new InvestmentAccount(dataArray[0],
                                 Integer.parseInt(dataArray[1]), dataArray[2]);
                         if (dataArray.length == 5) {
-                            accountInvest.retirementContributions(Double.parseDouble(dataArray[4]));
+                            accountInvest.retirementContributions(Double.parseDouble(dataArray[4]), false);
                         }
                         accountInvest.credit(Double.parseDouble(dataArray[3]));
                         AccountFileAndValue<InvestmentAccount> investFileAndValue = new AccountFileAndValue
@@ -142,9 +157,11 @@ public class User {
     }
 
     public void writeAccounts(File file) {
+        String name = file.getAbsolutePath();
+        file.delete();
         for (AccountFileAndValue a: this.accounts) {
            try {
-               a.writeToFile(file);
+               a.writeToFile(new File(name));
            } catch (NoCreditCardException e) {
                e.printStackTrace();
            }

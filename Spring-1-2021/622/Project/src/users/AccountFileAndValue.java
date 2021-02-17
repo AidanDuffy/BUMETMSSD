@@ -38,24 +38,26 @@ public class AccountFileAndValue<T> {
     }
 
     public boolean writeToFile(File file) throws NoCreditCardException {
-        String in_braces = file_str.substring(2,file_str.length() - 1);
+        String in_braces = file_str.substring(2,file_str.length() - 2);
         if (in_braces.split(",").length == 1) {
             throw new NoCreditCardException();
         }
         try {
-            DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file.getAbsolutePath()));
             DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file.getAbsolutePath()));
             byte[] bytes = new byte[(int)file.length()];
             dataInputStream.read(bytes);
-            byte[] toStringByte = account.toString().getBytes(StandardCharsets.UTF_8);
+            dataInputStream.close();
+            DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file.getAbsolutePath()));
+            byte[] toStringByte = (account.toString() + "\n").getBytes(StandardCharsets.UTF_8);
             byte[] combined = new byte[bytes.length + toStringByte.length];
             for (int i = 0; i < bytes.length; i += 1) {
                 combined[i] = bytes[i];
             }
             for (int i = 0; i < toStringByte.length; i += 1) {
-                combined[i + bytes.length] = bytes[i];
+                combined[i + bytes.length] = toStringByte[i];
             }
             dataOutputStream.write(combined);
+            dataOutputStream.close();
             return true;
         } catch (IOException e) {
             System.out.println("An error occurred when trying to write credit card account info.");
