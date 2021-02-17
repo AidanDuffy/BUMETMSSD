@@ -34,6 +34,10 @@ public class AccountFileAndValue<T> {
         this.file_str = account.toString();
     }
 
+    public T getAccount() {
+        return this.account;
+    }
+
     public boolean writeToFile(File file) throws NoCreditCardException {
         String in_braces = file_str.substring(2,file_str.length() - 1);
         if (in_braces.split(",").length == 1) {

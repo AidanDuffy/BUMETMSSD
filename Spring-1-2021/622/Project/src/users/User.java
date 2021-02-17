@@ -16,16 +16,8 @@ public class User {
 
     public void addAccount(Account account) {
         double val = account.getValue();
-        if (account instanceof BankAccount) {
-            AccountFileAndValue<BankAccount> acc = new AccountFileAndValue<BankAccount>((BankAccount) account,val);
-            accounts.add(acc);
-        } else if (account instanceof CreditCardAccount) {
-            AccountFileAndValue<CreditCardAccount> acc = new AccountFileAndValue<CreditCardAccount>((CreditCardAccount) account,val);
-            accounts.add(acc);
-        } else if (account instanceof InvestmentAccount) {
-            AccountFileAndValue<InvestmentAccount> acc = new AccountFileAndValue<InvestmentAccount>((InvestmentAccount) account,val);
-            accounts.add(acc);
-        }
+        AccountFileAndValue acc = new AccountFileAndValue(account, val);
+        accounts.add(acc);
     }
 
     public ArrayList<Account> getAccounts() {
@@ -39,11 +31,12 @@ public class User {
     public ArrayList<Account> getAccountsByType(int type) {
         ArrayList<Account> account_by_type = new ArrayList<>();
         for (AccountFileAndValue a: this.accounts) {
-            if (type == 0 && a.account instanceof BankAccount) {
+            Account acc = (Account) a.getAccount();
+            if (type == 0 && acc instanceof BankAccount) {
                 account_by_type.add((BankAccount) a.account);
-            } else if (type == 1 && a.account instanceof CreditCardAccount) {
+            } else if (type == 1 && acc instanceof CreditCardAccount) {
                 account_by_type.add((CreditCardAccount) a.account);
-            } else if (type == 2 && a.account instanceof InvestmentAccount) {
+            } else if (type == 2 && acc instanceof InvestmentAccount) {
                 account_by_type.add((InvestmentAccount) a.account);
             }
         }
