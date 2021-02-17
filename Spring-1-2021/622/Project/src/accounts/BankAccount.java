@@ -14,6 +14,14 @@ public class BankAccount extends Account {
         this.interestRate = interestRate;
     }
 
+    public BankAccount(String bank, String accountType, int accountNumber,double balance, double interestRate) {
+        this.bank = bank;
+        this.accountNumber = accountNumber;
+        this.accountType = accountType;
+        this.interestRate = interestRate;
+        this.value = balance;
+    }
+
     @Override
     public void credit(double amount) {
         this.value += amount;
