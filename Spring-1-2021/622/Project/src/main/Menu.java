@@ -14,10 +14,6 @@ import java.util.stream.Stream;
 
 public class Menu {
 
-    public boolean checkUserInfo(String username, String password) {
-        return true;
-    }
-
     public boolean addAccount(User user) {
         Scanner scanner = new Scanner(System.in);
         int type = -1;
@@ -254,7 +250,7 @@ public class Menu {
                     new_user = false;
                 }
             }
-            found = checkUserInfo(owner,pass);
+            found = FinFree.checkUserInfo(owner,pass);
             if (found) {
                 break;
             } else {
