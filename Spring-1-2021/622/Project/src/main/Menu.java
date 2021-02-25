@@ -1,63 +1,28 @@
+package main;
+
 import accounts.Account;
 import accounts.BankAccount;
 import accounts.CreditCardAccount;
 import accounts.InvestmentAccount;
 import users.User;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
-public class Menu extends Thread {
+public class Menu {
 
-    public static boolean bankBalance(User user) {
-        ArrayList<Account> banks = user.getAccountsByType(0);
-        if (banks.size() > 1) {
-            System.out.println("Please select the bank account you'd like to check:");
-            int acc = selectAccount(banks);
-            System.out.println("The value of that account is " + banks.get(acc).getValue());
-        } else if (banks.size() == 1) {
-            System.out.println("You have only one bank account with a current balance of " + banks.get(0).getValue());
-        } else {
-            System.out.println("You have no bank accounts tied to this user!");
-        }
+    public boolean checkUserInfo(String username, String password) {
         return true;
     }
 
-    public static boolean investmentValue(User user) {
-        ArrayList<Account> invest = user.getAccountsByType(2);
-        if (invest.size() > 1) {
-            System.out.println("Please select the investment account you'd like to check:");
-            int acc = selectAccount(invest);
-            System.out.println("The value of that account is " + invest.get(acc).getValue());
-        } else if (invest.size() == 1) {
-            System.out.println("You have only one investment account with a current balance of " + invest.get(0).getValue());
-        } else {
-            System.out.println("You have no investment accounts tied to this user!");
-        }
-        return true;
-    }
-
-    public static boolean creditDebt(User user) {
-        ArrayList<Account> credit = user.getAccountsByType(1);
-        if (credit.size() > 1) {
-            System.out.println("Please select the credit card account you'd like to check:");
-            int acc = selectAccount(credit);
-            System.out.println("The value of that account is " + credit.get(acc).getValue());
-        } else if (credit.size() == 1) {
-            System.out.println("You have only one credit card account with a current balance of " + credit.get(0).getValue());
-        } else {
-            System.out.println("You have no credit card accounts tied to this user!");
-        }
-        return true;
-    }
-
-    public static boolean addAccount(User user) {
+    public boolean addAccount(User user) {
         Scanner scanner = new Scanner(System.in);
         int type = -1;
         try {
-            System.out.println("Please enter the account type.");
+            System.out.println("Please enter the account type. (0 for bank, 1 for credit, 2 for investment)");
             type = scanner.nextInt();
         } catch (InputMismatchException e) {
             System.out.println("Please enter an integer!");
@@ -65,7 +30,9 @@ public class Menu extends Thread {
         }
         System.out.println("Please ensure all of the following is correct before you enter!");
         if (type == 0) {
+            System.out.println("What is the bank's name?");
             String bank = scanner.nextLine();
+            bank = scanner.nextLine();
             System.out.println("Enter 1 for Savings, 2 for Checking, 3 for CD");
             int accType = scanner.nextInt();
             String accTypeStr = "";
@@ -84,6 +51,8 @@ public class Menu extends Thread {
             int number = scanner.nextInt();
             BankAccount bankAccount = new BankAccount(bank, accTypeStr, number, balance, rate);
             System.out.println("Added!");
+            user.addAccount(bankAccount);
+            FinFree.updateAccount(user.getName(), 0, bankAccount.toString());
         } else if (type == 1) {
             System.out.println("Enter 1 for a new credit card account (new issuer) and 2 for a new credit card for an existing account.");
             int newType = scanner.nextInt();
@@ -98,7 +67,21 @@ public class Menu extends Thread {
         return true;
     }
 
-    public static boolean bankDepositWithdraw(User user, int option) {
+    public boolean bankBalance(User user) {
+        ArrayList<Account> banks = user.getAccountsByType(0);
+        if (banks.size() > 1) {
+            System.out.println("Please select the bank account you'd like to check:");
+            int acc = selectAccount(banks);
+            System.out.println("The value of that account is " + banks.get(acc).getValue());
+        } else if (banks.size() == 1) {
+            System.out.println("You have only one bank account with a current balance of " + banks.get(0).getValue());
+        } else {
+            System.out.println("You have no bank accounts tied to this user!");
+        }
+        return true;
+    }
+
+    public boolean bankDepositWithdraw(User user, int option) {
         Scanner scanner = new Scanner(System.in);
         ArrayList<Account> banks = user.getAccountsByType(0);
         BankAccount bankAccount;
@@ -127,7 +110,21 @@ public class Menu extends Thread {
         return true;
     }
 
-    public static boolean creditPurchasePayOff(User user, int option) {
+    public boolean creditDebt(User user) {
+        ArrayList<Account> credit = user.getAccountsByType(1);
+        if (credit.size() > 1) {
+            System.out.println("Please select the credit card account you'd like to check:");
+            int acc = selectAccount(credit);
+            System.out.println("The value of that account is " + credit.get(acc).getValue());
+        } else if (credit.size() == 1) {
+            System.out.println("You have only one credit card account with a current balance of " + credit.get(0).getValue());
+        } else {
+            System.out.println("You have no credit card accounts tied to this user!");
+        }
+        return true;
+    }
+
+    public boolean creditPurchasePayOff(User user, int option) {
         Scanner scanner = new Scanner(System.in);
         ArrayList<Account> credit = user.getAccountsByType(1);
         CreditCardAccount creditAccount;
@@ -156,7 +153,21 @@ public class Menu extends Thread {
         return true;
     }
 
-    public static boolean mainMenu(User user) {
+    public boolean investmentValue(User user) {
+        ArrayList<Account> invest = user.getAccountsByType(2);
+        if (invest.size() > 1) {
+            System.out.println("Please select the investment account you'd like to check:");
+            int acc = selectAccount(invest);
+            System.out.println("The value of that account is " + invest.get(acc).getValue());
+        } else if (invest.size() == 1) {
+            System.out.println("You have only one investment account with a current balance of " + invest.get(0).getValue());
+        } else {
+            System.out.println("You have no investment accounts tied to this user!");
+        }
+        return true;
+    }
+
+    public boolean mainMenu(User user) {
         String name = user.getName();
         String worth = "";
         String menu = "Welcome to FinFree, " + name + "! Please select from one of the options below" +
@@ -212,7 +223,57 @@ public class Menu extends Thread {
         }
     }
 
-    public static int selectAccount(ArrayList<Account> accounts) {
+    public void run() {
+        Thread thread;
+        Scanner scanner = new Scanner(System.in);
+        String greeting = "Hello! Welcome to FinFree, please enter your login information below:";
+        String username = "Username[just hit enter if you are a new user]: ";
+        String password = "Password[Not yet implemented, just hit enter]: ";
+        boolean new_user = true;
+        String owner = "";
+        String pass = "";
+        boolean found = false;
+        User user = new User("");
+        while (!found) {
+            System.out.print(greeting + "\n" + username);
+            owner = scanner.nextLine();
+            System.out.print(password);
+            pass = scanner.nextLine(); //This will be the default password for all.
+            System.out.print("Are you a new user? Type 'Y' or 'y' if so!");
+            if (new_user) {
+                String new_or_not = scanner.nextLine();
+                if (new_or_not.equals("Y") || new_or_not.equals("y")) {
+                    System.out.print("Welcome new user!\nPlease enter a username: ");
+                    owner = scanner.nextLine();
+                    FinFree.addUser(owner);
+                    System.out.println("Welcome, " + owner + "! Let's setup your first account!");
+                    user = new User(owner);
+                    addAccount(user);
+                    break;
+                } else {
+                    new_user = false;
+                }
+            }
+            found = checkUserInfo(owner,pass);
+            if (found) {
+                break;
+            } else {
+                System.out.println("Error! Bad login information, try again!");
+            }
+        }
+        if (!new_user) {
+            user = new User(owner); //Eventually, will read owner name from the accounts file first.
+        }
+        user.readAccounts();
+        thread = new Thread(user);
+        thread.start();
+        boolean menu = mainMenu(user);
+        if (menu) {
+            user.writeAccounts();
+        }
+    }
+
+    public int selectAccount(ArrayList<Account> accounts) {
         int result = 0;
         String name = "";
         for (int i = 1; i <= accounts.size(); i += 1) {

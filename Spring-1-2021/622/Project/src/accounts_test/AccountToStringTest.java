@@ -29,12 +29,7 @@ public class AccountToStringTest {
         assertEquals(dataList[3], Double.toString(deposit));
         assertEquals(dataList[4], Double.toString(interest));
         System.out.println(str);
-        File file = new File("fileWriteTest.txt");
         AccountFileAndValue<BankAccount> acc = new AccountFileAndValue<BankAccount>(bankAccount, bankAccount.getValue());
-        try {
-            acc.writeToFile(file);
-        } catch (NoCreditCardException e) {
-        }
     }
 
     @Test
@@ -44,13 +39,6 @@ public class AccountToStringTest {
         String test = account.toString();
         assertEquals(test.length(), 7);
         File file = new File("fileWriteTest.txt");
-        AccountFileAndValue<CreditCardAccount> acc = new AccountFileAndValue<CreditCardAccount>(account, account.getValue());
-        try {
-            acc.writeToFile(file);
-            assertEquals(true,false);
-        } catch (NoCreditCardException e) {
-            assertEquals(true,true);
-        }
         String number = "1111 2222 3333 4444";
         String cvc = "012";
         int month = 10;
@@ -69,7 +57,7 @@ public class AccountToStringTest {
         assertEquals(card[2], cvc);
         assertEquals(card[3], Integer.toString(month));
         assertEquals(card[4], Integer.toString(year));
-        assertEquals(card[5], Double.toString(account.getValue()));
+        assertEquals(card[5], String.format("%.2f",account.getValue()));
         assertEquals(card[6], Double.toString(limit));
         assertEquals(dataList.length, 2);
         assertEquals(card.length, 7);
@@ -89,15 +77,9 @@ public class AccountToStringTest {
         assertEquals(card[2], cvc);
         assertEquals(card[3], Integer.toString(month));
         assertEquals(card[4], Integer.toString(year));
-        assertEquals(card[5], Double.toString(account.getValue()));
+        assertEquals(card[5], String.format("%.2f",account.getValue()));
         assertEquals(card[6], Double.toString(limit));
         System.out.println(str);
-        acc.update(account.getValue());
-        try {
-            acc.writeToFile(file);
-        } catch (NoCreditCardException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
@@ -127,15 +109,11 @@ public class AccountToStringTest {
         dataList = data.split(",");
         assertEquals(dataList.length, 5);
         assertEquals(dataList[2], type);
-        assertEquals(dataList[3], Double.toString(contribution + investment));
-        assertEquals(dataList[4], Double.toString(contribution));
+        assertEquals(dataList[3], String.format("%.2f",contribution + investment));
+        assertEquals(dataList[4], String.format("%.2f",contribution));
         System.out.println(str);
         File file = new File("fileWriteTest.txt");
         AccountFileAndValue<InvestmentAccount> acc = new AccountFileAndValue<InvestmentAccount>(account, account.getValue());
-        try {
-            acc.writeToFile(file);
-        } catch (NoCreditCardException e) {
-        }
     }
 
 }
