@@ -1,12 +1,18 @@
 package main;
 
+import users.User;
+import users.UserPassword;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.*;
 import java.util.concurrent.locks.ReentrantLock;
+
 
 public class FinFree {
 
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "X"; //I just got rid of this since it is a password I actually use sometimes...
+    private static final String PASSWORD = "Whatcdptpbtn44%"; //I just got rid of this since it is a password I actually use sometimes...
     private static final String CONN_STRING = "jdbc:mysql://localhost:3306/finfree";
     static Connection connection = null;
     static ReentrantLock accLock = new ReentrantLock();
@@ -24,27 +30,35 @@ public class FinFree {
         menu.run();
     }
 
-    public static void addUser(String name) {
+    public static void addUser(String name, String password) {
         try (Statement statement = connection.createStatement()) {
+            String hashedSalted = UserPassword.createPassHash(password);
+            statement.executeUpdate("INSERT INTO LOGINS (username, password) values ('" + name + "','" + hashedSalted + "')");
             statement.executeUpdate("INSERT INTO USERS (username) values ('" + name + "')");
-        } catch (SQLException e) {
+        } catch (SQLException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
     }
 
     public static boolean checkUserInfo(String username, String password) {
         ResultSet rs = null;
-        boolean result = false;
+        boolean valid = false;
         String res = "";
+        String accs = "";
         try (Statement statement = connection.createStatement()) {
-            rs = statement.executeQuery("SELECT * FROM users WHERE username = '" + username + "';");
+            rs = statement.executeQuery("SELECT * FROM users INNER JOIN logins ON users.username = logins.username WHERE logins.username= '" + username + "';");
+            while (rs.next()) {
+                accs += rs.getString(1);
+            }
+            rs = statement.executeQuery("SELECT password FROM LOGINS WHERE username = '" + username + "';");
             while (rs.next()) {
                 res += rs.getString(1);
             }
-        } catch (SQLException e) {
+            valid = (UserPassword.checkPassword(password,res) && !accs.equals("null"));
+        } catch (SQLException | InvalidKeySpecException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return (res != null);
+        return valid;
     }
 
     public static void updateAccount(String name, int type, String account) {
@@ -100,6 +114,22 @@ public class FinFree {
                 return result;
             }
         }
+    }
+
+    private String getAllUserLogins(User user) {
+        ResultSet rs = null;
+        String logins = "";
+        if(user.getName().equals("admin") && checkUserInfo(user.getName(),user.getPassword())) {
+            try (Statement statement = connection.createStatement()) {
+                rs = statement.executeQuery("SELECT * FROM logins GROUP BY username;");
+                while (rs.next()) {
+                    logins += rs.getString(1);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return logins;
     }
 
 }

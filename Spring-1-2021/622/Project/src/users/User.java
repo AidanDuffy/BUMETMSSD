@@ -2,6 +2,8 @@ package users;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import accounts.*;
 import main.FinFree;
@@ -9,10 +11,18 @@ import main.FinFree;
 public class User implements Runnable{
 
     String owner;
+    String password;
     ArrayList<AccountFileAndValue> accounts;
 
-    public User(String user) {
+    public User(String user, String password) {
         owner = user;
+        try {
+            password = UserPassword.createPassHash(password);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
         accounts = new ArrayList<>();
     }
 
@@ -61,6 +71,10 @@ public class User implements Runnable{
             res[i] = temp;
         }
         return res;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public double getNetCash() {

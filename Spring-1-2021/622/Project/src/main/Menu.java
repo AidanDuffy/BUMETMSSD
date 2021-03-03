@@ -224,12 +224,12 @@ public class Menu {
         Scanner scanner = new Scanner(System.in);
         String greeting = "Hello! Welcome to FinFree, please enter your login information below:";
         String username = "Username[just hit enter if you are a new user]: ";
-        String password = "Password[Not yet implemented, just hit enter]: ";
+        String password = "Password[just hit enter if you are a new user]: ";
         boolean new_user = true;
         String owner = "";
         String pass = "";
         boolean found = false;
-        User user = new User("");
+        User user = new User("", "");
         while (!found) {
             System.out.print(greeting + "\n" + username);
             owner = scanner.nextLine();
@@ -241,9 +241,11 @@ public class Menu {
                 if (new_or_not.equals("Y") || new_or_not.equals("y")) {
                     System.out.print("Welcome new user!\nPlease enter a username: ");
                     owner = scanner.nextLine();
-                    FinFree.addUser(owner);
+                    System.out.print("Please enter a password: ");
+                    pass = scanner.nextLine();
+                    FinFree.addUser(owner,pass);
                     System.out.println("Welcome, " + owner + "! Let's setup your first account!");
-                    user = new User(owner);
+                    user = new User(owner, pass);
                     addAccount(user);
                     break;
                 } else {
@@ -258,7 +260,7 @@ public class Menu {
             }
         }
         if (!new_user) {
-            user = new User(owner); //Eventually, will read owner name from the accounts file first.
+            user = new User(owner, pass); //Eventually, will read owner name from the accounts file first.
         }
         user.readAccounts();
         thread = new Thread(user);
