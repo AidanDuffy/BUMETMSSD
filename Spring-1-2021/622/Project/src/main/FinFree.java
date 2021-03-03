@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class FinFree {
 
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "Whatcdptpbtn44%"; //I just got rid of this since it is a password I actually use sometimes...
+    private static final String PASSWORD = "X"; //I just got rid of this since it is a password I actually use sometimes...
     private static final String CONN_STRING = "jdbc:mysql://localhost:3306/finfree";
     static Connection connection = null;
     static ReentrantLock accLock = new ReentrantLock();
