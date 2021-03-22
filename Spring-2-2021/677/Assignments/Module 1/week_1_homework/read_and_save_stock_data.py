@@ -21,8 +21,8 @@ def get_stock(ticker, start_date, end_date, s_window, l_window):
         df['Day'] = df['Date'].dt.day
         for col in ['Open', 'High', 'Low', 'Close', 'Adj Close']:
             df[col] = df[col].round(2)
-        df['Weekday'] = df['Date'].dt.weekday_name  
-#        df['Weekday'] = df['Date'].dt.day_name  
+#        df['Weekday'] = df['Date'].dt.weekday_name
+        df['Weekday'] = df['Date'].dt.day_name()
         df['Week_Number'] = df['Date'].dt.strftime('%U')
         df['Year_Week'] = df['Date'].dt.strftime('%Y-%U')
         df['Short_MA'] = df['Adj Close'].rolling(window=s_window, min_periods=1).mean()
@@ -40,10 +40,10 @@ def get_stock(ticker, start_date, end_date, s_window, l_window):
         return None
 
 try:
-    ticker='SPY'
-    input_dir = r'C:\Users\epinsky\bu\python\data_science_with_Python\datasets'
+    ticker = 'DB'
+    input_dir = r'G:\Documents\BUMETMSSD\Spring-2-2021\677\Assignments\Module 1\week_1_homework'
     output_file = os.path.join(input_dir, ticker + '.csv')
-    df = get_stock(ticker, start_date='2014-01-01', end_date='2019-12-31', 
+    df = get_stock(ticker, start_date='2016-01-01', end_date='2020-12-31',
                s_window=14, l_window=50)
     df.to_csv(output_file, index=False)
     print('wrote ' + str(len(df)) + ' lines to file: ' + output_file)

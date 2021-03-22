@@ -8,8 +8,8 @@ constructs a list of lines
 """
 import os
 
-ticker='SPY'
-input_dir = r'C:\Users\epinsky\bu\python\data_science_with_Python\datasets'
+ticker = 'DB'
+input_dir = r'G:\Documents\BUMETMSSD\Spring-2-2021\677\Assignments\Module 1\week_1_homework'
 ticker_file = os.path.join(input_dir, ticker + '.csv')
 
 try:   
