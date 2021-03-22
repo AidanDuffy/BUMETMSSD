@@ -2,7 +2,6 @@ package accounts;
 //An account tied to a specific user, which contains assets of some value,
 //either owned or owed.
 
-import java.io.File;
 import java.io.Serializable;
 
 public abstract class Account implements Serializable {
