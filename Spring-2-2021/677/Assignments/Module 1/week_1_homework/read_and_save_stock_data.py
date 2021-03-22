@@ -40,7 +40,7 @@ def get_stock(ticker, start_date, end_date, s_window, l_window):
         return None
 
 try:
-    ticker = 'DB'
+    ticker = 'SPY'
     input_dir = r'G:\Documents\BUMETMSSD\Spring-2-2021\677\Assignments\Module 1\week_1_homework'
     output_file = os.path.join(input_dir, ticker + '.csv')
     df = get_stock(ticker, start_date='2016-01-01', end_date='2020-12-31',
