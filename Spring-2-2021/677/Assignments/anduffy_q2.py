@@ -21,18 +21,10 @@ for ticker in tickers:
 #Question 1.1
 def read_file_with_true_label(ticker_file):
     init_dataframe = pd.read_csv(ticker_file, delimiter=",")
-    try:
-        with open(ticker_file) as f:
-            lines = f.read().splitlines()
-        dailys = anduffy_q1.DailyReturns(lines, 0)
-    except Exception as e:
-        print(e)
-        print('failed to read stock data for ticker: ', ticker)
     dataframe = init_dataframe
-    true_vals = ['+']
-    for i in range(len(dailys.opens)):
-        dailys.oracle(i)
-        if dailys.purchased:
+    true_vals = []
+    for ret in dataframe["Return"]:
+        if ret >=0:
             true_vals.append('+')
         else:
             true_vals.append('-')
@@ -180,6 +172,7 @@ def predictive_labels(df):
     df["Predictive Label W2"] = predicted[2]
     df["Predictive Label W3"] = predicted[3]
     df["Predictive Label W4"] = predicted[4]
+    #df.to_csv(r"G:\Documents\BUMETMSSD\Spring-2-2021\677\Assignments\SPYpredlabels.csv")
 
 #Q2.2
 def check_predictive_labels(df):
@@ -212,7 +205,7 @@ def check_predictive_labels_signs(df):
             total[sign][j] += 1
             check = "Predictive Label W" + str(2+j)
             pred_sign = df[check][i]
-            if pred_sign == df['True Value'][i]:
+            if pred_sign == sign:
                 correct[sign][j] += 1
     for c in ["+","-"]:
         for i in range(3):
@@ -318,7 +311,111 @@ def question3(df):
                 print(
                     "The ensemble labels were less accurate than relying only"
                     " on looking back " + str(i + 2) + " days for true " +sign)
-    print()
+
+def true_signs(df,type):
+    correct = [0, 0]
+    if type == 5:
+        check = 'Ensemble Value'
+    else:
+        check = 'Predictive Label W' + str(type)
+    for i in range(df.shape[0]):
+        if int(df['Year'][i]) <= 2018:
+            continue
+        if df['True Value'][i] == "+":
+            if df[check][i] == "+":
+                correct[0] += 1
+        else:
+            if df[check][i] == "-":
+                correct[1] += 1
+    return correct[0], correct[1]
+
+
+def false_signs(df,type):
+    correct = [0, 0]
+    if type == 5:
+        check = 'Ensemble Value'
+    else:
+        check = 'Predictive Label W' + str(type)
+    for i in range(df.shape[0]):
+        if int(df['Year'][i]) <= 2018:
+            continue
+        if df['True Value'][i] == "+":
+            if df[check][i] != "+":
+                correct[0] += 1
+        else:
+            if df[check][i] != "-":
+                correct[1] += 1
+    return correct[0], correct[1]
+
+
+def question4(df):
+    for i in range(4):
+        x = ["W","W","W","Ensemble"]
+        true_pos, true_neg = true_signs(df, i+2)
+        false_pos, false_neg = false_signs(df, i+2)
+        if (true_neg+false_pos) == 0:
+            true_neg_rate = 0
+        else:
+            true_neg_rate = true_neg/(true_neg+false_pos)
+        if true_pos + false_neg == 0 :
+            true_pos_rate = 0
+        else:
+            true_pos_rate = true_pos / (true_pos + false_neg)
+        lead = x[i]+str(2+i)
+        if i == 3:
+            lead=x[i]
+        print(lead+": \nTP: " + str(true_pos)+"\nFP: "+str(false_pos)
+              +"\nTN: "+ str(true_neg) + "\nFN: " + str(false_neg) +
+              "\nTPR: " + format(true_pos_rate,'.2%') + "\nTNR: " +
+              format(true_neg_rate,'.2%'))
+
+
+def question5(df):
+    #W2 is the most accurate in both, so hard coded that for now.
+    amount = [100]*3
+    shares = [0,0,0]
+    w_strat = []
+    w_hold = False
+    ensemble_strat = []
+    e_hold = False
+    buy_hold = []
+    for i in range(df.shape[0]):
+        if int(df['Year'][i]) <= 2018:
+            w_strat.append(100)
+            ensemble_strat.append(100)
+            buy_hold.append(100)
+            continue
+        if shares[0] == 0:
+            shares[0] = amount[0]/int(df['Open'][i])
+        tmp = float(df['Close'][i])
+        amount[0] = shares[0] * tmp
+        buy_hold.append(amount[0])
+        if df['Predictive Label W2'][i] == '+':
+            if w_hold is False:
+                shares[1] = amount[1]/float(df['Open'][i])
+                w_hold = True
+            amount[1] = shares[1] * float(df['Close'][i])
+        else:
+            if w_hold:
+                amount[1] = shares[1]*float(df['Close'][i-1])
+                shares[1] = 0
+                w_hold = False
+        if df['Ensemble Value'][i] == '+':
+            if e_hold is False:
+                shares[2] = amount[2]/float(df['Open'][i])
+                e_hold = True
+            amount[2] = shares[2] * float(df['Close'][i])
+        else:
+            if e_hold:
+                amount[2] = shares[2]*float(df['Close'][i-1])
+                shares[2] = 0
+                e_hold = False
+        w_strat.append(amount[1])
+        ensemble_strat.append(amount[2])
+    df["Buy & Hold Value"] = buy_hold
+    df["W2 Strategy Value"] = w_strat
+    df["Ensemble Strategy Value"] = ensemble_strat
+
 
 def main():
     pd_dataframes = [read_file_with_true_label(ticker_files[0]),
@@ -336,7 +433,12 @@ def main():
         question2(df)
         print("\nQUESTION 3:\n")
         question3(df)
-
+        print("\nQUESTION 4:\n")
+        question4(df)
+        print("\nQUESTION 5:\n")
+        question5(df)
+    pd_dataframes[0].to_csv(r"G:\Documents\BUMETMSSD\Spring-2-2021\677\Assignments\SPYbuy.csv")
+    pd_dataframes[1].to_csv(r"G:\Documents\BUMETMSSD\Spring-2-2021\677\Assignments\DBbuy.csv")
 
 
 
