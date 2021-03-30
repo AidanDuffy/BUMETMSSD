@@ -10,8 +10,9 @@ import os
 import anduffy_q1
 
 ticker = 'SPY'
-input_dir = r'G:\Documents\BUMETMSSD\Spring-2-2021\677\Assignments\Module 1\week_1_homework'
+input_dir = r'G:\Documents\BUMETMSSD\Spring-2-2021\677\Assignments'
 ticker_file = os.path.join(input_dir, ticker + '.csv')
+
 
 def print_size_avg_stdev(db_dailys):
     days = db_dailys.R.keys()
@@ -26,51 +27,43 @@ def print_size_avg_stdev(db_dailys):
             print("Standard Deviation:" + db_dailys.stdev(i, day))
         print()
 
-try:
-    with open(ticker_file) as f:
-        lines = f.read().splitlines()
-    print('opened file for ticker: ', ticker)
 
-    for i in range(5):
-        db_dailys = anduffy_q1.DailyReturns(lines, 2016+i)
-        #print(str(2016+i) + ":")
-        #print_size_avg_stdev(db_dailys)
-#    print("\n============\nAGGREGATE:\n")
-    db_dailys = anduffy_q1.DailyReturns(lines, 0)
-    #print_size_avg_stdev(db_dailys)
-    for j in range(len(db_dailys.opens)-1):
-        db_dailys.oracle(j)
-    print("Oracle returns: " + str(db_dailys.worth))
-    db_dailys = anduffy_q1.DailyReturns(lines, 0)
-    print("Buy and Hold value: " + str(db_dailys.buy_and_hold()))
-    db_dailys = anduffy_q1.DailyReturns(lines, 0)
-    for j in range(len(db_dailys.opens)-1):
-        db_dailys.mad_oracle_a(j)
-    print("Mad Oracle A: " + str(db_dailys.worth))
-    db_dailys = anduffy_q1.DailyReturns(lines, 0)
-    for j in range(len(db_dailys.opens)-1):
-        db_dailys.mad_oracle_b(j)
-    print("Mad Oracle B: " + str(db_dailys.worth))
-    db_dailys = anduffy_q1.DailyReturns(lines, 0)
-    for j in range(len(db_dailys.opens) - 1):
-        db_dailys.mad_oracle_c(j)
-    print("Mad Oracle C: " + str(db_dailys.worth))
+def main():
+    try:
+        with open(ticker_file) as f:
+            lines = f.read().splitlines()
+        print('opened file for ticker: ', ticker)
 
-    
-except Exception as e:
-    print(e)
-    print('failed to read stock data for ticker: ', ticker)
+        for i in range(5):
+            db_dailys = anduffy_q1.DailyReturns(lines, 2016 + i)
+            # print(str(2016+i) + ":")
+            # print_size_avg_stdev(db_dailys)
+        #    print("\n============\nAGGREGATE:\n")
+        db_dailys = anduffy_q1.DailyReturns(lines, 0)
+        # print_size_avg_stdev(db_dailys)
+        for j in range(len(db_dailys.opens) - 1):
+            db_dailys.oracle(j)
+        print("Oracle returns: " + str(db_dailys.worth))
+        db_dailys = anduffy_q1.DailyReturns(lines, 0)
+        print("Buy and Hold value: " + str(db_dailys.buy_and_hold()))
+        db_dailys = anduffy_q1.DailyReturns(lines, 0)
+        for j in range(len(db_dailys.opens) - 1):
+            db_dailys.mad_oracle_a(j)
+        print("Mad Oracle A: " + str(db_dailys.worth))
+        db_dailys = anduffy_q1.DailyReturns(lines, 0)
+        for j in range(len(db_dailys.opens) - 1):
+            db_dailys.mad_oracle_b(j)
+        print("Mad Oracle B: " + str(db_dailys.worth))
+        db_dailys = anduffy_q1.DailyReturns(lines, 0)
+        for j in range(len(db_dailys.opens) - 1):
+            db_dailys.mad_oracle_c(j)
+        print("Mad Oracle C: " + str(db_dailys.worth))
 
 
+    except Exception as e:
+        print(e)
+        print('failed to read stock data for ticker: ', ticker)
 
 
-
-
-
-
-
-
-
-
-
-
+if __name__ == '__main__':
+    main()

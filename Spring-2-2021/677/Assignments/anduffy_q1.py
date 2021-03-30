@@ -91,6 +91,8 @@ class DailyReturns:
         return str(result)
 
     def oracle(self, day):
+        if day == len(self.returns) - 1:
+            return True
         if self.returns[day+1] > 0:
             if self.purchased is False:
                 self.purchased = True
