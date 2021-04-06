@@ -1,0 +1,4 @@
+Upon examination, the possibilities for the classifier for detecting fradulent
+bills are as follows:
+if the skewness is above 5 and the variance is above -4 and the kurtosis is
+below 0 and entropy is above -2.5

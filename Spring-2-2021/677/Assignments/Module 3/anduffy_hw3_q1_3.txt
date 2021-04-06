@@ -1,0 +1,5 @@
+Looking at the averages for each category, it is clear that regardless of class,
+entropy will be negative. Additionally, kurtosis always appears to be positive.
+On the other hand, the variance and skewness categories appear to be positive
+for green and negative for reds. Finally, I noticed that the standard deviation
+was constant for all four functions when accounting for both reds and greens.
