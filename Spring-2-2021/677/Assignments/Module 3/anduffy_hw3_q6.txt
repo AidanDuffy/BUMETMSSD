@@ -1,0 +1,12 @@
+1.
+No Variance: 0.8206997084548104
+No Skewness: 0.8935860058309038
+No Kurtosis: 0.8731778425655976
+No Entropy: 0.9810495626822158
+2. None of these display an increase in accuracy. No entropy stays consistent,
+however.
+3. Removing variance registered the greatest loss in accuracy.
+4. Once again, removing entropy led to no loss in accuracy.
+5. Entropy leaving no negative changes and, of the ones that did lose accuracy,
+skewness leaving the smallest change is consistent with k-NN. However, k-NN's
+largest drop in accuracy was from the removal of kurtosis, not variance.
