@@ -1,0 +1,11 @@
+1.
+No Variance: 0.9868804664723032
+No Skewness: 0.9883381924198251
+No Kurtosis: 0.9839650145772595
+No Entropy: 1.0
+
+2. This means that all eliminating entropy actually allows for perfect accuracy!
+Removing any another slightly lower the efficacy of the model.
+3. Removing kurtosis led to the largest decrease in accuracy.
+4. Entropy's removal also led to the smallest change in accuracy as well as
+decrease (since it increased).

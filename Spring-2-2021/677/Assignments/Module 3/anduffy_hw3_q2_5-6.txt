@@ -1,0 +1,12 @@
+Prediction Accuracies:
+	True Positives: 12
+	False Positives: 16
+	True Negatives: 285
+	False Negatives: 373
+	True Positive Rate: 0.03116883116883117
+	True Negative Rate: 0.946843853820598
+	Accuracy: 0.4329446064139942
+
+This system is almost 95% accurate at finding false bills, but it is not great
+at determining if a true bill is false or not. Given the overally accuracy at
+42%, this method is weaker than simply flipping a coin.

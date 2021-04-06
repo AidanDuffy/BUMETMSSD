@@ -1,0 +1,14 @@
+2.
+Logisitic Regression Accuracies:
+	True Positives: 373
+	False Positives: 1
+	True Negatives: 300
+	False Negatives: 12
+	True Positive Rate: 0.9688311688311688
+	True Negative Rate: 0.9966777408637874
+	Accuracy: 0.9810495626822158
+3. This is slightly worse than the k-NN model, but it is significantly better
+than the simple classifier. This means that the data is likely fairly simple
+to linearly separate.
+4. No, the k-NN model performs better in every category.
+5. This model also predicts, with my BUID info, that the bill would be good.

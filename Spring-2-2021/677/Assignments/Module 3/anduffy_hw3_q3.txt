@@ -1,0 +1,13 @@
+2. It appears that the error rate is constant.
+k-NN Accuracies:
+	True Positives: 384
+	False Positives: 0
+	True Negatives: 301
+	False Negatives: 1
+	True Positive Rate: 0.9974025974025974
+	True Negative Rate: 1.0
+	Accuracy: 0.9985422740524781
+4. Using the k-NN system, we achieve a near perfect accuracy, so this is the
+preferred system.
+5. This would be Variance = 7, Skewness = 1, Kurtosis = 1, Entropy = 8, and my
+classifier would mark this as a bad bill, but the k-NN would mark it as good.

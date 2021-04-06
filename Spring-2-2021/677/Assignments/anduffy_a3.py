@@ -10,7 +10,12 @@ import os
 import pandas as pd
 import math
 import seaborn
-
+from sklearn . preprocessing import StandardScaler, LabelEncoder
+from sklearn . neighbors import KNeighborsClassifier
+from sklearn . model_selection import train_test_split
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LogisticRegression
 
 def question1(data):
     color_list = []
@@ -65,36 +70,183 @@ def question1(data):
 
 
 def question2(data):
-    x_train = data.sample(frac=.5)
-    x_test = data.drop(x_train.index)
-    seaborn.pairplot(x_train,hue='Color')
-    seaborn.pairplot(x_train[x_train['Color'] == 'red'])
-    seaborn.pairplot(x_train[x_train['Color'] == 'green'])
+    x_train,x_test = train_test_split(data,test_size=.5, random_state=0)
+    #seaborn.pairplot(x_train,hue='Color')
+    #seaborn.pairplot(x_train[x_train['Color'] == 'red'])
+    #seaborn.pairplot(x_train[x_train['Color'] == 'green'])
     x_test_classifier_labels = []
-    for i in range(x_test.shape[0]):
-        if (float(x_test['Variance'][i]) > -4) \
-                and (float(x_test['Skewness'][i]) > 5)\
-                and float(x_test['Kurtosis'][i]) < 0:
-            x_test_classifier_labels.append("good")
-        else:
-            x_test_classifier_labels.append("fake")
+    for i in range(data.shape[0]):
+        try:
+            if (float(x_test['Variance'][i]) > 0) \
+                    and (float(x_test['Skewness'][i]) > 5)\
+                    and float(x_test['Kurtosis'][i]) > 0:
+                x_test_classifier_labels.append("good")
+            else:
+                x_test_classifier_labels.append("fake")
+        except:
+            continue
     x_test["Predicted"] = x_test_classifier_labels
+    tp = 0
+    fp = 0
+    tn = 0
+    fn = 0
+    for i in range(data.shape[0]):
+        try:
+            if x_test['Color'][i] == 'red':
+                if x_test["Predicted"][i] == 'fake':
+                    tn += 1
+                else:
+                    fp += 1
+            else:
+                if x_test["Predicted"][i] == 'fake':
+                    fn += 1
+                else:
+                    tp += 1
+        except:
+            continue
+    tpr = tp/(tp+fn)
+    tnr = tn/(tn+fp)
+    accuracy = (tp+tn)/(tp+tn+fp+fn)
+    print("Prediction Accuracies:\n\tTrue Positives: " + str(tp) +
+          "\n\tFalse Positives: " + str(fp) + "\n\tTrue Negatives: "+ str(tn)+
+          "\n\tFalse Negatives: " + str(fn) + "\n\tTrue Positive Rate: " +
+          str(tpr) + "\n\tTrue Negative Rate: " + str(tnr) + "\n\tAccuracy: " +
+          str(accuracy))
     return
 
 
-def question3():
+def question3(data):
+    k_nums = [3,5,7,9,11]
+    X = data[["Variance", "Skewness", "Kurtosis","Entropy"]].values
+    scaler = StandardScaler().fit(X)
+    X = scaler.transform(X)
+    Y = LabelEncoder().fit_transform(data[["Color"]].values)
+    x_train, X_test, y_train, Y_test = train_test_split(X,Y,
+                                                test_size=.5, random_state=0)
+    error_rate = []
+    low_error = 1
+    k_optimal = 0
+    for k in k_nums:
+        knn_classifier = KNeighborsClassifier(n_neighbors=k)
+        knn_classifier.fit(x_train,y_train)
+        prediction = knn_classifier.predict(X_test)
+        error = np.mean(prediction != Y_test)
+        error_rate.append(error)
+        if error < low_error:
+            low_error = error
+            k_optimal = k
+    plt.plot(k_nums, error_rate, color='red', linestyle='dashed',
+             marker='o', markerfacecolor='black', markersize=10)
+    plt.title('Error Rate vs. k')
+    plt.xlabel('number of neighbors : k')
+    plt.ylabel('Error Rate')
+    plt.show()
+    knn_classifier = KNeighborsClassifier(n_neighbors=k_optimal)
+    knn_classifier.fit(X, Y)
+    prediction = knn_classifier.predict(X_test)
+    tp = 0
+    fp = 0
+    tn = 0
+    fn = 0
+    total = 0
+    for pred in prediction:
+        if pred != Y_test[total]:
+            if Y_test[total] == 0:
+                fn += 1
+            else:
+                fp += 1
+        else:
+            if Y_test[total] == 0:
+                tp += 1
+            else:
+                tn += 1
+        total += 1
+    tpr = tp/(tp+fn)
+    tnr = tn/(tn+fp)
+    accuracy = (tp+tn)/total
+    print("k-NN Accuracies:\n\tTrue Positives: " + str(tp) +
+          "\n\tFalse Positives: " + str(fp) + "\n\tTrue Negatives: " + str(
+        tn) +
+          "\n\tFalse Negatives: " + str(fn) + "\n\tTrue Positive Rate: " +
+          str(tpr) + "\n\tTrue Negative Rate: " + str(tnr) + "\n\tAccuracy: " +
+          str(accuracy))
+    X_test = [[7,1,1,8]]
+    knn_classifier = KNeighborsClassifier(n_neighbors=k_optimal)
+    knn_classifier.fit(X, Y)
+    prediction = knn_classifier.predict(X_test)
+    print(prediction)
     return
 
 
-def question4():
+def question4(data):
+    k_optimal = 3
+    X_sets = [data[["Skewness", "Kurtosis", "Entropy"]].values,
+              data[["Variance", "Kurtosis", "Entropy"]].values,
+              data[["Variance", "Skewness", "Entropy"]].values,
+              data[["Variance", "Skewness", "Kurtosis"]].values]
+    Y = LabelEncoder().fit_transform(data[["Color"]].values)
+    error_rate =[]
+    for X in X_sets:
+        scaler = StandardScaler().fit(X)
+        X = scaler.transform(X)
+        x_train, X_test, y_train, Y_test = train_test_split(X, Y,
+                                                            test_size=.5,
+                                                            random_state=0)
+        knn_classifier = KNeighborsClassifier(n_neighbors=k_optimal)
+        knn_classifier.fit(X, Y)
+        prediction = knn_classifier.predict(X_test)
+        error_rate.append(np.mean(prediction != Y_test))
+    print("No Variance: "+str(1-error_rate[0]))
+    print("No Skewness: " + str(1-error_rate[1]))
+    print("No Kurtosis: " + str(1-error_rate[2]))
+    print("No Entropy: " + str(1-error_rate[3]))
+
+
+def question5(data):
+    X = data[["Variance", "Skewness", "Kurtosis", "Entropy"]].values
+    scaler = StandardScaler().fit(X)
+    X = scaler.transform(X)
+    Y = LabelEncoder().fit_transform(data[["Color"]].values)
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y,
+                                                        test_size=.5,
+                                                        random_state=0)
+    log_reg_classifier = LogisticRegression().fit(X_train,Y_train)
+    prediction = log_reg_classifier.predict(X_test)
+    accuracy = np.mean(prediction == Y_test)
+    tp = 0
+    fp = 0
+    tn = 0
+    fn = 0
+    total = 0
+    for pred in prediction:
+        if pred != Y_test[total]:
+            if Y_test[total] == 0:
+                fn += 1
+            else:
+                fp += 1
+        else:
+            if Y_test[total] == 0:
+                tp += 1
+            else:
+                tn += 1
+        total += 1
+    tpr = tp / (tp + fn)
+    tnr = tn / (tn + fp)
+    accuracy = (tp + tn) / total
+    print("\n\nLogisitic Regression Accuracies:\n\tTrue Positives: " + str(tp) +
+          "\n\tFalse Positives: " + str(fp) + "\n\tTrue Negatives: " + str(
+        tn) +
+          "\n\tFalse Negatives: " + str(fn) + "\n\tTrue Positive Rate: " +
+          str(tpr) + "\n\tTrue Negative Rate: " + str(tnr) + "\n\tAccuracy: " +
+          str(accuracy))
+    X_test = [[7, 1, 1, 8]]
+    log_reg_classifier = LogisticRegression().fit(X_train, Y_train)
+    prediction = log_reg_classifier.predict(X_test)
+    print(prediction)
     return
 
 
-def question5():
-    return
-
-
-def question6():
+def question6(data):
     return
 
 
@@ -105,7 +257,10 @@ def main():
     banknote_data = os.path.join(input_dir,  file_name)
     banknote_df = pd.read_csv(banknote_data, delimiter=",")
     banknote_df = question1(banknote_df)
-    banknote_df = question2(banknote_df)
+    question2(banknote_df)
+    #question3(banknote_df)
+    #question4(banknote_df)
+    question5(banknote_df)
 
 
 
