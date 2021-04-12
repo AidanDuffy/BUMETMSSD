@@ -1,0 +1,12 @@
+HW4
+Q3
+--------------------------------------------------------------------------------
+Model                   |    SSE  (death event=0)       |     (death event=1)
+y = ax + b              |             57.17             |           46.60
+y = ax2 + bx + c        |             69.95             |           54.03
+y = ax3 + bx2 + cx + d  |             291.54            |           73.66
+y = a log x + b         |              57.08            |           46.37
+log y = a log x + b     |              14.92            |           7.71
+--------------------------------------------------------------------------------
+1) The best model for survivors and deceased was the second GLM log type.
+2) The worst model for both was the cubic.
