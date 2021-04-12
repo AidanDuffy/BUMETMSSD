@@ -21,13 +21,24 @@ from sklearn.linear_model import LogisticRegression
 
 def question1(data):
     df_0 = data[data['DEATH_EVENT'] == 0]
+    df_0 = df_0[['creatinine_phosphokinase','serum_creatinine','serum_sodium',
+                 'platelets']]
     df_1 = data[data['DEATH_EVENT'] == 1]
+    df_1 = df_1[['creatinine_phosphokinase', 'serum_creatinine','serum_sodium',
+                 'platelets']]
     matrix_0 = df_0.corr()
     matrix_1 = df_1.corr()
-    return data
+    seaborn.heatmap(matrix_0,annot = True)
+    plt.show()
+    seaborn.heatmap(matrix_1,annot = True)
+    plt.show()
+    return
 
 
 def question2(data):
+    #Group 3: X: serum sodium, Y: serum creatinine
+    df_0 = data[data['DEATH_EVENT'] == 0]
+    df_0 = df_0[['serum_sodium','serum_creatinine']]
     return
 
 
@@ -44,6 +55,7 @@ def main():
     data = data[['creatinine_phosphokinase', 'serum_creatinine', 'serum_sodium',
                 'platelets','DEATH_EVENT']]
     question1(data)
+    question2(data)
 
 
 

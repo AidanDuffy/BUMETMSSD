@@ -1,3 +1,8 @@
 HW4
 Question 1.3
-A)
+A) The largest correlation for survivors is an inverse relationship of -0.22 between serum sodium and serum creatinine.
+B) The smallest correlation for survivors is an inverse relationship, -0.0025, between serum sodium and creatinine phosphokinase.
+C) The largest correlation for the deceased is a direct relationship of 0.15 betweem serum sodium and creatinine phosphokinase.
+D) The least significant correlation for the deceased as an inverse relationship, -0.029 between serum creatinine and platelets.
+E) The results are not the same. In fact, the largest correlation for the dead was the smallest for survivors. This could mean it is a leading indicator for death.
+The smallest for the dead and the largest for the survivors were unrelated.
