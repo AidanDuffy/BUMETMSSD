@@ -7,3 +7,13 @@ vs assymetry was selected, the graph indicated almost no correlation between the
 two. One interesting pattern was compactness vs area, where a low compactness
 meant a low area, but as we got to medium and high compactness, almost all of
 the correlation was lost.
+
+3.4:
+
+After running this several times, the accuracy of the system wild quite significantly,
+going as low as 3% and as high as 87%.
+
+3.5:
+
+Generally speaking, upon several runnings of the program, this classifier was
+consistently less accurate than the earlier use cases.

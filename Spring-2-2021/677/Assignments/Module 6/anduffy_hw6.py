@@ -128,9 +128,8 @@ def question3(data):
     feature2 = random.choice(features)
     while(feature1 == feature2):
         feature1 = random.choice(features)
-    data2 = get_df(False)#Using groups from Q1 as mentioned in lecture
-    X2 = data2[[feature1,feature2]].values
-    Y2 = data2[['L']].values
+    X2 = data[[feature1,feature2]].values
+    Y2 = data[['L']].values
     kmeans_class = KMeans(n_clusters=optimal_k, random_state=400)
     y2_means = kmeans_class.fit_predict(X2)
     plt.scatter(X2[y2_means == 0, 0], X2[y2_means == 0, 1], s=100, c='red',
@@ -170,14 +169,86 @@ def question3(data):
         print("\tLabel: " + str(C_list[j]))
         j += 1
     #PART FOUR
-
+    smallest = -1
+    smallest_count = 10000
+    j = 0
+    for label in label_counts:
+        current = sum(label)
+        if current < smallest_count:
+            smallest_count = current
+            smallest = label
+            smallest_index = j
+        j += 1
+    label_counts.remove(smallest)
+    centroids = kmeans_class.cluster_centers_
+    centroids = np.delete(centroids, smallest_index, 0)
+    points_and_centroid = dict()
+    centroid_dict = dict()
+    i = 0
+    for c in centroids:
+        centroid_dict[str(c)] = chr(ord('A') + i)
+        i += 1
+        points_and_centroid[centroid_dict[str(c)]] = list()
+    for point in X2:
+        smallest_distance = 999999
+        closest_centroid = 0
+        i = 0
+        for current in centroids:
+            tmp = np.linalg.norm(point - current)
+            if tmp < smallest_distance:
+                smallest_distance = tmp
+                closest_centroid = current
+            i += 1
+        points_and_centroid[centroid_dict[str(closest_centroid)]].append(point)
+    correct = 0
+    total = 0
+    letters = ['A','B','C']
+    for i in range(len(X2)):
+        current_point = X2[i]
+        current_y = Y2[i][0]
+        total += 1
+        y_letter = letters[current_y-1]
+        for tmp in points_and_centroid[y_letter]:
+            if tmp[0] == current_point[0] and tmp[1] == current_point[1]:
+                correct += 1
+    accuracy = correct/total
+    print("\n\nQ3.4\nThe overall accuracy of this system was " +
+          "{:.2f}%".format(accuracy*100))
+    #PART FIVE
+    data5 = get_df(False)
+    X5 = data5[[feature1, feature2]].values
+    Y5 = data5[['L']].values
+    correct = 0
+    total = 0
+    letters = ['A', 'B', 'C']
+    prediction = list()
+    for i in range(len(X5)):
+        hit = False
+        current_point = X5[i]
+        current_y = Y5[i][0]
+        if current_y == 2:
+            continue
+        total += 1
+        y_letter = letters[current_y - 1]
+        for tmp in points_and_centroid[y_letter]:
+            if tmp[0] == current_point[0] and tmp[1] == current_point[1]:
+                correct += 1
+                prediction.append(current_y)
+                hit = True
+        if hit is False:
+            prediction.append(0) #Made up, always wrong
+    accuracy = correct / total
+    print("\n\nQ3.5\nThe overall accuracy of this system was " +
+          "{:.2f}%".format(accuracy * 100))
+    confusion = metrics.confusion_matrix(Y5, np.array(prediction))
+    print("\tConfusion Matrix:\n" + str(confusion))
     return
 
 
 def main():
-    #data = get_df(False)
-    #question1(data)
-    #question2(data)
+    data = get_df(False)
+    question1(data)
+    question2(data)
     data = get_df(True)
     question3(data)
     return
