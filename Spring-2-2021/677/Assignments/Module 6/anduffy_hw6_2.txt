@@ -1,0 +1,13 @@
+Model           |   TP  |   FP  |   TN  |   FN  |   Accuracy    |   TPR |   TNR
+Linear SVM      |   31	|	1	|	36	|	2	|	95.71%	    | 93.94%| 97.30%
+Gaussian SVM    |   32	|	3	|	34	|	1	|	94.29%	    | 96.97%| 91.89%
+Polynomial SVM  |   32	|	4	|	33	|	1	|	92.86%	    | 96.97%| 89.19%
+kNN Classifier  |   29	|	2	|	35	|	4	|	91.43%	    | 87.88%| 94.59%
+
+Poly degree 3, k = 2
+
+This shows that using SVMs delivers more accurate results given a dataset with
+several features and a dataset of this size. As noted in the course PDFs, SVMs
+struggle with larger datasets and are more computationally intensive in training,
+so it would be interesting to experiment there. Even still, kNN was generally
+the most accurate of the supervised learning classifiers, so it is bested here.

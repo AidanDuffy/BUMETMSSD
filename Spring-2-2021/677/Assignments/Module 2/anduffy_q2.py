@@ -13,7 +13,7 @@ import numpy as np
 import anduffy_q1
 
 tickers = ['SPY', 'DB']
-input_dir = r'G:\Documents\BUMETMSSD\Spring-2-2021\677\Assignments'
+input_dir = r'G:\Documents\BUMETMSSD\Spring-2-2021\677\Assignments\Module 2'
 ticker_files = []
 for ticker in tickers:
     ticker_files.append(os.path.join(input_dir, ticker + '.csv'))

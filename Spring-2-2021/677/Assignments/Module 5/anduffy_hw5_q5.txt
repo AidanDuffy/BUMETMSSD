@@ -1,0 +1,14 @@
+Type            |   TP  |   FP  |   TN  |   FN  |   Accuracy    |   TPR |   TNR
+Naive Bayseian  |   800 |   178 |   43  |   42  |   79.30%      | 95.01%| 19.46%
+Decision Tree   |   776 |   65  |   156 |   66  |   87.68%      | 92.16%| 70.59%
+Random Forest   |   824 |   70  |   151 |   18  |   91.72%      | 97.86%| 68.33%
+(N,d = 5)
+
+It is clear that all three of these classifiers had a much easier time marking
+true positives rather than true negatives, as evidenced by NB getting 80% of
+the negatives wrong and the highest, from the decision tree, was only 70%. This
+happened all the while the lowest TPR was 92%. Additionally, given that the
+random forest, when run multiple times, always had d=5 but a varying N, shows
+that max depth has a clear correlation with overall accuracy, while N does not.
+Also, we see that the decision tree and forest are more accurate than the NB,
+and it confirms the notion that the random forest is always the most accurate.

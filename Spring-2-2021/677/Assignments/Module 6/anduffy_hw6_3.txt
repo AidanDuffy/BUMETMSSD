@@ -1,0 +1,9 @@
+3.2:
+
+I ran this several times to examine multiple graphs. Unsurprisingly, the higher
+the width, the higher the perimeter as well as the area. Additionally, there was
+a direct correlation between groove length and length. However, when compactness
+vs assymetry was selected, the graph indicated almost no correlation between the
+two. One interesting pattern was compactness vs area, where a low compactness
+meant a low area, but as we got to medium and high compactness, almost all of
+the correlation was lost.
