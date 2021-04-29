@@ -16,6 +16,8 @@ import numpy as np
 from ast import literal_eval
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 import unicodedata
 
 movies_df_index = 0
@@ -52,21 +54,23 @@ def parse_files(init = False, nums = None):
     for file in used_files:
         df = pd.read_csv(os.path.join(input_dir, file + ".csv"), delimiter=",")
         dfs.append(df)
-    # Elminate all the generic words
-    tf_vect = TfidfVectorizer(stop_words='english')
-    # Replaces all null entries with the empty string
-    dfs[movies_metadata_df_index]['overview'] = \
-        dfs[movies_metadata_df_index]['overview'].fillna('')
-    # Transform and fit our data into this matrix
-    tf_matrix = tf_vect.fit_transform(
-        dfs[movies_metadata_df_index]['overview'])
-    return dfs[0], dfs[1], tf_matrix
+    if init:
+        # Elminate all the generic words
+        tf_vect = TfidfVectorizer(stop_words='english')
+        # Replaces all null entries with the empty string
+        dfs[movies_metadata_df_index]['overview'] = \
+            dfs[movies_metadata_df_index]['overview'].fillna('')
+        # Transform and fit our data into this matrix
+        tf_matrix = tf_vect.fit_transform(
+            dfs[movies_metadata_df_index]['overview'])
+        return dfs[0], dfs[1], tf_matrix
+    else:
+        return dfs
 
 
 def format_titles(title1, title2=None, single_title=None):
     stop = ["the", 'The', "a", 'A', 'an', 'An', "Les", "La"]
     title1 = title1.str.replace('[{}]'.format(string.punctuation), '')
-    title1 = title1.str.replace(" ", "")
     title1 = title1.str.lower()
     new_title1 = list()
     count = 0
@@ -82,12 +86,12 @@ def format_titles(title1, title2=None, single_title=None):
     if title2 is not None:
         title2 = title2.str.replace('[{}]'.format(string.punctuation), '')
         title2 = title2.str.replace(" ", "")
+        title1 = title1.str.replace(" ", "")
         title2 = title2.str.lower()
-        return new_title1, title2
+        return title1, title2
     elif single_title is not None:
         single_title = single_title.replace('[{}]'.format(
-            string.punctuation), '')
-        single_title = single_title.lower().replace(" ", "")
+            string.punctuation), '').lower()
         return new_title1, single_title
     else:
         return new_title1
@@ -172,7 +176,7 @@ def weighted_rating(movie_data, percentile):
     return top_x_percent
 
 
-def plot_based_recommendations(title, metadata, indexes, scores):
+def generic_recommendations(title, metadata, indexes, scores):
     """
     This recommends the 10 movies with the most similar plots.
     :param title: Given title
@@ -186,7 +190,6 @@ def plot_based_recommendations(title, metadata, indexes, scores):
     index = indexes[title]
     # Get all the sim scores for this title and sort them
     similarity = list(enumerate(scores[index]))
-
     similarity = sorted(similarity, key=lambda x: x[1],
                         reverse=True)  # We want the score, not the movie id being the weight
     ten_best = similarity[1:11]  # [0] would be the film itself!
@@ -207,16 +210,53 @@ def get_list_of_features(data):
 
 
 def get_genre(data):
-    data['genre'] = data['genre'].apply(get_list_of_features)
+    data['genres'] = data['genres'].apply(get_list_of_features)
     return
 
 
-def genre_based_recommendations(title, metadata, indexes, scores):
-    feature = 'genre'
-    bad_ids = metadata[metadata["imdb_id"][:2] != "tt"]
-    metadata = metadata.drop()
-    metadata[feature] = metadata[feature].apply(literal_eval())
+def format_data(data):
+    if isinstance(data,list):
+        result = list()
+        for movie in data:
+            result.append(movie.replace(" ","").lower())
+        return result
+    elif isinstance(data, str):
+        return data.lower().replace(" ","")
+    else:
+        return ""
+
+
+def extra_recommender_data(data,genre=False,credit=False):
+    metadata_vector = ""
+    if genre:
+        metadata_vector = " ".join(data['genres'])
+    elif credit:
+        metadata_vector = " ".join(data['genres']) + " " +\
+                          " ".join(data['director']) + " " +\
+                          " ".join(data['cast'])
+    return metadata_vector
+
+
+def finish_extra_recommend(title, metadata):
+    count_matrix = CountVectorizer(stop_words='english').fit_transform(
+        metadata['vector_data'])
+    count_similarity_matrix = cosine_similarity(count_matrix, count_matrix)
+    data = metadata.reset_index()
+    indexes = pd.Series(data.index, index=metadata['title'])
+    generic_recommendations(title,metadata, indexes,count_similarity_matrix)
+
+
+def genre_based_recommendations(title, metadata):
+    feature = 'genres'
+    #These were causing errors and needed to be removed
+    bad_ids = [19730,29503, 35587]
+    metadata = metadata.drop(bad_ids)
+    metadata[feature] = metadata[feature].apply(literal_eval)
     get_genre(metadata)
+    metadata[feature] = metadata[feature].apply(format_data)
+    metadata['vector_data'] = metadata.apply(extra_recommender_data, axis = 1,
+                                             args = (True, False))
+    finish_extra_recommend(title,metadata)
     return
 
 
@@ -226,22 +266,31 @@ def get_director(data):
             return crew['name']
     return np.nan
 
+
 def get_cast_and_crew(data):
     data['director'] = data['crew'].apply(get_director)
     data['cast'] = data['cast'].apply(get_list_of_features)
     return
 
-def credits_based_recommendations(title, metadata, indexes, scores):
-    credits_df = parse_files(nums=credits_index)
+
+def credits_based_recommendations(title, metadata):
+    credits_df = parse_files(nums=[credits_index])[0]
+    bad_ids = [19730, 29503, 35587]
+    metadata = metadata.drop(bad_ids)
     features = ['cast', 'crew', 'genres']
-    metadata = metadata.drop(metadata["imdb_id"][:2] != "tt")
     credits_df['id'] = credits_df['id'].astype('int')
     metadata['id'] = metadata['id'].astype('int')
     metadata = metadata.merge(credits_df, on='id')
     for feature in features:
-        metadata[feature] = metadata[feature].apply(literal_eval())
+        metadata[feature] = metadata[feature].apply(literal_eval)
     get_genre(metadata)
     get_cast_and_crew(metadata)
+    features = ['cast', 'director', 'genres']
+    for feature in features:
+        metadata[feature] = metadata[feature].apply(format_data)
+    metadata['vector_data'] = metadata.apply(extra_recommender_data, axis=1,
+                                             args=(False, True))
+    finish_extra_recommend(title, metadata)
     return
 
 
@@ -261,11 +310,11 @@ def content_based_recommender(title, metadata, indexes, scores,
     :return:
     """
     if plot_based:
-        plot_based_recommendations(title, metadata, indexes, scores)
+        generic_recommendations(title, metadata, indexes, scores)
     elif genre_based:
-        genre_based_recommendations(title, metadata, indexes, scores)
+        genre_based_recommendations(title, metadata)
     elif credits_based:
-        credits_based_recommendations(title, metadata, indexes, scores)
+        credits_based_recommendations(title, metadata)
     return
 
 
@@ -358,7 +407,11 @@ def main():
     if check_yes in yes:
         plot, genre, credit = check_rec_types()
         title = get_user_title(movie_meta)
-        similarity_matrix = linear_kernel(movie_meta_matrix, movie_meta_matrix)
+        if plot:
+            similarity_matrix = linear_kernel(movie_meta_matrix,
+                                              movie_meta_matrix)
+        else:
+            similarity_matrix = None
         content_based_recommender(title, movie_meta, indexes,
                                   similarity_matrix,
                                   plot, genre, credit)
