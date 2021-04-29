@@ -1,8 +1,11 @@
 """
 Author: Aidan Duffy
 Creation Date: April 10, 2021
-Last Updated: April 29, 2021
-Description: This is the main program file for the Movie Recommender system.
+Last Updated: April 24, 2021
+Description: This is the fourth attempt at the main program file for the Movie
+Recommender system. I added most of the required user I/O and modularized
+most of the functions. I have also taken notes on what needs to be added
+in terms of project next steps, and I will continue to do so.
 """
 import os
 import string
@@ -31,8 +34,7 @@ def parse_files(input_dir):
     dfs[movies_metadata_df_index]['overview'] = \
         dfs[movies_metadata_df_index]['overview'].fillna('')
     # Transform and fit our data into this matrix
-    tf_matrix = tf_vect.fit_transform(
-        dfs[movies_metadata_df_index]['overview'])
+    tf_matrix = tf_vect.fit_transform(dfs[movies_metadata_df_index]['overview'])
     return dfs[0], dfs[1], tf_matrix
 
 
@@ -47,7 +49,7 @@ def format_titles(title1, title2=None, single_title=None):
         if title is None or title != title:
             continue
         words = title.split()
-        if words[0] in stop and title2 is not None:
+        if words[0] in stop:
             words = words[1:]
         final_title = " ".join(words)
         new_title1.append(final_title)
@@ -128,58 +130,38 @@ def weighted_rating(movie_data, percentile=0.9):
     return top_x_percent
 
 
-def plot_based_recommendations(title, metadata, indexes, scores):
-    """
-    This recommends the 10 movies with the most similar plots.
-    :param title: Given title
-    :param metadata: dataframe
-    :param indexes: all the indexes
-    :param scores: similarity scores
-    :return:
-    Add: allow users to alter the number of films recommended as well as add a
-    popularity filter. Perhaps a filter for year as well? And language?
-    """
-    index = indexes[title]
-    # Get all the sim scores for this title and sort them
-    sim_scores = list(enumerate(scores[index]))
-
-    sim_scores = sorted(sim_scores, key=lambda x: x[1],
-                        reverse=True)  # We want the score, not the movie id being the weight
-    ten_best = sim_scores[1:11]  # [0] would be the film itself!
-    movie_indexes = [i[0] for i in ten_best]
-    print("Based on the plot of " + title + ", we recommend: ")
-    print(metadata['title'].iloc[movie_indexes])
+def plot_based_recommendations(title, metadata, indices, sim_scores):
     return
 
 
-def genre_based_recommendations(title, metadata, indexes, scores):
+def genre_based_recommendations(title, metadata, indices, sim_scores):
     return
 
 
-def credits_based_recommendations(title, metadata, indexes, scores):
+def credits_based_recommendations(title, metadata, indices, sim_scores):
     return
 
 
-def content_based_recommender(title, metadata, indexes, scores,
+def content_based_recommender(title, metadata, indices, sim_scores,
                               plot_based=True, genre_based=False,
                               credits_based=False):
     """
     This is the main pipeline for the subtypes of the recommendation system.
     :param title: film title
     :param metadata: movie metadata dataframe
-    :param indexes:
-    :param scores: is the similary score matrix between movies
+    :param indices:
+    :param sim_scores:
     :param plot_based: should we issue a plot based recommendation? default yes
     :param genre_based: should it issues a genre based rec? default no
     :param credits_based: should it issue a credits based rec? default no
     :return:
     """
     if plot_based:
-        plot_based_recommendations(title, metadata, indexes, scores)
+        plot_based_recommendations(title, metadata, indices, sim_scores)
     if genre_based:
-        genre_based_recommendations(title, metadata, indexes, scores)
+        genre_based_recommendations(title, metadata, indices, sim_scores)
     if credits_based:
-        credits_based_recommendations(title, metadata, indexes, scores)
+        credits_based_recommendations(title, metadata, indices, sim_scores)
     return
 
 
@@ -225,29 +207,24 @@ def popularity_weighted_ratings(movie_meta):
 
 
 def check_rec_types():
-    check_yes = input("\nWould you like to have plot-based recommendations? ")
+    check_yes = input("Would you like to have plot-based recommendations?"
+                      "\nType \'yes\', \'Yes\', \'y\', or\'Y\',"
+                      " otherwise it will continue.")
     yes = ['yes', 'Yes', 'y', 'Y']
     plot, genre, credit = False, False, False
     if check_yes in yes:
         plot = True
-    check_yes = input("\nWould you like to have genre-based recommendations? ")
+    check_yes = input("Would you like to have genre-based recommendations?"
+                      "\nType \'yes\', \'Yes\', \'y\', or\'Y\',"
+                      " otherwise it will continue.")
     if check_yes in yes:
         genre = True
-    check_yes = input(
-        "\nWould you like to have credits-based recommendations? ")
+    check_yes = input("Would you like to have credits-based recommendations?"
+                      "\nType \'yes\', \'Yes\', \'y\', or\'Y\',"
+                      " otherwise it will continue.")
     if check_yes in yes:
         credit = True
     return plot, genre, credit
-
-
-def get_user_title(movie_meta):
-    title = input("What movie do you want recommendations from? ")
-    valid_title = check_title(title, movie_meta)
-    while valid_title is False:
-        title = input("Invalid! What movie do you want recommendations from? ")
-        valid_title = check_title(title, movie_meta)
-    print("Valid title! Please wait while the similarity matrix is created...")
-    return title
 
 
 def main():
@@ -255,27 +232,34 @@ def main():
     input_dir = os.path.abspath(os.path.join(here, os.pardir + r"/Data"))
     movies, movie_meta, movie_meta_matrix = parse_files(input_dir)
     # movie_meta = fix_years_add_movie_id(movie_meta,movies)
-    indexes = pd.Series(movie_meta.index,
+    indices = pd.Series(movie_meta.index,
                         index=movie_meta['title']).drop_duplicates()
-    print("NOTIFICATION: Anytime there is a yes/no question, type"
-          " \'yes\', \'Yes\', \'y\', or\'Y\' for yes, anything else will be"
-          " read as a no.\n\n")
     check_yes = input("Would you like to see the most highly rated films given"
-                      " certain popularities? \n(Ex: see top 10 from the 65th "
-                      "percentile, in terms of popularity.)\n")
-    yes = ['yes', 'Yes', 'y', 'Y']
+                " certain popularities? \nEx: see top 10 from the 65th "
+                "percentile, in terms of popularity."
+                "\nType \'yes\', \'Yes\', \'y\', or\'Y\',"
+                      " otherwise it will continue.")
+    yes = ['yes','Yes','y','Y']
     if check_yes in yes:
         popularity_weighted_ratings(movie_meta)
-    check_yes = input(
-        "\nWould you like to use the movie recommendation system?\n")
+    check_yes = input("Would you like to use the movie recommendation system?"
+                      "\nType \'yes\', \'Yes\', \'y\', or\'Y\',"
+                      " otherwise it will continue.")
     if check_yes in yes:
         plot, genre, credit = check_rec_types()
-        title = get_user_title(movie_meta)
-        similarity_matrix = linear_kernel(movie_meta_matrix, movie_meta_matrix)
-        content_based_recommender(title, movie_meta, indexes,
-                                  similarity_matrix,
-                                  plot, genre, credit)
-    print("Thanks for using the program!")
+    else:
+        print("Thanks for using the program!")
+        return
+    title = input("What movie do you want recommendations from?")
+    valid_title = check_title(title, movie_meta)
+    while valid_title is False:
+        title = input("Invalid! What movie do you want recommendations from? ")
+        valid_title = check_title(title, movie_meta)
+    print("Valid title! Please wait while the similarity matrix is created...")
+    similarity_matrix = linear_kernel(movie_meta_matrix, movie_meta_matrix)
+    content_based_recommender(title, movie_meta, indices, similarity_matrix,
+                              plot, genre, credit)
+    return
 
 
 if __name__ == '__main__':
