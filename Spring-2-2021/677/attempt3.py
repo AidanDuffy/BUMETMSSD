@@ -1,8 +1,11 @@
 """
 Author: Aidan Duffy
 Creation Date: April 10, 2021
-Last Updated: April 29, 2021
-Description: This is the main program file for the Movie Recommender system.
+Last Updated: April 21, 2021
+Description: This is the third attempt at the main program file for the Movie
+Recommender system. I successfully was able to implement a weighted rating system
+as well as display the top X films that are in the top Xth percentile in terms
+of popularity(votes cast on imdb).
 """
 import math
 import os
