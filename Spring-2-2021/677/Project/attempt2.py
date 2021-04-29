@@ -1,8 +1,11 @@
 """
 Author: Aidan Duffy
 Creation Date: April 10, 2021
-Last Updated: April 29, 2021
-Description: This is the main program file for the Movie Recommender system.
+Last Updated: April 15, 2021
+Description: This is the second attempt at the main program file for the Movie
+Recommender system. I filtered out some of the data at the start to prevent
+wasted time. I also attempted to add the movieId and years properly to the main
+metadata file, but struggled there.
 """
 import math
 import os
