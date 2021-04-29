@@ -2,26 +2,53 @@
 Author: Aidan Duffy
 Creation Date: April 10, 2021
 Last Updated: April 29, 2021
-Description: This is the main program file for the Movie Recommender system.
+Description: This is the main program file for the Movie Recommender system. I
+used several tutorials which provided me with the dataset in order to complete
+the task. These helped me find functions from modules we had covered in class,
+but not these specific functions, ie vectorization fucntions from sklearn.
+ADD: I would also like for users to be able to store their own ratings and based
+off of a generated profile, the system will recommend to them.
 """
 import os
 import string
 import pandas as pd
 import numpy as np
+from ast import literal_eval
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 import unicodedata
 
 movies_df_index = 0
 movies_metadata_df_index = 1
+tags_index, movies_index, ratings_index, links_index = 0,1,2,3
+genome_tags_index, genome_scores_index, credits_index, metadata_index = 4,5,6,7
+
+here = os.path.abspath(__file__)
+input_dir = os.path.abspath(os.path.join(here, os.pardir + r"/Data"))
 
 
-def parse_files(input_dir):
+def parse_files(init = False, nums = None):
+    """
+    This provides dataframes from the given data csv files.
+    :param init: if this is the first run
+    :param nums:
+    :return: the dataframes from the parsed files.
+    """
     dfs = list()
     file_names = [r"tags", r"movies", r"ratings_small", r"links_small",
                   r"genome-tags", r"genome-scores", r'credits',
                   r"movies_metadata"]
-    used_files = [file_names[1], file_names[7]]
+    used_files = list()
+    if init:
+        nums = [movies_index,metadata_index]
+    if nums is None:
+        print("Error, no list of numbers provided for the files!")
+        return
+    for num in nums:
+        if num < 0 or num > 7:
+            print("Error! Bad number given!")
+            return
+        used_files.append(file_names[num])
     for file in used_files:
         df = pd.read_csv(os.path.join(input_dir, file + ".csv"), delimiter=",")
         dfs.append(df)
@@ -67,11 +94,27 @@ def format_titles(title1, title2=None, single_title=None):
 
 
 def remove_accents(title):
+    """
+    I encountered some miscellaneous accent chars like in Les Mis, so
+    this is to remove those.
+    :param title: given movie title
+    :return: Normalized title
+    """
     nfkd_form = unicodedata.normalize('NFKD', title)
     return u"".join([c for c in nfkd_form if not unicodedata.combining(c)])
 
 
 def fix_years_add_movie_id(metadata, movies):
+    """
+    WORK IN PROGRESS
+    I am trying to add the proper year of release as well as the movieId to the
+    metadata file, though the formatting of the titles is somewhat hindering
+    this as it is not consistent in formatting or sometimes the language.
+    :param metadata: movie metadata dataframe
+    :param movies: movie csv dataframe
+    :return: metadata dataframe with the proper years and movieId
+    ADD: Need to find a way to cross-reference the movieId with another file.
+    """
     years, ids = list(), list()
     metadata_index = 0
     meta_titles_df = metadata["title"]
@@ -93,26 +136,27 @@ def fix_years_add_movie_id(metadata, movies):
     return metadata
 
 
-def calculate_weighted_rating(df, min, avg):
+def calculate_weighted_rating(df, min_vote, avg):
     """
     IMDB's formula for calculated a weighted rating.
     :param df: The movie metadata dataframe.
-    :param min: the minimum number of votes to be considered
+    :param min_vote: the minimum number of votes to be considered
     :param avg: the average vote score
-    :return: the weight rating.
+    :return: the weighted rating.
     """
     average_rating = df['vote_average']
     vote_count = df['vote_count']
-    denominator = min + vote_count
-    weighted_rating = ((vote_count / denominator) * average_rating) \
-                      + ((min / denominator) * avg)
-    return weighted_rating
+    denominator = min_vote + vote_count
+    weight = ((vote_count / denominator) * average_rating) \
+             + ((min_vote / denominator) * avg)
+    return weight
 
 
-def weighted_rating(movie_data, percentile=0.9):
+def weighted_rating(movie_data, percentile):
     """
     This will help create a top X% chart of movies.
-    :param movie_data:
+    :param percentile: user's desired percentile of popularity
+    :param movie_data: movie metadata dataframe
     :return:
     """
     mean_vote = movie_data['vote_average'].mean()
@@ -141,22 +185,63 @@ def plot_based_recommendations(title, metadata, indexes, scores):
     """
     index = indexes[title]
     # Get all the sim scores for this title and sort them
-    sim_scores = list(enumerate(scores[index]))
+    similarity = list(enumerate(scores[index]))
 
-    sim_scores = sorted(sim_scores, key=lambda x: x[1],
+    similarity = sorted(similarity, key=lambda x: x[1],
                         reverse=True)  # We want the score, not the movie id being the weight
-    ten_best = sim_scores[1:11]  # [0] would be the film itself!
+    ten_best = similarity[1:11]  # [0] would be the film itself!
     movie_indexes = [i[0] for i in ten_best]
     print("Based on the plot of " + title + ", we recommend: ")
     print(metadata['title'].iloc[movie_indexes])
     return
 
 
-def genre_based_recommendations(title, metadata, indexes, scores):
+def get_list_of_features(data):
+    if isinstance(data, list):
+        names = [i['name'] for i in data]
+        if len(names) > 3:
+            names = names[:3]
+        return names
+    else:
+        return []
+
+
+def get_genre(data):
+    data['genre'] = data['genre'].apply(get_list_of_features)
     return
 
 
+def genre_based_recommendations(title, metadata, indexes, scores):
+    feature = 'genre'
+    bad_ids = metadata[metadata["imdb_id"][:2] != "tt"]
+    metadata = metadata.drop()
+    metadata[feature] = metadata[feature].apply(literal_eval())
+    get_genre(metadata)
+    return
+
+
+def get_director(data):
+    for crew in data:
+        if crew['job'] == 'Director':
+            return crew['name']
+    return np.nan
+
+def get_cast_and_crew(data):
+    data['director'] = data['crew'].apply(get_director)
+    data['cast'] = data['cast'].apply(get_list_of_features)
+    return
+
 def credits_based_recommendations(title, metadata, indexes, scores):
+    credits_df = parse_files(nums=credits_index)
+    features = ['cast', 'crew', 'genres']
+    metadata = metadata.drop(metadata["imdb_id"][:2] != "tt")
+    credits_df['id'] = credits_df['id'].astype('int')
+    metadata['id'] = metadata['id'].astype('int')
+    metadata = metadata.merge(credits_df, on='id')
+    for feature in features:
+        metadata[feature] = metadata[feature].apply(literal_eval())
+    get_genre(metadata)
+    get_cast_and_crew(metadata)
     return
 
 
@@ -170,15 +255,16 @@ def content_based_recommender(title, metadata, indexes, scores,
     :param indexes:
     :param scores: is the similary score matrix between movies
     :param plot_based: should we issue a plot based recommendation? default yes
-    :param genre_based: should it issues a genre based rec? default no
-    :param credits_based: should it issue a credits based rec? default no
+    :param genre_based: should it issues a plot and genre based rec? default no
+    :param credits_based: should it issue a plot, genre, and cast/crew
+    based rec? default no
     :return:
     """
     if plot_based:
         plot_based_recommendations(title, metadata, indexes, scores)
-    if genre_based:
+    elif genre_based:
         genre_based_recommendations(title, metadata, indexes, scores)
-    if credits_based:
+    elif credits_based:
         credits_based_recommendations(title, metadata, indexes, scores)
     return
 
@@ -230,13 +316,16 @@ def check_rec_types():
     plot, genre, credit = False, False, False
     if check_yes in yes:
         plot = True
-    check_yes = input("\nWould you like to have genre-based recommendations? ")
-    if check_yes in yes:
-        genre = True
-    check_yes = input(
-        "\nWould you like to have credits-based recommendations? ")
-    if check_yes in yes:
-        credit = True
+        check_yes = input("\nWould you like to also factor in genre-based "
+                          "recommendations? ")
+        if check_yes in yes:
+            plot = False
+            genre = True
+            check_yes = input("\nWould you like to also factor in the cast and"
+                              " crew into your recommendations? ")
+            if check_yes in yes:
+                genre = False
+                credit = True
     return plot, genre, credit
 
 
@@ -251,9 +340,7 @@ def get_user_title(movie_meta):
 
 
 def main():
-    here = os.path.abspath(__file__)
-    input_dir = os.path.abspath(os.path.join(here, os.pardir + r"/Data"))
-    movies, movie_meta, movie_meta_matrix = parse_files(input_dir)
+    movies, movie_meta, movie_meta_matrix = parse_files(init = True)
     # movie_meta = fix_years_add_movie_id(movie_meta,movies)
     indexes = pd.Series(movie_meta.index,
                         index=movie_meta['title']).drop_duplicates()
