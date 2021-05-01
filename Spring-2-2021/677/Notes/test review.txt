@@ -1,0 +1,25 @@
+REVIEW:
+Module 2/Quiz 2:
+-Covariance formula
+-Weighted sum formula
+-Pearson Correlation
+-loss function, gradient descent
+Gradient of a continuous (and di erentiable) function decreases as you get closer to a minimum.
+True or false? Scaling the loss function by 2 will make gradient descent work faster
+
+Module 3/Quiz 3:
+-briefly, MLE
+-error function = bias^2 + variance + irreducible error [bias = avg diff b/w prediction and correct value, variance = variance of prediction for the same point]
+-overfitting = low bias, high variance
+-underfitting = low variance, high bias
+-NPV/PPV = Neg/Pos Predicted Val
+-TNR/TPR = True -/+ Rate
+-FNR(miss rate)/FPR(fall out) = False -/+ Rate
+-FDR = False Discovery Rate (1-PPV)
+-FOR = False Omission Rate (1-NPV)
+-ROC = receiver operating characteristic
+-AUC = area under curve
+-STDDEV = 68-95-99 rule for standard deviations
+ m
+( ) = m!/(n!*(m-n)!)
+ n
