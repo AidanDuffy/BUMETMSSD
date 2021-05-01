@@ -23,3 +23,10 @@ Module 3/Quiz 3:
  m
 ( ) = m!/(n!*(m-n)!)
  n
+
+Quiz 4/Module 4:
+	-True a. Regression through the origin yields an equivalent slope if you center the data first
+	-True b.Normalizing variables results in the slope being the correlation
+	-False c. Least squares is not an estimation tool 
+ BAYES:
+ P(A|B) = P(B|A)*P(A)/P(B)
