@@ -30,3 +30,4 @@ Quiz 4/Module 4:
 	-False c. Least squares is not an estimation tool 
  BAYES:
  P(A|B) = P(B|A)*P(A)/P(B)
+ independent means P(A&B) = P(A)P(B)
