@@ -12,12 +12,13 @@ import matplotlib.pyplot as plt
 import pandas
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
-from sklearn.naive_bayes import GaussianNB
-from sklearn.model_selection import *
-from sklearn.metrics import confusion_matrix
-from sklearn.ensemble import RandomForestClassifier
+import sklearn
+from sklearn.ensemble._forest import RandomForestClassifier
+from sklearn.metrics._classification import confusion_matrix
+from sklearn.model_selection._split import train_test_split
 from sklearn import tree
+from sklearn.naive_bayes import GaussianNB
+from sklearn.preprocessing._label import LabelEncoder
 
 
 def question1():
@@ -43,8 +44,8 @@ def question2(data,group_cols):
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=.5,
                                                         random_state=500)
     NB_classifier = GaussianNB().fit(X_train,Y_train)
-    pred = NB_classifier.predict(X_test)
-    error_rate = np.mean(pred != Y_test)
+    pred = NB_classifier.predict(X_train)
+    error_rate = np.mean(pred != Y_train)
     print("\tError Rate: " + "{:.2f}%".format(error_rate*100))
     tn, fp, fn, tp = confusion_matrix(Y_test,pred).ravel()
     tpr = tp/(tp+fn)
@@ -132,10 +133,10 @@ def main():
     cols = ['MSTV', 'Width', 'Mode', 'Variance']
     print("Naive Bayseian Classifier Data:")
     question2(dataframe,cols)
-    print("Decision Tree Data:")
-    question3(dataframe,cols)
-    print("Random Forest Data:")
-    question4(dataframe, cols)
+    #print("Decision Tree Data:")
+    #question3(dataframe,cols)
+    #print("Random Forest Data:")
+    #question4(dataframe, cols)
     return
 
 
