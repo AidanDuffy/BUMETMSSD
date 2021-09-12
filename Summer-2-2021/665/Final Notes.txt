@@ -1,0 +1,287 @@
+CS665 Final Notes:
+
+
+Links for OOP and DPs:
+--https://medium.com/@andrewkoenigbautista/oop-there-it-is-polymorphism-82ca1e85f11 
+	--Poly,inheritance, abstraction, encapsulation
+		-know goals, differences, relations
+
+--https://i.stack.imgur.com/07dXi.png 
+	--abstraction v encapsulation
+
+--https://www.geeksforgeeks.org/difference-between-abstract-class-and-interface-in-java/
+	--abstract classes vs interfaces
+
+--https://refactoring.guru/refactoring
+	--refactoring overview
+
+--https://java-design-patterns.com/patterns/
+	--design patterns
+
+--https://refactoring.guru/design-patterns
+	--design patterns
+
+For DP, know:
+	1. When to use which
+	2. What do they solve for
+	3. How do they solve
+	4. Pros/Cons
+	5. Related Patterns
+	6. Differences
+
+For Refactoring:
+	1. What is it
+	2. When do we do it
+	3. Why do it
+	4. What are technqiues
+	5. Which DPs are used frequently in refactoring
+===================================================
+
+Module 1:
+
+UML:
+Picture:https://upload.wikimedia.org/wikipedia/commons/9/93/Uml_classes_en.svg
+
+1. Classes
+	A. Rectangle w/ four parts:
+		-Name
+		-Attributes (attribute name: type = default value[optional])
+		-Operations
+		-Comments(optional)
+2. Packages
+	A. Collection of classes & subclasses and sub packages
+3. Use <<TEXT>> to convey useful information to readers
+	A. Visibility
+	B. If classes are Interfaces/Abs. Classes
+4. Class Relationships:
+	A. Association: arrows going both ways, general, ex: Employer employs Employee, Employee is employed by Employer
+	B. Multiplicity:Range showing how many objects on one class relate to another, ex: if Employer has 1..3, 1 employer can have 3 employees, 1..* means they could have as many as they want.
+	C. General Note: design against interfaces, not implementations (example of inheritance and abstraction, design against a general type, can inherit attributes and methods)
+	D. Inheritance: Empty arrow head points to the superclass from the subclass
+	E. Realization: dotted line arrow, subclass to superclass where a class satisfies an interface (class possesses the methods promised by the interface)
+	F. Aggregation: when objects of one class are contained/associated (one way) w/ objects of another (ex. an aircraft contains/has wings), shown as the "aircraft" have an empty diamond as its arrow with a line pointing to the "wing" with a regular arrowhead
+	G. Composition: when objects cannot exist w/o the objects that aggregate them (ex. if the airfract is a plane, it needs a wing), shown with a filled diamond instead
+	H. Dependence: D & F are examples of dependencies of one class on another, other ex is if a method's parameter contains or returns a class object, non-D/F dependence depicted with a dotted line and arrow
+	I: Visibility: + public, - private, # protected, ~ package/default
+	J: Activity Diagrams, Runtime, and State Diagrams are on class website if needed (doubtful)
+	K: Design Goals:
+		1. Sufficiency (handles requirements)
+		2. Understandability (can the intended audience comprehend)
+		3. Modularity (divided into well defined parts)
+		4. Cohesion (organized so similar elements are grouped...parts that are not decomposed belong together)
+			--ex. Plane flight: first class, business, and economy class decomp makes sense and cohesive, but separating passengers by weight or height does not, low cohesion
+		5. Coupling (organized to minimize dependence b/w elements)
+			--ex: low coupling w/ regular seating chart, high with the height one, would have first class seats randomly next to economy, spacing would be strange
+		6. Robustness (can deal w/ variety of inputs)
+		7. Flexibility (can be modified to handle requirement changes)
+		8. Reusability (can use parts of the design and implementation for other apps)
+		9. Information Hiding (module internals hidden from others, helps to concentrate at one thing at a time)
+		10. Efficiency (executes within acceptable time and space)
+		11. Security (promotes defense against deliberate harm)
+		12. Reliability (executes within acceptable fail rate)
+
+========================================================
+
+Module 2:
+
+I. Creational Pattern: related to the process of creating ensembles of related classes (Examples[* means less important]:Name, Purpose, ex, outline) 
+	A. Factory
+		1. Create objects at runtime w/ flexibility that constructors cannot provide
+		2. From a single version of control code, generate mail messages tailored to various customers
+		3. Create desired objects by using methods that return the objects
+	B. Abstract Factory
+		1. Create coordinated families of objects at runtime chose from a set of styles
+		2. Display a kitchen layout, aloowing the user to select a style at runtime
+		3. Encapsulate each family in a class whose methods return objects in that style
+	C. Prototype*
+		1. Create an aggregate object in which selected parts are essentially copies
+		2. Display a kitchen layout, allowing the user to select, at runtime, a type of wall cabinet or type of floor cabinet
+		3. Create the objects of the type by cloning a prototype
+	D. Singleton
+		1. Ensure that a class has at most ONE instantiation, accesible throughout the app
+		2. Build an app to evaluate the results of an experiment, ensure there is only one experiment at runtime and it can be accessed by an method in the app
+		3. Make the constructor private and obtain the unique object by means of a public method that returns it (statis)
+II. Structural Pattern: concerned with non-trivial relationships among classes
+	A. Composite
+		1. Represent a tree of objects. Allow client code to access uniform functionality distributed in the subtree rooted by any node.
+		2. Represent the org chart of a company. Allow client code to call printOrganization() on any Employee object, printing all the names of the employee and their subordinates, if any.
+		3. Have composite objects aggregate other composite objects.
+	B. Decorator
+		1. Allow objects and functionality to be added to an object at runtime
+		2. Allow the user of an online clothing store to see an image of themselves dressed in variety of clothes
+		3. Link the objects using aggregation
+	C. Adapter
+		1. Allow an app to make use of external/legacy functionality
+		2. Design a loan app from scratch but allow it to use any vendor's classes that compute monthly payment calculations
+		3. Introduce an inherited intermediary class relating the app and class w/ desired functionality
+	D. Facade
+		1. Manage software architectures involving large number of classes
+		2. Design the architecutre of a student loan software app so that one group of devs can concentrate on the database, another of the UI at the same time and a final on on payment calculations. Minimize coordination issues
+		3. For each package, introduce an object which is the sole access to objects within the package.
+	E. Flyweight*
+		1. Obtain the benefits of having a large number of individual objects w/o excessive runtime space needs
+		2. --
+		3. Share objects by parameterizing the methods w/ vairables expressing the context
+	F. Proxy
+		1. Some methods are remote or need lots of time/space to run. Ensure they can run but no more often than needed
+		2. Assume that rendering an image consumes lots of resources b/c data has to be read from a bile, fill a buffer, then render. If the buffer is already fille dby a previous invoation then invoking the function should not repeat this step.
+		3. Introduce a class b/w the requesting methods and the resouce
+III. Behavioral Pattern: captures behavior
+	A. Command
+		1. Make the execution of operations more flexible (like enable undoing)
+		2. Allow users to retract their last four decisions at any time (the undo problem)
+		3. Capture each command in a class of its own
+	B. Mediator
+		1. Capture the interaction b/w objects w/o having them reference each other (permitting their reuse)
+		2. Build an app that estimates the amount of time required to bring ships into and out of a harbor, and to transport them to dry dock for mainenance. But ensure that the Ship and Tugboat classes can be reused separately
+		3. Capture each interaction in a separate class, which aggreagates the objects involved.
+	C. Observer
+		1. A set of objects depends on the data in a single object. Design a way in which they can be updated when that single object changes attribute values.
+		2. Keep management marketing and ops departments up to date on sales data. Each of these have different requirements for the data
+		3. Capture the data source as a class. Allow it to loop through th observer objects, calling an update() method
+	D. State
+		1. At runtime, vary the effect of invoking an object's methods depends upon its state
+		2. Customers fill out an order form on a site, then hit the enter button. The result must depend upon the state of the form data: ie Personal info incomplete or credit check in progress...
+		3. Capture each command in a class of its own.
+	E. Template
+		1. Allow an algo to run partial variants at runtime.
+		2. ORganize the large number of traffic light algos in a city by arranging them into a few basic forms with variants tailored to specific locations.
+		3. Have a base class contain an overall method, but with function class where variability is needed. Have subclasses implement these function calls to caputre the required variability.
+
+Characteristics:
+I. Viewpoints:
+	1. Static (class model, how its built)
+	2. Dynamic (sequence or state diagram, how it runs)
+II. Levels:
+	1. Abstract (top view, core of the pattern)
+	2. Concrete (parts, describes the particulars)
+III. Roles:
+	1. Application of the DP itself
+	2. Clients of the DP app
+	3. Setup code initializes and controls
+
+==================================================
+Module 3:
+
+I. Creational Patterns:
+	A. Factory:
+		-use methods not constructors to create objects where constructors alone are not sufficient
+		-ie when client code requires an instances, factory email generator: what type of customer is it for?
+	B. Singleton (ik this one)
+	C. Abstract Factory:
+		-capture family creation in a class containing a factory method for each class in the family
+	D. Factory v Abstract Factory:
+		-Factory is a method, abstract factory is an object
+II. Structural Patterns:
+	A. Facade:
+		-provides an interface to a package of classes, consists of a singleton object of a class thats the only exposure to the package's functionality
+		-if clients need to reference objects in a package, make abstract classes and make those open
+	B. Decorator:
+		-add responsibilites to an object at runtime
+		-provide a linked list of objects, each encapsulating responsibility
+	C. Composite:
+		-represent a tree of objects, recursive pattern where a class ends up aggregating itself
+		-use a recursive form in which the tree class aggreagates and inherits from the base class for the objects. 
+		- to execute all of the objects, the code executes a common method to all of the nodes at the root and all of its children
+	D. Adapter
+		-allow an app to use external functionality in a retargetable manner
+		-write the app against an abstract version of the external class, introduce a subclass that aggreagtes the external class
+	E. Proxy
+		-avoid resource expenditure in a transparent way
+		-interpose a substitute class which accesses the expensive functionality only when absolutely needed.
+
+===================================================
+Module 4:Behavioral Patterns
+
+I. Iterator
+	A. Deals with individuals in a collection or set
+	B. Iterator is an object
+	C. Provides a way to access the elements of an aggregate object sequentially w/o exposing its underlying representation
+	D. Encapsulate the iteration in a class pointing to an element of the aggregate
+II.Mediator
+	A. Capture mutual behavior w/o direct dependency
+III. Observer
+	A. Arrange a set of objects to be affected by a single object
+	B. The single object aggregates the set, calling a method with a fixed name on each memeber
+	C. Has a notifty() that runs update() on all observers
+IV. State
+	A. Cause an object to behave in a manner determined by its state
+	B. Aggregate a state object and delegate behavior to it.
+V. Chain of Responsibility*
+	A. Allow a set of objects to service a request, present clients w/ a simple interface
+	B. Link the objects in a chain via aggregation, allowing each to perform some of the responsibility, passing the request along
+	C. Used when we need to add responsibilites to an object at runtime
+VI. Command
+	A. Increase flexibility in calling for a service
+	B. Aggregate a state object and delegate behavior to it
+VII. Template
+	A. Code variations on an algo w/o having to recode commonalities
+	B. Aggregate a state objet and delegate behavior to it
+	C. Goal: to capture a basic algorithm and its variant
+
+====================================================
+Module 5: Architectures and Frameworks
+
+I. Context of Arch.
+	-framework is a collection of models (class model) that forms a template for a category of architectures
+	-Start w/ a use case, then ID domain classes, then shape an architecture using frameworks, then create design classes
+II. Models
+	-framework is a collection of models
+	-Use case model (do this), class model (with objects of these classes), data flow model (in this way), state model (reacting to these events)
+	-Steps for selecting a basic architecture:
+		1. Develop a mental model
+		2. Decompose into required components (want high cohesion and low coupling)
+		3. repeat for all components
+		4. consider a facade for each package
+III. Classifying Archs.
+	-Types:
+		1. Data flow: data flowing b/w functional elements
+		2. Independent Components: executing in parallel, occasionally communicating
+		3. Virtual Machines: interpreter and program in special-purpose language
+		4. Repositories: primarily built around large data collection
+		5. Layered: subsystems, each depending one-way on another subsystem
+IV. Frameworks
+	-used to reuse classes, relationships among classes, or pre programmed control
+	-Goals:
+		1. Persistence Service: store instances b/w executions
+		2. Identify Service: identify objects sufficiently to retrieve them across executions
+		3. Pooling: of objects (reusing objects at runtime to save resouces), threads, and database connections
+		4. Security
+
+=====================================================
+Module 6: Refactoring
+
+I. Why
+	-tips:
+		-build new components alongside existig ones, plan for substitutions where possible
+		-test new ones throughly
+		-avoid altering exisitng components until the end
+	-alter the design while retaining the same functionality
+II.Big Refactorings
+	-Tease Apart Inheritance
+		-if SoftwareEmp inherits from Emp, which has three subtypes (fulltime, parttime and retired SoftwareEmp), make two objects, employee and status...similar to going from ac+ab+bc+bd to (a+b)(c+d)
+	-Convert Procedural Design to Objects
+		-Distrubute functionalities to objects
+	-Separate Domain from Presentation
+	-Extract Hierarchy
+		-remove bloat, create subclasses, move functionality down and test
+III. Composing Methods
+	-Extract method
+		-create a helper method from a part of another larger method
+	-Inline Method
+	-Inlime temp (remove a temp variable)
+	-Replace temp with a query/function
+	-introduce explaining variable to replace complicated expression
+	-splite temporary variable thats used more than once
+	-remove assignment to parameters
+	-replace method with a method objects (Command DP)
+IV. Moving Features B/w Objects
+	-Move method (trades off method holding vs usage)
+	-Move Field (trades off holding v usage)
+	-Extract Class (encapsulate set of attributes and methods of a class)
+	-Inline Class (Opposite of extract class)
+	-Hide delegate(hide class dependencies from client classes)
+	-Remove Middle Man (opposite of hide delegate)
+V. Organizing Data
+VI. Dealing w/ Generalization
+VII. Simplifying Method Calls
