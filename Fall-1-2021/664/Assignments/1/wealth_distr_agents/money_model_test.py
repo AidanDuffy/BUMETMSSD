@@ -11,12 +11,12 @@ def main():
 
     wealth = []
     for j in range(100):
-        model = MoneyModel(10)
+        model = MoneyModel(10, 50)
         for i in range(10):
             model.step()
         for agent in model.schedule.agents:
             wealth.append(agent.wealth)
-    plt.hist(wealth, bins=range(max(wealth) + 1))
+    plt.hist(wealth)
     plt.show()
 
 if __name__ == '__main__':
